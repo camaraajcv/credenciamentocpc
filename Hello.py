@@ -142,6 +142,7 @@ def main():
                     df2.to_csv("data.csv", index=False)
                     st.success('Linha editada com sucesso!')
 
+
         elif action == 'Excluir':
             st.header('Excluir Processo Existente:')
             row_index = st.selectbox('Selecione o número da linha para exclusão:', options=list(range(len(df2))))
