@@ -98,7 +98,7 @@ def main():
             st.header('Editar processo Existente:')
             row_index = st.selectbox('Selecione o número da linha do processo para edição:', options=list(range(len(df2))))
 
-            situacao_edit = st.selectbox('SITUAÇÃO ECONSIG:', options=['', 'Arquivado pela PP1', 'Arquivado pela CPC', 'Análise CPC', 'Encaminhado para CPC', 'Encaminhado para PP1', 'Aguardando Documentações', 'Enviado para Homologação', 'Enviado para Publicação', 'Aguardando assinaturas CPC'], index=['Arquivado pela PP1', 'Arquivado pela CPC', 'Análise CPC', 'Encaminhado para CPC', 'Encaminhado para PP1', 'Aguardando Documentações', 'Enviado para Homologação', 'Enviado para Publicação', 'Aguardando assinaturas CPC'].index(df2.iloc[row_index]['SITUAÇÃO ECONSIG']))
+            situacao_edit = st.selectbox('SITUAÇÃO ECONSIG:', options=['', 'Arquivado pela PP1', 'Ativo', 'Bloqueado', 'Arquivado pela CPC'], index=['Arquivado pela PP1', 'Ativo', 'Bloqueado', 'Arquivado pela CPC'].index(df2.iloc[row_index]['SITUAÇÃO ECONSIG']))
 
             # Definindo os outros campos de edição usando os valores da linha selecionada
             subprocesso_edit = st.text_input('SUBPROCESSO:', value=df2.iloc[row_index]['SUBPROCESSO'])
@@ -141,6 +141,7 @@ def main():
                     }
                     df2.to_csv("data.csv", index=False)
                     st.success('Linha editada com sucesso!')
+
 
 
         elif action == 'Excluir':
