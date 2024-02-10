@@ -47,7 +47,7 @@ def main():
 
     if action != 'Selecione...':
         if action == 'Incluir':
-            st.header('Adicionar Nova Linha:')
+            st.header('Adicionar Novo Processo:')
             situacao = st.selectbox('SITUAÇÃO ECONSIG:', options=['', 'Arquivado pela PP1', 'Arquivado pela CPC', 'Análise CPC', 'Encaminhado para CPC', 'Encaminhado para PP1', 'Aguardando Documentações', 'Enviado para Homologação', 'Enviado para Publicação', 'Aguardando assinaturas CPC'], index=0)
             subprocesso = st.text_input('SUBPROCESSO:')
             categoria = st.selectbox('CATEGORIA:', options=['', 'I', 'II', 'III'], index=0)
@@ -97,7 +97,10 @@ def main():
         elif action == 'Editar':
             st.header('Editar processo Existente:')
             row_index = st.selectbox('Selecione o número da linha do processo para edição:', options=list(range(len(df2))))
+
             situacao_edit = st.selectbox('SITUAÇÃO ECONSIG:', options=['', 'Arquivado pela PP1', 'Arquivado pela CPC', 'Análise CPC', 'Encaminhado para CPC', 'Encaminhado para PP1', 'Aguardando Documentações', 'Enviado para Homologação', 'Enviado para Publicação', 'Aguardando assinaturas CPC'], index=['Arquivado pela PP1', 'Arquivado pela CPC', 'Análise CPC', 'Encaminhado para CPC', 'Encaminhado para PP1', 'Aguardando Documentações', 'Enviado para Homologação', 'Enviado para Publicação', 'Aguardando assinaturas CPC'].index(df2.iloc[row_index]['SITUAÇÃO ECONSIG']))
+
+            # Definindo os outros campos de edição usando os valores da linha selecionada
             subprocesso_edit = st.text_input('SUBPROCESSO:', value=df2.iloc[row_index]['SUBPROCESSO'])
             categoria_edit = st.selectbox('CATEGORIA:', options=['', 'I', 'II', 'III'], index=['I', 'II', 'III'].index(df2.iloc[row_index]['CATEGORIA']))
             natureza_desconto_edit = st.selectbox('NATUREZA DE DESCONTO:', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'Seguro de Vida'], index=['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'Seguro de Vida'].index(df2.iloc[row_index]['NATUREZA DE DESCONTO']))
