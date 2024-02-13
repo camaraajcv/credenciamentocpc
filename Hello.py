@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import re
+from datetime import datetime, timedelta
 
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
@@ -50,14 +51,19 @@ def main():
             consignataria = st.text_input('Consignatária')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.text_input('Situação')
-            data_expiracao_contratual = st.text_input('Data Expiração Contratual')
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY')
             categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ')
             nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
         with col2:
+            dias_para_fim_vigencia = (data_expiracao_contratual - datetime.now()).days
+            if dias_para_fim_vigencia < 0:
+                dias_para_fim_vigencia = 'Expirado'
+            else:
+                dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
            
-            dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência')
+            dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             nup = st.text_input('NUP')
             codigo = st.text_input('Código')
             status_credenciamento = st.text_input('Status Credenciamento')
@@ -80,7 +86,7 @@ def main():
                     'NRO CONTRATO (PORTARIA OU TERMO)': nro_contrato,
                     'BCA OU DOU': bca_ou_dou,
                     'SITUAÇÃO': situacao,
-                    'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual,
+                    'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual.strftime('%d/%m/%Y'),
                     'Dias para Fim Vigência': dias_para_fim_vigencia,
                     'NUP': nup,
                     'CÓDIGO': codigo,
@@ -120,8 +126,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
 
 
 
