@@ -232,11 +232,8 @@ def main():
     st.bar_chart(count_by_category)
 
     st.subheader('Percentual por Natureza de Desconto')
-    count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts().reset_index()
-    count_by_natureza = count_by_natureza.rename(columns={'index': 'NATUREZA DESCONTO', 'NATUREZA DE DESCONTO': 'TOTAL'})
-    count_by_natureza['TOTAL'] = count_by_natureza['TOTAL'].astype(str)  # Convertendo para string
+    count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
     st.write(count_by_natureza)
-
     plt.figure(figsize=(8, 6))
     plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
