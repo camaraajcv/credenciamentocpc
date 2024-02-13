@@ -3,9 +3,9 @@ import pandas as pd
 
 # Função para adicionar dados à planilha
 def adicionar_dados(file_path, dados):
-    df = pd.read_excel(file_path, engine='xlrd')  # Força o uso do xlrd para ler arquivos .xls
+    df = pd.read_excel(file_path)
     novo_registro = pd.DataFrame([dados], columns=df.columns)
-    df = df.append(novo_registro, ignore_index=True)
+    df = pd.concat([df, novo_registro], ignore_index=True)
     df.to_excel(file_path, index=False)
 
 def main():
@@ -55,7 +55,7 @@ def main():
 
     # Exibe os dados da planilha atualizada
     st.header('Planilha Atualizada')
-    df = pd.read_excel(file_path, engine='xlrd')  # Força o uso do xlrd para ler arquivos .xls
+    df = pd.read_excel(file_path)
     st.write(df)
 
 if __name__ == '__main__':
