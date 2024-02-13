@@ -155,7 +155,9 @@ def main():
             status_credenciamento_edit = st.text_input('Status Credenciamento -  Observações', value=df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'])
             acao_edit = st.text_input('Ação', value=df.loc[indice_edicao, 'AÇÃO'])
             oficio_para_ec_edit = st.text_input('Ofício para EC', value=df.loc[indice_edicao, 'OFÍCIO PARA EC'])
-            cpc_status_edit = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'], index=df.loc[indice_edicao, 'CPC STATUS'])
+            cpc_status_edit = st.selectbox('CPC Status', 
+                                options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'], 
+                                index=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'].index(df.loc[indice_edicao, 'CPC STATUS']))
             cpc_anual_edit = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'], index=df.loc[indice_edicao, 'CPC ANUAL'])
             verificado_edit = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'], index=0 if df.loc[indice_edicao, 'Verificado ?'] == 'Sim' else 1)
 
