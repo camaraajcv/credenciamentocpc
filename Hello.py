@@ -34,8 +34,14 @@ def main():
         # Exibir formulário para inserir dados
         st.header('Inserir Novos Dados')
 
-        situacao_econsig = st.text_input('Situação Econômica')
-        localizacao = st.text_input('Localização')
+        col1, col2 = st.columns(2)
+
+        with col1:
+            situacao_econsig = st.selectbox('Situação Econômica', options=['', 'Arquivado', 'Ativo', 'Bloqueado', 'Não Cadastrado'])
+
+        with col2:
+            localizacao = st.text_input('Localização')
+
         categoria = st.text_input('Categoria')
         natureza_desconto = st.text_input('Natureza de Desconto')
         consignataria = st.text_input('Consignatária')
