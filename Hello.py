@@ -1,17 +1,31 @@
 import streamlit as st
 import pandas as pd
+import os
+
+# Função para carregar ou criar o DataFrame
+def carregar_dataframe():
+    # Verificar se o arquivo CSV existe
+    if os.path.exists("dados.csv"):
+        # Se o arquivo existir, carregue o DataFrame a partir dele
+        return pd.read_csv("dados.csv")
+    else:
+        # Caso contrário, crie um DataFrame vazio com as colunas desejadas
+        colunas = ['SITUAÇÃO ECONSIG', 'LOCALIZAÇÃO', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
+                   'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                   'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                   'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL']
+        return pd.DataFrame(columns=colunas)
+
+# Função para salvar o DataFrame em um arquivo CSV
+def salvar_dataframe(df):
+    df.to_csv("dados.csv", index=False)
 
 def main():
     st.title('Inserindo e Excluindo Dados em DataFrame')
 
-    # Criar DataFrame vazio com as colunas desejadas
-    colunas = ['SITUAÇÃO ECONSIG', 'LOCALIZAÇÃO', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-               'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
-               'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-               'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-               'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL']
-
-    df = pd.DataFrame(columns=colunas)
+    # Carregar ou criar o DataFrame
+    df = carregar_dataframe()
 
     # Checkbox para exibir o formulário de inserção
     exibir_formulario_insercao = st.checkbox('Exibir Formulário de Inserção')
@@ -75,16 +89,19 @@ def main():
         # Exibir formulário para exclusão de linha
         st.header('Excluir Dados')
 
-        indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
+        if not df.empty:
+            indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
 
-        if st.button('Excluir'):
-            if not df.empty:
+            if st.button('Excluir'):
                 df = df.drop(index=indice_exclusao)
                 st.success('Linha excluída com sucesso.')
 
     # Exibir DataFrame atualizado
     st.header('DataFrame Atualizado')
     st.write(df)
+
+    # Salvar DataFrame em arquivo CSV
+    salvar_dataframe(df)
 
 if __name__ == '__main__':
     main()
