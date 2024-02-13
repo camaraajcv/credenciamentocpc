@@ -62,7 +62,7 @@ def main():
            
             dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             nup = st.text_input('NUP')
-            codigo = st.text_input('Código')
+            codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento')
             acao = st.text_input('Ação')
             oficio_para_ec = st.text_input('Ofício para EC')
