@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 def main():
-    st.title('Inserindo Dados em DataFrame')
+    st.title('Inserindo e Excluindo Dados em DataFrame')
 
     # Criar DataFrame vazio com as colunas desejadas
     colunas = ['SITUAÇÃO ECONSIG', 'LOCALIZAÇÃO', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
@@ -13,10 +13,10 @@ def main():
 
     df = pd.DataFrame(columns=colunas)
 
-    # Checkbox para exibir o formulário
-    exibir_formulario = st.checkbox('Exibir Formulário')
+    # Checkbox para exibir o formulário de inserção
+    exibir_formulario_insercao = st.checkbox('Exibir Formulário de Inserção')
 
-    if exibir_formulario:
+    if exibir_formulario_insercao:
         # Exibir formulário para inserir dados
         st.header('Inserir Novos Dados')
 
@@ -68,12 +68,27 @@ def main():
 
             st.success('Dados inseridos com sucesso.')
 
+    # Checkbox para exibir o formulário de exclusão
+    exibir_formulario_exclusao = st.checkbox('Exibir Formulário de Exclusão')
+
+    if exibir_formulario_exclusao:
+        # Exibir formulário para exclusão de linha
+        st.header('Excluir Dados')
+
+        indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
+
+        if st.button('Excluir'):
+            if not df.empty:
+                df = df.drop(index=indice_exclusao)
+                st.success('Linha excluída com sucesso.')
+
     # Exibir DataFrame atualizado
     st.header('DataFrame Atualizado')
     st.write(df)
 
 if __name__ == '__main__':
     main()
+
 
 
 
