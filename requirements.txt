@@ -3,5 +3,4 @@ numpy
 pandas
 pydeck
 streamlit
-xlrd>=2.0.1
-openpyxl
+streamlit_pydantic
