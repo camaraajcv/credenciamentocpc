@@ -43,7 +43,7 @@ def main():
         col1, col2 = st.columns(2)
 
         with col1:
-            situacao_econsig = st.selectbox('Situação Econômica*', options=['', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'])
+            situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'])
             localizacao = st.text_input('Localização')
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
