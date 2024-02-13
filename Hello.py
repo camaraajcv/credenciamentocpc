@@ -134,7 +134,7 @@ def main():
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
                              options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
-                             index=[0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1])
+                             index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
             data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual*', value=datetime.strptime(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'], '%d/%m/%Y'))
             categoria_edit = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'], index=df.loc[indice_edicao, 'CATEGORIA'])
             natureza_desconto_edit = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'], index=df.loc[indice_edicao, 'NATUREZA DE DESCONTO'])
