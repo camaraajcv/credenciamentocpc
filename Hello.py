@@ -233,15 +233,17 @@ def main():
 
     st.subheader('Percentual por Natureza de Desconto')
     count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
-    count_by_natureza.index.name = 'NATUREZA DESCONTO'  # Renomeia o índice para "NATUREZA DESCONTO"
-    count_by_natureza = count_by_natureza.reset_index()  # Reseta o índice para poder renomear a coluna
-    count_by_natureza = count_by_natureza.rename(columns={'NATUREZA DE DESCONTO': 'TOTAL'})  # Renomeia a coluna 'NATUREZA DE DESCONTO' para 'TOTAL'
-
     st.write(count_by_natureza)
     plt.figure(figsize=(8, 6))
-    plt.pie(count_by_natureza['TOTAL'], labels=count_by_natureza['NATUREZA DESCONTO'], autopct='%1.1f%%', startangle=140)
+    plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot()
+
+    st.header('Gráficos')
+    st.subheader('Correlação entre Dias para Fim Vigência e CPC Anual')
+    fig, ax = plt.subplots()
+    sns.scatterplot(data=df, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
+    st.pyplot(fig)
 
 
 if __name__ == "__main__":
