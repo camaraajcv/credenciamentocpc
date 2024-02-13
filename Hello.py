@@ -46,7 +46,7 @@ def main():
 
     if exibir_formulario_insercao:
         # Exibir formulário para inserir dados
-        st.header('Inserir Processo')
+        #st.header('Inserir Processo')
 
         col1, col2 = st.columns(2)
 
@@ -111,7 +111,7 @@ def main():
                     st.success('Dados inseridos com sucesso.')
 
     # Checkbox para exibir o formulário de exclusão
-    exibir_formulario_exclusao = st.checkbox('Excluir Processo')
+    #exibir_formulario_exclusao = st.checkbox('Excluir Processo')
 
     if exibir_formulario_exclusao:
         # Exibir formulário para exclusão de linha
@@ -125,7 +125,7 @@ def main():
                 st.success('Linha excluída com sucesso.')
 
     # Checkbox para exibir o formulário de edição
-    exibir_formulario_edicao = st.checkbox('Alterar Processo')
+    #exibir_formulario_edicao = st.checkbox('Alterar Processo')
 
     if exibir_formulario_edicao:
         # Exibir formulário para edição de dados
