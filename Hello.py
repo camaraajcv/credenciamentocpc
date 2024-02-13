@@ -158,7 +158,9 @@ def main():
             cpc_status_edit = st.selectbox('CPC Status', 
                                 options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'], 
                                 index=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'].index(df.loc[indice_edicao, 'CPC STATUS']))
-            cpc_anual_edit = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'], index=df.loc[indice_edicao, 'CPC ANUAL'])
+            cpc_anual_edit = st.selectbox('CPC Anual', 
+                              options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'], 
+                              index=[('', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026').index(df.loc[indice_edicao, 'CPC ANUAL'])])
             verificado_edit = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'], index=0 if df.loc[indice_edicao, 'Verificado ?'] == 'Sim' else 1)
 
             if st.button('Alterar'):
