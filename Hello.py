@@ -32,7 +32,9 @@ def main():
 
     # Carregar ou criar o DataFrame
     df = carregar_dataframe()
-
+        # Exibir DataFrame atualizado
+    st.header('Tabela Atualizada')
+    st.write(df)
     # Checkbox para exibir o formulário de inclusão
     exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
 
@@ -191,9 +193,7 @@ def main():
 
                         st.success('Dados alterados com sucesso.')
 
-    # Exibir DataFrame atualizado
-    st.header('DataFrame Atualizado')
-    st.write(df)
+
 
     # Salvar DataFrame em arquivo CSV
     salvar_dataframe(df)
