@@ -218,9 +218,11 @@ def main():
 
     st.header('Gráficos')
     st.subheader('Correlação entre Dias para Fim Vigência e CPC Anual')
-    sns.scatterplot(data=df, x='Dias para Fim Vigência', y='CPC ANUAL')
-    st.pyplot()
+    fig, ax = plt.subplots()
+    sns.scatterplot(data=df, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
+    st.pyplot(fig)
 
 if __name__ == '__main__':
     main()
+
 
