@@ -194,6 +194,7 @@ def main():
                         df.loc[indice_edicao, 'CPC STATUS'] = cpc_status_edit
                         df.loc[indice_edicao, 'Verificado ?'] = verificado_edit
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
+                        df.loc[indice_edicao, 'NRO CONTRATO (PORTARIA OU TERMO)'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
 
                         st.success('Dados alterados com sucesso.')
