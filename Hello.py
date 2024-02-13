@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import re
 
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
@@ -21,6 +22,13 @@ def carregar_dataframe():
 def salvar_dataframe(df):
     df.to_csv("dados.csv", index=False)
 
+# Função para validar o formato do CNPJ
+def validar_cnpj(cnpj):
+    if not re.match(r'\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}', cnpj):
+        st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
+        return False
+    return True
+
 def main():
     st.title('Inserindo e Excluindo Dados em DataFrame')
 
@@ -38,55 +46,43 @@ def main():
 
         with col1:
             situacao_econsig = st.selectbox('Situação Econômica', options=['', 'Arquivado', 'Ativo', 'Bloqueado', 'Não Cadastrado'])
-
-        with col2:
             localizacao = st.text_input('Localização')
 
-        categoria = st.text_input('Categoria')
-        natureza_desconto = st.text_input('Natureza de Desconto')
-        consignataria = st.text_input('Consignatária')
+        with col2:
+            categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
+            natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
+
         cnpj = st.text_input('CNPJ')
-        nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
-        bca_ou_dou = st.text_input('BCA ou DOU')
-        situacao = st.text_input('Situação')
-        data_expiracao_contratual = st.text_input('Data Expiração Contratual')
-        dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência')
-        nup = st.text_input('NUP')
-        codigo = st.text_input('Código')
-        status_credenciamento = st.text_input('Status Credenciamento')
-        acao = st.text_input('Ação')
-        oficio_para_ec = st.text_input('Ofício para EC')
-        cpc_status = st.text_input('CPC Status')
-        verificado = st.text_input('Verificado?')
-        cpc_anual = st.text_input('CPC Anual')
 
         if st.button('Inserir'):
-            novo_dado = {
-                'SITUAÇÃO ECONSIG': situacao_econsig,
-                'LOCALIZAÇÃO': localizacao,
-                'CATEGORIA': categoria,
-                'NATUREZA DE DESCONTO': natureza_desconto,
-                'CONSIGNATÁRIA': consignataria,
-                'CNPJ': cnpj,
-                'NRO CONTRATO (PORTARIA OU TERMO)': nro_contrato,
-                'BCA OU DOU': bca_ou_dou,
-                'SITUAÇÃO': situacao,
-                'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual,
-                'Dias para Fim Vigência': dias_para_fim_vigencia,
-                'NUP': nup,
-                'CÓDIGO': codigo,
-                'STATUS CREDENCIAMENTO': status_credenciamento,
-                'AÇÃO': acao,
-                'OFÍCIO PARA EC': oficio_para_ec,
-                'CPC STATUS': cpc_status,
-                'Verificado ?': verificado,
-                'CPC ANUAL': cpc_anual
-            }
+            # Validar CNPJ
+            if validar_cnpj(cnpj):
+                novo_dado = {
+                    'SITUAÇÃO ECONSIG': situacao_econsig,
+                    'LOCALIZAÇÃO': localizacao,
+                    'CATEGORIA': categoria,
+                    'NATUREZA DE DESCONTO': natureza_desconto,
+                    'CONSIGNATÁRIA': '', # Vazio por padrão
+                    'CNPJ': cnpj,
+                    'NRO CONTRATO (PORTARIA OU TERMO)': '', # Vazio por padrão
+                    'BCA OU DOU': '', # Vazio por padrão
+                    'SITUAÇÃO': '', # Vazio por padrão
+                    'DATA EXPIRAÇÃO CONTRATUAL': '', # Vazio por padrão
+                    'Dias para Fim Vigência': '', # Vazio por padrão
+                    'NUP': '', # Vazio por padrão
+                    'CÓDIGO': '', # Vazio por padrão
+                    'STATUS CREDENCIAMENTO': '', # Vazio por padrão
+                    'AÇÃO': '', # Vazio por padrão
+                    'OFÍCIO PARA EC': '', # Vazio por padrão
+                    'CPC STATUS': '', # Vazio por padrão
+                    'Verificado ?': '', # Vazio por padrão
+                    'CPC ANUAL': '' # Vazio por padrão
+                }
 
-            novo_df = pd.DataFrame([novo_dado])
-            df = pd.concat([df, novo_df], ignore_index=True)
+                novo_df = pd.DataFrame([novo_dado])
+                df = pd.concat([df, novo_df], ignore_index=True)
 
-            st.success('Dados inseridos com sucesso.')
+                st.success('Dados inseridos com sucesso.')
 
     # Checkbox para exibir o formulário de exclusão
     exibir_formulario_exclusao = st.checkbox('Exibir Formulário de Exclusão')
@@ -111,6 +107,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
