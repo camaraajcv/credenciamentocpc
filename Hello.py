@@ -1,17 +1,35 @@
 import streamlit as st
+from streamlit_pydantic import st_pydantic
 import pandas as pd
 import os
 import re
 from datetime import datetime, date
 
+class DadosInsercao:
+    situacao_econsig: str
+    localizacao: str
+    consignataria: str
+    bca_ou_dou: str
+    situacao: str
+    data_expiracao_contratual: str
+    categoria: str
+    natureza_desconto: str
+    cnpj: str
+    nro_contrato: str
+    nup: str
+    codigo: str
+    status_credenciamento: str
+    acao: str
+    oficio_para_ec: str
+    cpc_status: str
+    verificado: str
+    cpc_anual: str
+
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
-    # Verificar se o arquivo CSV existe
     if os.path.exists("dados.csv"):
-        # Se o arquivo existir, carregue o DataFrame a partir dele
         return pd.read_csv("dados.csv")
     else:
-        # Caso contrário, crie um DataFrame vazio com as colunas desejadas
         colunas = ['SITUAÇÃO ECONSIG', 'LOCALIZAÇÃO', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
@@ -45,78 +63,64 @@ def main():
 
         col1, col2 = st.columns(2)
 
+        # Criar um objeto para inserção de dados
+        dados = DadosInsercao()
+
+        # Definir a máscara para o CNPJ
+        cnpj_mask = '99.999.999/9999-99'
+
+        # Exibir o formulário de inserção de dados
         with col1:
-            situacao_econsig = st.selectbox('Situação Econômica', options=['', 'Arquivado', 'Ativo', 'Bloqueado', 'Não Cadastrado'])
-            localizacao = st.text_input('Localização')
-            consignataria = st.text_input('Consignatária')
-            bca_ou_dou = st.text_input('BCA ou DOU')
-            situacao = st.text_input('Situação')
-            data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY')
-            categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
-            natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
-            cnpj = st.text_input('CNPJ')
-            nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
+            st.write('Coluna 1')
+            st_pydantic(dados, fields={'situacao_econsig': {'label': 'Situação Econômica', 'options': ['Arquivado', 'Ativo', 'Bloqueado', 'Não Cadastrado']},
+                                       'localizacao': 'Localização',
+                                       'consignataria': 'Consignatária',
+                                       'bca_ou_dou': 'BCA ou DOU',
+                                       'situacao': 'Situação',
+                                       'data_expiracao_contratual': 'Data Expiração Contratual',
+                                       'categoria': {'label': 'Categoria', 'options': ['I', 'II', 'III']},
+                                       'natureza_desconto': {'label': 'Natureza de Desconto', 'options': ['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA']},
+                                       'cnpj': {'input_type': 'text', 'placeholder': cnpj_mask},
+                                       'nro_contrato': 'Nro Contrato (Portaria ou Termo)'})
         with col2:
-            data_atual = date.today()  # Obtém a data atual
-            dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
-            if dias_para_fim_vigencia < 0:
-                dias_para_fim_vigencia = 'Expirado'
-            else:
-                dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
-           
-            dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
-            nup = st.text_input('NUP')
-            codigo = st.text_input('Código')
-            status_credenciamento = st.text_input('Status Credenciamento')
-            acao = st.text_input('Ação')
-            oficio_para_ec = st.text_input('Ofício para EC')
-            cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
-            verificado = st.text_input('Verificado?')
-            cpc_anual = st.text_input('CPC Anual')
+            st.write('Coluna 2')
+            st_pydantic(dados, fields={'nup': 'NUP',
+                                       'codigo': 'Código',
+                                       'status_credenciamento': 'Status Credenciamento',
+                                       'acao': 'Ação',
+                                       'oficio_para_ec': 'Ofício para EC',
+                                       'cpc_status': {'label': 'CPC Status', 'options': ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO']},
+                                       'verificado': 'Verificado?',
+                                       'cpc_anual': 'CPC Anual'})
 
         if st.button('Inserir'):
-            # Validar CNPJ
-            if validar_cnpj(cnpj):
+            if validar_cnpj(dados.cnpj):
                 novo_dado = {
-                    'SITUAÇÃO ECONSIG': situacao_econsig,
-                    'LOCALIZAÇÃO': localizacao,
-                    'CATEGORIA': categoria,
-                    'NATUREZA DE DESCONTO': natureza_desconto,
-                    'CONSIGNATÁRIA': consignataria,
-                    'CNPJ': cnpj,
-                    'NRO CONTRATO (PORTARIA OU TERMO)': nro_contrato,
-                    'BCA OU DOU': bca_ou_dou,
-                    'SITUAÇÃO': situacao,
-                    'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual.strftime('%d/%m/%Y'),
-                    'Dias para Fim Vigência': dias_para_fim_vigencia,
-                    'NUP': nup,
-                    'CÓDIGO': codigo,
-                    'STATUS CREDENCIAMENTO': status_credenciamento,
-                    'AÇÃO': acao,
-                    'OFÍCIO PARA EC': oficio_para_ec,
-                    'CPC STATUS': cpc_status,
-                    'Verificado ?': verificado,
-                    'CPC ANUAL': cpc_anual
+                    'SITUAÇÃO ECONSIG': dados.situacao_econsig,
+                    'LOCALIZAÇÃO': dados.localizacao,
+                    'CATEGORIA': dados.categoria,
+                    'NATUREZA DE DESCONTO': dados.natureza_desconto,
+                    'CONSIGNATÁRIA': dados.consignataria,
+                    'CNPJ': dados.cnpj,
+                    'NRO CONTRATO (PORTARIA OU TERMO)': dados.nro_contrato,
+                    'BCA OU DOU': dados.bca_ou_dou,
+                    'SITUAÇÃO': dados.situacao,
+                    'DATA EXPIRAÇÃO CONTRATUAL': dados.data_expiracao_contratual,
+                    'Dias para Fim Vigência': dados.dias_para_fim_vigencia,
+                    'NUP': dados.nup,
+                    'CÓDIGO': dados.codigo,
+                    'STATUS CREDENCIAMENTO': dados.status_credenciamento,
+                    'AÇÃO': dados.acao,
+                    'OFÍCIO PARA EC': dados.oficio_para_ec,
+                    'CPC STATUS': dados.cpc_status,
+                    'Verificado ?': dados.verificado,
+                    'CPC ANUAL': dados.cpc_anual
                 }
 
                 novo_df = pd.DataFrame([novo_dado])
                 df = pd.concat([df, novo_df], ignore_index=True)
 
                 st.success('Dados inseridos com sucesso.')
-
-    # Checkbox para exibir o formulário de exclusão
-    exibir_formulario_exclusao = st.checkbox('Exibir Formulário de Exclusão')
-
-    if exibir_formulario_exclusao:
-        # Exibir formulário para exclusão de linha
-        st.header('Excluir Dados')
-
-        if not df.empty:
-            indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
-
-            if st.button('Excluir'):
-                df = df.drop(index=indice_exclusao)
-                st.success('Linha excluída com sucesso.')
 
     # Exibir DataFrame atualizado
     st.header('DataFrame Atualizado')
@@ -127,9 +131,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
