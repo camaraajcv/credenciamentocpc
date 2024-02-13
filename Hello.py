@@ -51,12 +51,12 @@ def main():
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.text_input('Situação')
             data_expiracao_contratual = st.text_input('Data Expiração Contratual')
-
-        with col2:
-            categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
+             categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ')
             nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
+        with col2:
+           
             dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência')
             nup = st.text_input('NUP')
             codigo = st.text_input('Código')
