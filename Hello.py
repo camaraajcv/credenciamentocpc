@@ -11,7 +11,7 @@ def carregar_dataframe():
     if os.path.exists("dados.csv"):
         return pd.read_csv("dados.csv")
     else:
-        colunas = ['SITUAÇÃO ECONSIG', 'LOCALIZAÇÃO', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+        colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
@@ -52,7 +52,7 @@ def main():
 
         with col1:
             situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'])
-            subprocesso_siloms = st.text_input('SUBOPROCESSO SILOMS*')
+            subprocesso_siloms = st.text_input('SUBPROCESSO SILOMS*')
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'])
@@ -87,7 +87,7 @@ def main():
                 else:
                     novo_dado = {
                         'SITUAÇÃO ECONSIG': situacao_econsig,
-                        'SUBOPROCESSO SILOMS': subprocesso_siloms,
+                        'SUBPROCESSO SILOMS': subprocesso_siloms,
                         'CATEGORIA': categoria,
                         'NATUREZA DE DESCONTO': natureza_desconto,
                         'CONSIGNATÁRIA': consignataria,
@@ -134,7 +134,7 @@ def main():
             situacao_econsig_edit = st.selectbox('Situação Econsig*', 
                                     options=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'], 
                                     index=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'].index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'] else 0)
-            subprocesso_siloms_edit = st.text_input('SUBOPROCESSO SILOMS*', value=df.loc[indice_edicao, 'SUBOPROCESSO SILOMS'])
+            subprocesso_siloms_edit = st.text_input('SUBPROCESSO SILOMS*', value=df.loc[indice_edicao, 'SUBPROCESSO SILOMS'])
             consignataria_edit = st.text_input('Consignatária*', value=df.loc[indice_edicao, 'CONSIGNATÁRIA'])
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
@@ -177,7 +177,7 @@ def main():
                         st.error('Os campos marcados com * são obrigatórios.')
                     else:
                         df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] = situacao_econsig_edit
-                        df.loc[indice_edicao, 'SUBOPROCESSO SILOMS'] = subprocesso_siloms_edit
+                        df.loc[indice_edicao, 'SUBPROCESSO SILOMS'] = subprocesso_siloms_edit
                         df.loc[indice_edicao, 'CATEGORIA'] = categoria_edit
                         df.loc[indice_edicao, 'NATUREZA DE DESCONTO'] = natureza_desconto_edit
                         df.loc[indice_edicao, 'CONSIGNATÁRIA'] = consignataria_edit
@@ -222,3 +222,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
