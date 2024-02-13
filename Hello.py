@@ -4,7 +4,8 @@ import pandas as pd
 # Função para adicionar dados à planilha
 def adicionar_dados(file_path, dados):
     df = pd.read_excel(file_path)
-    df = df.append(dados, ignore_index=True)
+    novo_registro = pd.DataFrame([dados], columns=df.columns)
+    df = pd.concat([df, novo_registro], ignore_index=True)
     df.to_excel(file_path, index=False)
 
 def main():
@@ -59,3 +60,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
