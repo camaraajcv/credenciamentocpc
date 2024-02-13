@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import re
-from datetime import datetime, timedelta
+from datetime import datetime, date
 
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
@@ -57,7 +57,8 @@ def main():
             cnpj = st.text_input('CNPJ')
             nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
         with col2:
-            dias_para_fim_vigencia = (data_expiracao_contratual - datetime.now()).days
+            data_atual = date.today()  # Obtém a data atual
+            dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
             if dias_para_fim_vigencia < 0:
                 dias_para_fim_vigencia = 'Expirado'
             else:
