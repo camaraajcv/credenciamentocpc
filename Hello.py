@@ -53,7 +53,7 @@ def main():
             situacao = st.text_input('Situação')
             data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY')
             categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
-            natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
+            natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ')
             nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
         with col2:
@@ -70,7 +70,7 @@ def main():
             status_credenciamento = st.text_input('Status Credenciamento')
             acao = st.text_input('Ação')
             oficio_para_ec = st.text_input('Ofício para EC')
-            cpc_status = st.selectbox('CPC Status', options=['', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
+            cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
             verificado = st.text_input('Verificado?')
             cpc_anual = st.text_input('CPC Anual')
 
