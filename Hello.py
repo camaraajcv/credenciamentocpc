@@ -139,7 +139,9 @@ def main():
             categoria_edit = st.selectbox('Categoria*', 
                               options=['', 'I', 'II', 'III'], 
                               index=['', 'I', 'II', 'III'].index(df.loc[indice_edicao, 'CATEGORIA']))
-            natureza_desconto_edit = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'], index=df.loc[indice_edicao, 'NATUREZA DE DESCONTO'])
+            natureza_desconto_edit = st.selectbox('Natureza de Desconto*', 
+                                      options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'], 
+                                      index=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'].index(df.loc[indice_edicao, 'NATUREZA DE DESCONTO']))
             cnpj_edit = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX', value=df.loc[indice_edicao, 'CNPJ'])
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual_edit - data_atual).days
