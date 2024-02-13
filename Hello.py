@@ -47,13 +47,11 @@ def main():
             localizacao = st.text_input('Localização')
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
-            situacao = st.text_input('Situação*')
+            situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'])
             data_expiracao_contratual = st.date_input('Data Expiração Contratual*', format='DD/MM/YYYY')
             categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
-            nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
-            verificado = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'])
         with col2:
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
@@ -70,6 +68,7 @@ def main():
             oficio_para_ec = st.text_input('Ofício para EC')
             cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
             cpc_anual = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
+            verificado = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'])
 
         if st.button('Inserir'):
             if validar_cnpj(cnpj):
@@ -83,7 +82,7 @@ def main():
                         'NATUREZA DE DESCONTO': natureza_desconto,
                         'CONSIGNATÁRIA': consignataria,
                         'CNPJ': cnpj,
-                        'NRO CONTRATO (PORTARIA OU TERMO)': nro_contrato,
+                        'NRO CONTRATO (PORTARIA OU TERMO)': '',
                         'BCA OU DOU': bca_ou_dou,
                         'SITUAÇÃO': situacao,
                         'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual.strftime('%d/%m/%Y'),
@@ -102,6 +101,20 @@ def main():
                     df = pd.concat([df, novo_df], ignore_index=True)
 
                     st.success('Dados inseridos com sucesso.')
+
+    # Checkbox para exibir o formulário de exclusão
+    exibir_formulario_exclusao = st.checkbox('Exibir Formulário de Exclusão')
+
+    if exibir_formulario_exclusao:
+        # Exibir formulário para exclusão de linha
+        st.header('Excluir Dados')
+
+        if not df.empty:
+            indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
+
+            if st.button('Excluir'):
+                df = df.drop(index=indice_exclusao)
+                st.success('Linha excluída com sucesso.')
 
     # Exibir DataFrame atualizado
     st.header('DataFrame Atualizado')
