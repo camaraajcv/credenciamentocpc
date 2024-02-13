@@ -36,15 +36,13 @@ def main():
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
+        exibir_formulario_insercao = st.checkbox('Inserir Novo Processo', key='inserir')
 
     with col2:
-        exibir_formulario_edicao = st.checkbox('Alterar Processo')
+        exibir_formulario_edicao = st.checkbox('Alterar Processo', key='alterar')
 
     with col3:
-        exibir_formulario_exclusao = st.checkbox('Excluir Processo')
-        # Checkbox para exibir o formulário de inclusão
-        exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
+        exibir_formulario_exclusao = st.checkbox('Excluir Processo', key='excluir')
 
     if exibir_formulario_insercao:
         # Exibir formulário para inserir dados
