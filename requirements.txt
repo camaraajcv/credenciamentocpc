@@ -4,3 +4,5 @@ pandas
 pydeck
 streamlit
 streamlit_pydantic
+matplotlib
+seaborn
