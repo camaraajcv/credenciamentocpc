@@ -204,7 +204,8 @@ def main():
 
     # Salvar DataFrame em arquivo CSV
     salvar_dataframe(df)
-
+    # Configuração para desativar o aviso PyplotGlobalUseWarning
+    st.set_option('deprecation.showPyplotGlobalUse', False)
     # Adicionar gráficos e indicadores
     st.header('Indicadores')
     st.subheader('Total de Processos por Situação')
