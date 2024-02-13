@@ -66,7 +66,7 @@ def main():
             nup = st.text_input('NUP')
             codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento -  Observações')
-            acao = st.text_input('Ação')
+            acao = st.text_input('Ação PP1 - Observação')
             oficio_para_ec = st.text_input('Ofício para EC')
             cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
             cpc_anual = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
