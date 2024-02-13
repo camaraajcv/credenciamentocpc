@@ -9,11 +9,12 @@ def carregar_dataframe():
     if os.path.exists("dados.csv"):
         return pd.read_csv("dados.csv")
     else:
-        colunas = ['SITUAÇÃO ECONSIG', 'LOCALIZAÇÃO', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+        colunas = ['SITUAÇÃO ECONSIG', 'SUBOPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                   'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL']
+                   'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL',
+                   'Data de Entrada']  # Adiciona a coluna 'Data de Entrada'
         return pd.DataFrame(columns=colunas)
 
 # Função para salvar o DataFrame em um arquivo CSV
@@ -44,7 +45,7 @@ def main():
 
         with col1:
             situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'])
-            localizacao = st.text_input('Localização')
+            subprocesso_siloms = st.text_input('SUBOPROCESSO SILOMS*')
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'])
@@ -52,6 +53,7 @@ def main():
             categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+            data_entrada = st.date_input('Data de Entrada*', format='DD/MM/YYYY')  # Adiciona o campo de Data de Entrada
         with col2:
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
@@ -72,12 +74,12 @@ def main():
 
         if st.button('Inserir'):
             if validar_cnpj(cnpj):
-                if consignataria.strip() == '' or situacao.strip() == '' or situacao_econsig.strip() == '' or verificado.strip() == '':
+                if consignataria.strip() == '' or situacao.strip() == '' or situacao_econsig.strip() == '' or verificado.strip() == '' or data_entrada is None:
                     st.error('Os campos marcados com * são obrigatórios.')
                 else:
                     novo_dado = {
                         'SITUAÇÃO ECONSIG': situacao_econsig,
-                        'LOCALIZAÇÃO': localizacao,
+                        'SUBOPROCESSO SILOMS': subprocesso_siloms,
                         'CATEGORIA': categoria,
                         'NATUREZA DE DESCONTO': natureza_desconto,
                         'CONSIGNATÁRIA': consignataria,
@@ -94,7 +96,8 @@ def main():
                         'OFÍCIO PARA EC': oficio_para_ec,
                         'CPC STATUS': cpc_status,
                         'Verificado ?': verificado,
-                        'CPC ANUAL': cpc_anual
+                        'CPC ANUAL': cpc_anual,
+                        'Data de Entrada': data_entrada.strftime('%d/%m/%Y')  # Adiciona a data de entrada ao DataFrame
                     }
 
                     novo_df = pd.DataFrame([novo_dado])
