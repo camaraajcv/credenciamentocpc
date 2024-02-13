@@ -233,6 +233,7 @@ def main():
 
     st.subheader('Percentual por Natureza de Desconto')
     count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
+    count_by_natureza = count_by_natureza.rename(columns={'index': 'NATUREZA DESCONTO', 'NATUREZA DE DESCONTO': 'TOTAL'})
     st.write(count_by_natureza)
     plt.figure(figsize=(8, 6))
     plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
