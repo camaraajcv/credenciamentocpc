@@ -135,21 +135,21 @@ def main():
             indice_edicao = st.number_input('Índice da Linha a ser Editada', min_value=0, max_value=len(df)-1, step=1, value=0)
 
             situacao_econsig_edit = st.selectbox('Situação Econsig*', 
-                                     options=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'], 
-                                     index=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'].index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'] else 0)
+                                    options=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'], 
+                                    index=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'].index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'] else 0)
             subprocesso_siloms_edit = st.text_input('SUBOPROCESSO SILOMS*', value=df.loc[indice_edicao, 'SUBOPROCESSO SILOMS'])
             consignataria_edit = st.text_input('Consignatária*', value=df.loc[indice_edicao, 'CONSIGNATÁRIA'])
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
-                             options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
-                             index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
+                            options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
+                            index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
             data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual*', value=datetime.strptime(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'], '%d/%m/%Y'))
             categoria_edit = st.selectbox('Categoria*', 
-                              options=['', 'I', 'II', 'III'], 
-                              index=['', 'I', 'II', 'III'].index(df.loc[indice_edicao, 'CATEGORIA']))
+                            options=['', 'I', 'II', 'III'], 
+                            index=['', 'I', 'II', 'III'].index(df.loc[indice_edicao, 'CATEGORIA']))
             natureza_desconto_edit = st.selectbox('Natureza de Desconto*', 
-                                      options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'], 
-                                      index=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'].index(df.loc[indice_edicao, 'NATUREZA DE DESCONTO']))
+                                    options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'], 
+                                    index=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'].index(df.loc[indice_edicao, 'NATUREZA DE DESCONTO']))
             cnpj_edit = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX', value=df.loc[indice_edicao, 'CNPJ'])
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual_edit - data_atual).days
@@ -172,7 +172,8 @@ def main():
             verificado_options = ['', 'Sim', 'Não']
             verificado_initial_index = verificado_options.index(df.loc[indice_edicao, 'Verificado ?']) if df.loc[indice_edicao, 'Verificado ?'] in verificado_options else 0
             verificado_edit = st.selectbox('Verificado?*', options=verificado_options, index=verificado_initial_index)
-            data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y'))
+            
+            data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y') if 'DATA DE ENTRADA' in df.columns else datetime.now())
             if st.button('Alterar'):
                 if validar_cnpj(cnpj_edit):
                     if consignataria_edit.strip() == '' or situacao_edit.strip() == '' or situacao_econsig_edit.strip() == '' or verificado_edit.strip() == '':
