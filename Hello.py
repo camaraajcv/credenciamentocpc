@@ -3,10 +3,10 @@ import pandas as pd
 
 # Função para adicionar dados à planilha
 def adicionar_dados(file_path, dados):
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(file_path, engine='openpyxl')  # Usando o engine openpyxl para leitura de arquivos .xls
     novo_registro = pd.DataFrame([dados], columns=df.columns)
     df = pd.concat([df, novo_registro], ignore_index=True)
-    df.to_excel(file_path, index=False)
+    df.to_excel(file_path, index=False, engine='openpyxl')  # Usando o engine openpyxl para escrita de arquivos .xls
 
 def main():
     st.title('Inserindo Dados em Planilha Excel')
@@ -55,9 +55,10 @@ def main():
 
     # Exibe os dados da planilha atualizada
     st.header('Planilha Atualizada')
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(file_path, engine='openpyxl')  # Usando o engine openpyxl para leitura de arquivos .xls
     st.write(df)
 
 if __name__ == '__main__':
     main()
+
 
