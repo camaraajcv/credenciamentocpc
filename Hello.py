@@ -28,17 +28,17 @@ def validar_cnpj(cnpj):
     return True
 
 def main():
-    st.title('Inserindo, Editando e Excluindo Dados em DataFrame')
+    st.title('Controle Processos CPC 2024')
 
     # Carregar ou criar o DataFrame
     df = carregar_dataframe()
 
     # Checkbox para exibir o formulário de inclusão
-    exibir_formulario_insercao = st.checkbox('Exibir Formulário de Inserção')
+    exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
 
     if exibir_formulario_insercao:
         # Exibir formulário para inserir dados
-        st.header('Inserir Novos Dados')
+        st.header('Inserir Processo')
 
         col1, col2 = st.columns(2)
 
@@ -103,7 +103,7 @@ def main():
                     st.success('Dados inseridos com sucesso.')
 
     # Checkbox para exibir o formulário de exclusão
-    exibir_formulario_exclusao = st.checkbox('Exibir Formulário de Exclusão')
+    exibir_formulario_exclusao = st.checkbox('Excluir Processo')
 
     if exibir_formulario_exclusao:
         # Exibir formulário para exclusão de linha
@@ -117,7 +117,7 @@ def main():
                 st.success('Linha excluída com sucesso.')
 
     # Checkbox para exibir o formulário de edição
-    exibir_formulario_edicao = st.checkbox('Exibir Formulário de Edição')
+    exibir_formulario_edicao = st.checkbox('Alterar Processo')
 
     if exibir_formulario_edicao:
         # Exibir formulário para edição de dados
