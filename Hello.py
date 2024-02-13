@@ -79,7 +79,7 @@ def main():
             cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
             cpc_anual = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
             verificado = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'])
-
+            numero_contrato = st.text_input('NRO CONTRATO (PORTARIA OU TERMO)')
         if st.button('Inserir'):
             if validar_cnpj(cnpj):
                 if consignataria.strip() == '' or situacao.strip() == '' or situacao_econsig.strip() == '' or verificado.strip() == '':
@@ -92,7 +92,7 @@ def main():
                         'NATUREZA DE DESCONTO': natureza_desconto,
                         'CONSIGNATÁRIA': consignataria,
                         'CNPJ': cnpj,
-                        'NRO CONTRATO (PORTARIA OU TERMO)': '',
+                        'NRO CONTRATO (PORTARIA OU TERMO)': numero_contrato,
                         'BCA OU DOU': bca_ou_dou,
                         'SITUAÇÃO': situacao,
                         'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual.strftime('%d/%m/%Y'),
@@ -169,7 +169,7 @@ def main():
             verificado_options = ['', 'Sim', 'Não']
             verificado_initial_index = verificado_options.index(df.loc[indice_edicao, 'Verificado ?']) if df.loc[indice_edicao, 'Verificado ?'] in verificado_options else 0
             verificado_edit = st.selectbox('Verificado?*', options=verificado_options, index=verificado_initial_index)
-            
+            numero_contrato_edit = st.text_input('NRO CONTRATO (PORTARIA OU TERMO)', value=df.loc[indice_edicao, 'NRO CONTRATO (PORTARIA OU TERMO)'])
             data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y') if 'DATA DE ENTRADA' in df.columns else datetime.now(), format='DD/MM/YYYY')
             if st.button('Alterar'):
                 if validar_cnpj(cnpj_edit):
@@ -224,5 +224,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
