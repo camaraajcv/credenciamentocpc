@@ -234,6 +234,7 @@ def main():
     st.subheader('Percentual por Natureza de Desconto')
     count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts().reset_index()
     count_by_natureza = count_by_natureza.rename(columns={'index': 'NATUREZA DESCONTO', 'NATUREZA DE DESCONTO': 'TOTAL'})
+    count_by_natureza['TOTAL'] = count_by_natureza['TOTAL'].astype(str)  # Convertendo para string
     st.write(count_by_natureza)
 
     plt.figure(figsize=(8, 6))
