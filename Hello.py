@@ -70,7 +70,7 @@ def main():
             status_credenciamento = st.text_input('Status Credenciamento')
             acao = st.text_input('Ação')
             oficio_para_ec = st.text_input('Ofício para EC')
-            cpc_status = st.text_input('CPC Status')
+            cpc_status = st.selectbox('CPC Status', options=['', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
             verificado = st.text_input('Verificado?')
             cpc_anual = st.text_input('CPC Anual')
 
@@ -127,6 +127,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
