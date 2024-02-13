@@ -43,16 +43,17 @@ def main():
         col1, col2 = st.columns(2)
 
         with col1:
-            situacao_econsig = st.selectbox('Situação Econômica', options=['', 'Arquivado', 'Ativo', 'Bloqueado', 'Não Cadastrado'])
-            localizacao = st.text_input('Localização')
-            consignataria = st.text_input('Consignatária')
-            bca_ou_dou = st.text_input('BCA ou DOU')
-            situacao = st.text_input('Situação')
-            data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY')
-            categoria = st.selectbox('Categoria', options=['', 'I', 'II', 'III'])
-            natureza_desconto = st.selectbox('Natureza de Desconto', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
-            cnpj = st.text_input('CNPJ', placeholder='XX.XXX.XXX/XXXX-XX')
-            nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)')
+            situacao_econsig = st.selectbox('Situação Econômica*', options=['', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'])
+            localizacao = st.text_input('Localização', required=False)
+            consignataria = st.text_input('Consignatária*', required=True)
+            bca_ou_dou = st.text_input('BCA ou DOU', required=False)
+            situacao = st.text_input('Situação*', required=True)
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual*', format='DD/MM/YYYY')
+            categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
+            natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
+            cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+            nro_contrato = st.text_input('Nro Contrato (Portaria ou Termo)', required=False)
+            verificado = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'])
         with col2:
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
@@ -63,13 +64,12 @@ def main():
            
             dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             nup = st.text_input('NUP')
-            codigo = st.text_input('Código')
+            codigo = st.text_input('Código', required=False)
             status_credenciamento = st.text_input('Status Credenciamento')
-            acao = st.text_input('Ação')
-            oficio_para_ec = st.text_input('Ofício para EC')
+            acao = st.text_input('Ação', required=False)
+            oficio_para_ec = st.text_input('Ofício para EC', required=False)
             cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
-            verificado = st.text_input('Verificado?')
-            cpc_anual = st.text_input('CPC Anual')
+            cpc_anual = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
 
         if st.button('Inserir'):
             if validar_cnpj(cnpj):
@@ -109,3 +109,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
