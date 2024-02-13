@@ -240,7 +240,11 @@ def main():
     st.pyplot()
 
     st.header('Gráficos')
+   
     st.subheader('Correlação entre Dias para Fim Vigência e CPC Anual')
+
+    # Converter a coluna 'Dias para Fim Vigência' para numérica
+    df['Dias para Fim Vigência'] = pd.to_numeric(df['Dias para Fim Vigência'].str.split(' ').str[0])
 
     # Ordenar o DataFrame pela coluna 'Dias para Fim Vigência'
     df_sorted = df.sort_values(by='Dias para Fim Vigência')
@@ -249,6 +253,7 @@ def main():
     fig, ax = plt.subplots()
     sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
+
 
 
 if __name__ == "__main__":
