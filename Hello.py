@@ -126,7 +126,9 @@ def main():
         if not df.empty:
             indice_edicao = st.number_input('Índice da Linha a ser Editada', min_value=0, max_value=len(df)-1, step=1, value=0)
 
-            situacao_econsig_edit = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'], index=df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'])
+            situacao_econsig_edit = st.selectbox('Situação Econsig*', 
+                                     options=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'], 
+                                     index=options.index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in options else 0)
             subprocesso_siloms_edit = st.text_input('SUBOPROCESSO SILOMS*', value=df.loc[indice_edicao, 'SUBOPROCESSO SILOMS'])
             consignataria_edit = st.text_input('Consignatária*', value=df.loc[indice_edicao, 'CONSIGNATÁRIA'])
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
