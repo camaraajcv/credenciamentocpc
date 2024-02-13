@@ -214,7 +214,7 @@ def main():
                         st.success('Dados alterados com sucesso.')
 
     # Exibir DataFrame atualizado
-    st.header('Processos Atualizado')
+    st.header('Processos Atualizados')
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
