@@ -235,7 +235,7 @@ def main():
     count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
     count_by_natureza.index.name = 'NATUREZA DESCONTO'  # Renomeia o índice para "NATUREZA DESCONTO"
     count_by_natureza = count_by_natureza.reset_index()  # Reseta o índice para poder renomear a coluna
-    count_by_natureza = count_by_natureza.rename(columns={'index': 'NATUREZA DESCONTO', 'NATUREZA DE DESCONTO': 'TOTAL'})  # Renomeia a coluna 'index' para 'NATUREZA DESCONTO' e 'NATUREZA DE DESCONTO' para 'TOTAL'
+    count_by_natureza = count_by_natureza.rename(columns={'NATUREZA DE DESCONTO': 'TOTAL'})  # Renomeia a coluna 'NATUREZA DE DESCONTO' para 'TOTAL'
 
     st.write(count_by_natureza)
     plt.figure(figsize=(8, 6))
