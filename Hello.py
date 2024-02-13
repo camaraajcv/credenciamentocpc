@@ -15,7 +15,7 @@ def carregar_dataframe():
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                   'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL']
+                   'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL', 'DATA DE ENTRADA']
         return pd.DataFrame(columns=colunas)
 
 # Função para salvar o DataFrame em um arquivo CSV
@@ -48,8 +48,6 @@ def main():
 
     if exibir_formulario_insercao:
         # Exibir formulário para inserir dados
-        #st.header('Inserir Processo')
-
         col1, col2 = st.columns(2)
 
         with col1:
@@ -62,6 +60,8 @@ def main():
             categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+            data_entrada = st.date_input('Data de Entrada*', format='DD/MM/YYYY', value=date.today())
+
         with col2:
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
@@ -104,16 +104,14 @@ def main():
                         'OFÍCIO PARA EC': oficio_para_ec,
                         'CPC STATUS': cpc_status,
                         'Verificado ?': verificado,
-                        'CPC ANUAL': cpc_anual
+                        'CPC ANUAL': cpc_anual,
+                        'DATA DE ENTRADA': data_entrada.strftime('%d/%m/%Y')
                     }
 
                     novo_df = pd.DataFrame([novo_dado])
                     df = pd.concat([df, novo_df], ignore_index=True)
 
                     st.success('Dados inseridos com sucesso.')
-
-    # Checkbox para exibir o formulário de exclusão
-    #exibir_formulario_exclusao = st.checkbox('Excluir Processo')
 
     if exibir_formulario_exclusao:
         # Exibir formulário para exclusão de linha
@@ -125,9 +123,6 @@ def main():
             if st.button('Excluir'):
                 df = df.drop(index=indice_exclusao)
                 st.success('Linha excluída com sucesso.')
-
-    # Checkbox para exibir o formulário de edição
-    #exibir_formulario_edicao = st.checkbox('Alterar Processo')
 
     if exibir_formulario_edicao:
         # Exibir formulário para edição de dados
@@ -145,7 +140,7 @@ def main():
             situacao_edit = st.selectbox('Situação*', 
                             options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
                             index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
-            data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual*', value=datetime.strptime(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'], '%d/%m/%Y'))
+            data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual*', value=datetime.strptime(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'], '%d/%m/%Y'), format='DD/MM/YYYY')
             categoria_edit = st.selectbox('Categoria*', 
                             options=['', 'I', 'II', 'III'], 
                             index=['', 'I', 'II', 'III'].index(df.loc[indice_edicao, 'CATEGORIA']))
@@ -175,7 +170,7 @@ def main():
             verificado_initial_index = verificado_options.index(df.loc[indice_edicao, 'Verificado ?']) if df.loc[indice_edicao, 'Verificado ?'] in verificado_options else 0
             verificado_edit = st.selectbox('Verificado?*', options=verificado_options, index=verificado_initial_index)
             
-            data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y') if 'DATA DE ENTRADA' in df.columns else datetime.now())
+            data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y') if 'DATA DE ENTRADA' in df.columns else datetime.now(), format='DD/MM/YYYY')
             if st.button('Alterar'):
                 if validar_cnpj(cnpj_edit):
                     if consignataria_edit.strip() == '' or situacao_edit.strip() == '' or situacao_econsig_edit.strip() == '' or verificado_edit.strip() == '':
@@ -199,6 +194,7 @@ def main():
                         df.loc[indice_edicao, 'CPC STATUS'] = cpc_status_edit
                         df.loc[indice_edicao, 'Verificado ?'] = verificado_edit
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
+                        df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
 
                         st.success('Dados alterados com sucesso.')
 
@@ -206,48 +202,22 @@ def main():
     st.header('DataFrame Atualizado')
     st.write(df)
 
-    # Indicadores
+    # Salvar DataFrame em arquivo CSV
+    salvar_dataframe(df)
+
+    # Adicionar gráficos e indicadores
     st.header('Indicadores')
+    st.subheader('Total de Processos por Situação')
+    count_by_situation = df['SITUAÇÃO'].value_counts()
+    st.bar_chart(count_by_situation)
 
-    # Total de registros
-    st.write(f"Total de registros na planilha: {len(df)}")
+    st.subheader('Distribuição das Categorias')
+    count_by_category = df['CATEGORIA'].value_counts()
+    st.bar_chart(count_by_category)
 
-    # Contagem de registros por situação
-    contagem_situacao = df['SITUAÇÃO'].value_counts()
-    st.write("Contagem de registros por situação:")
-    st.write(contagem_situacao)
-
-    # Contagem de registros por categoria
-    contagem_categoria = df['CATEGORIA'].value_counts()
-    st.write("Contagem de registros por categoria:")
-    st.write(contagem_categoria)
-
-    # Porcentagem de processos verificados e não verificados
-    porcentagem_verificados = df['Verificado ?'].value_counts(normalize=True) * 100
-    st.write("Porcentagem de processos verificados e não verificados:")
-    st.write(porcentagem_verificados)
-
-    # Gráficos
     st.header('Gráficos')
-
-    # Gráfico de barras para distribuição por situação
-    plt.figure(figsize=(10, 6))
-    sns.countplot(data=df, x='SITUAÇÃO')
-    plt.xticks(rotation=45)
-    st.pyplot()
-
-    # Gráfico de pizza para distribuição por categoria
-    plt.figure(figsize=(8, 8))
-    df['CATEGORIA'].value_counts().plot.pie(autopct='%1.1f%%')
-    plt.ylabel('')
-    plt.title('Distribuição por Categoria')
-    st.pyplot()
-
-    # Gráfico de barras horizontais para contagem de processos verificados e não verificados
-    plt.figure(figsize=(8, 6))
-    df['Verificado ?'].value_counts().plot(kind='barh')
-    plt.xlabel('Quantidade')
-    plt.title('Processos Verificados e Não Verificados')
+    st.subheader('Correlação entre Dias para Fim Vigência e CPC Anual')
+    sns.scatterplot(data=df, x='Dias para Fim Vigência', y='CPC ANUAL')
     st.pyplot()
 
 if __name__ == '__main__':
