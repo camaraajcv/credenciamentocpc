@@ -241,8 +241,13 @@ def main():
 
     st.header('Gráficos')
     st.subheader('Correlação entre Dias para Fim Vigência e CPC Anual')
+
+    # Ordenar o DataFrame pela coluna 'Dias para Fim Vigência'
+    df_sorted = df.sort_values(by='Dias para Fim Vigência')
+
+    # Plotar o gráfico de dispersão com o DataFrame ordenado
     fig, ax = plt.subplots()
-    sns.scatterplot(data=df, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
+    sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
 
 
