@@ -172,7 +172,7 @@ def main():
             verificado_options = ['', 'Sim', 'Não']
             verificado_initial_index = verificado_options.index(df.loc[indice_edicao, 'Verificado ?']) if df.loc[indice_edicao, 'Verificado ?'] in verificado_options else 0
             verificado_edit = st.selectbox('Verificado?*', options=verificado_options, index=verificado_initial_index)
-
+            data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y'))
             if st.button('Alterar'):
                 if validar_cnpj(cnpj_edit):
                     if consignataria_edit.strip() == '' or situacao_edit.strip() == '' or situacao_econsig_edit.strip() == '' or verificado_edit.strip() == '':
