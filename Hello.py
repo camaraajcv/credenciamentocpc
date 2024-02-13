@@ -32,9 +32,19 @@ def main():
 
     # Carregar ou criar o DataFrame
     df = carregar_dataframe()
+    # Checkboxes para incluir, editar e excluir processos
+    col1, col2, col3 = st.columns(3)
 
-    # Checkbox para exibir o formulário de inclusão
-    exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
+    with col1:
+        exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
+
+    with col2:
+        exibir_formulario_edicao = st.checkbox('Alterar Processo')
+
+    with col3:
+        exibir_formulario_exclusao = st.checkbox('Excluir Processo')
+        # Checkbox para exibir o formulário de inclusão
+        exibir_formulario_insercao = st.checkbox('Inserir Novo Processo')
 
     if exibir_formulario_insercao:
         # Exibir formulário para inserir dados
