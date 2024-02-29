@@ -77,7 +77,7 @@ def main():
 
         with col1:
             situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'])
-            subprocesso_siloms = st.text_input('SUBPROCESSO SILOMS*',max_chars=6)
+            subprocesso_siloms = st.text_input('SUBPROCESSO SILOMS*', value=str(df.loc[indice_edicao, 'SUBPROCESSO SILOMS']), max_chars=6)
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'])
