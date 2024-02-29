@@ -281,8 +281,8 @@ def main():
     
     
     # Selecionar as colunas relevantes para o novo DataFrame
-    novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO','DATA DE ENTRADA']]
-    
+    novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO']]
+
     # Exibir o novo DataFrame
     st.write(novo_df)
 if __name__ == "__main__":
