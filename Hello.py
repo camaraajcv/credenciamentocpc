@@ -277,13 +277,7 @@ def main():
     sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
 
-
     
-    
-    # Selecionar as colunas relevantes para o novo DataFrame
-    novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO']]
 
-    # Exibir o novo DataFrame
-    st.write(novo_df)
 if __name__ == "__main__":
     main()
