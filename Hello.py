@@ -89,14 +89,24 @@ def main():
 
         with col2:
             data_entrada = st.date_input('Data de Entrada*', format='DD/MM/YYYY', value=date.today())
-            data_atual = date.today()  # Obtém a data atual
-            dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
-            if dias_para_fim_vigencia < 0:
-                dias_para_fim_vigencia = 'Expirado'
+            # Obtém a data atual
+            data_atual = date.today()
+
+            # Obtém a data de expiração do contrato do usuário
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY')
+
+            # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
+            if data_expiracao_contratual is not None:
+                dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
+                if dias_para_fim_vigencia < 0:
+                    dias_para_fim_vigencia = 'Expirado'
+                else:
+                    dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
             else:
-                dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
-           
-            dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
+                dias_para_fim_vigencia = ''
+
+            # Exibe os dias para o fim da vigência
+            st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             nup = st.text_input('NUP')
             codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento -  Observações')
