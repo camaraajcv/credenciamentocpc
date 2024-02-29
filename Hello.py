@@ -284,6 +284,6 @@ def main():
     novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO']]
 
     # Exibir o novo DataFrame
-    print(novo_df)
+    st.write(novo_df)
 if __name__ == "__main__":
     main()
