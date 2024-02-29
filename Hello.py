@@ -5,6 +5,7 @@ import re
 from datetime import datetime, date
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
@@ -209,14 +210,27 @@ def main():
             dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             #nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
             codigo_edit = st.text_input('Código Caixa', value=df.loc[indice_edicao, 'CÓDIGO'])
-            status_credenciamento_value = df.loc[indice_edicao, 'STATUS CREDENCIAMENTO']
-            if pd.isnull(status_credenciamento_value):
-                status_credenciamento_value = ''  # Substitui NaN por uma string vazia
+            status_credenciamento_edit = st.text_input('Status Credenciamento -  Observações', value=df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'])
+            # Obtém o valor da coluna 'CPC STATUS' para o índice de edição
+            cpc_status_value = df.loc[indice_edicao, 'CPC STATUS']
 
-            status_credenciamento_edit = st.text_input('Status Credenciamento - Observações', value=status_credenciamento_value)
-            cpc_status_edit = st.selectbox('CPC Status', 
-                                options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'], 
-                                index=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'].index(df.loc[indice_edicao, 'CPC STATUS']))
+            # Verifica se o valor é NaN
+            if pd.isnull(cpc_status_value):
+                # Se for NaN, atribui um valor padrão ou vazio
+                cpc_status_value = ''
+
+            # Define as opções do selectbox
+            opcoes_cpc_status = ['', 'EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO', 'EM ANÁLISE PP1']
+
+            # Obtém o índice do valor atual no selectbox
+            if cpc_status_value in opcoes_cpc_status:
+                indice_cpc_status = opcoes_cpc_status.index(cpc_status_value)
+            else:
+                # Se o valor atual não estiver na lista de opções, assume o índice 0
+                indice_cpc_status = 0
+
+            # Cria o selectbox com o valor atual selecionado
+            cpc_status_edit = st.selectbox('CPC Status*', options=opcoes_cpc_status, index=indice_cpc_status)
             cpc_anual_options = ['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026']
             cpc_anual_initial_index = cpc_anual_options.index(df.loc[indice_edicao, 'CPC ANUAL']) if df.loc[indice_edicao, 'CPC ANUAL'] in cpc_anual_options else 0
             cpc_anual_edit = st.selectbox('CPC Anual', options=cpc_anual_options, index=cpc_anual_initial_index)
