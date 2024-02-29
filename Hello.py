@@ -57,9 +57,9 @@ def main():
 
     # Lógica para garantir apenas um checkbox selecionado
     with col1:
-        inserir_checked = st.checkbox('Inserir Novo Processo', key='inserir')
+        inserir_checked = st.checkbox('Incluir Novo Processo', key='inserir')
         if inserir_checked:
-            opcao_selecionada = 'inserir'
+            opcao_selecionada = 'incluir'
     with col2:
         editar_checked = st.checkbox('Alterar Processo', key='alterar')
         if editar_checked:
@@ -69,7 +69,7 @@ def main():
         if excluir_checked:
             opcao_selecionada = 'excluir'
 
-    if opcao_selecionada == 'inserir':
+    if opcao_selecionada == 'incluir':
         # Exibir formulário para inserir dados
         col1, col2 = st.columns(2)
 
