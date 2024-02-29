@@ -26,10 +26,10 @@ def carregar_dataframe():
         return pd.read_csv("dados.csv")
     else:
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO (PORTARIA OU TERMO)', 
+                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                   'AÇÃO', 'OFÍCIO PARA EC', 'CPC STATUS', 'Verificado ?', 'CPC ANUAL', 'DATA DE ENTRADA']
+                   'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
         return pd.DataFrame(columns=colunas)
 
 # Função para salvar o DataFrame em um arquivo CSV
@@ -98,15 +98,12 @@ def main():
             nup = st.text_input('NUP')
             codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento -  Observações')
-            acao = st.text_input('Ação')
-            oficio_para_ec = st.text_input('Ofício para EC')
-            cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'])
+            cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
             cpc_anual = st.selectbox('CPC Anual', options=['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
-            verificado = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'])
-            numero_contrato = st.text_input('NRO CONTRATO (PORTARIA OU TERMO)')
+            numero_contrato = st.text_input('NRO CONTRATO')
         if st.button('Inserir'):
             if validar_cnpj(cnpj):
-                if consignataria.strip() == '' or situacao.strip() == '' or situacao_econsig.strip() == '' or verificado.strip() == '':
+                if consignataria.strip() == '' or situacao.strip() == '' or situacao_econsig.strip() == '' :
                     st.error('Os campos marcados com * são obrigatórios.')
                 else:
                     novo_dado = {
@@ -116,7 +113,7 @@ def main():
                         'NATUREZA DE DESCONTO': natureza_desconto,
                         'CONSIGNATÁRIA': consignataria,
                         'CNPJ': cnpj,
-                        'NRO CONTRATO (PORTARIA OU TERMO)': numero_contrato,
+                        'NRO CONTRATO': numero_contrato,
                         'BCA OU DOU': bca_ou_dou,
                         'SITUAÇÃO': situacao,
                         ##'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual.strftime('%d/%m/%Y'),
@@ -124,10 +121,7 @@ def main():
                         'NUP': nup,
                         'CÓDIGO': codigo,
                         'STATUS CREDENCIAMENTO': status_credenciamento,
-                        'AÇÃO': acao,
-                        'OFÍCIO PARA EC': oficio_para_ec,
                         'CPC STATUS': cpc_status,
-                        'Verificado ?': verificado,
                         'CPC ANUAL': cpc_anual,
                         'DATA DE ENTRADA': data_entrada.strftime('%d/%m/%Y')
                     }
@@ -182,22 +176,17 @@ def main():
             nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
             codigo_edit = st.text_input('Código Caixa', value=df.loc[indice_edicao, 'CÓDIGO'])
             status_credenciamento_edit = st.text_input('Status Credenciamento -  Observações', value=df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'])
-            acao_edit = st.text_input('Ação', value=df.loc[indice_edicao, 'AÇÃO'])
-            oficio_para_ec_edit = st.text_input('Ofício para EC', value=df.loc[indice_edicao, 'OFÍCIO PARA EC'])
             cpc_status_edit = st.selectbox('CPC Status', 
-                                options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'], 
-                                index=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO'].index(df.loc[indice_edicao, 'CPC STATUS']))
+                                options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'], 
+                                index=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'].index(df.loc[indice_edicao, 'CPC STATUS']))
             cpc_anual_options = ['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026']
             cpc_anual_initial_index = cpc_anual_options.index(df.loc[indice_edicao, 'CPC ANUAL']) if df.loc[indice_edicao, 'CPC ANUAL'] in cpc_anual_options else 0
             cpc_anual_edit = st.selectbox('CPC Anual', options=cpc_anual_options, index=cpc_anual_initial_index)
-            verificado_options = ['', 'Sim', 'Não']
-            verificado_initial_index = verificado_options.index(df.loc[indice_edicao, 'Verificado ?']) if df.loc[indice_edicao, 'Verificado ?'] in verificado_options else 0
-            verificado_edit = st.selectbox('Verificado?*', options=verificado_options, index=verificado_initial_index)
             numero_contrato_edit = st.text_input('NRO CONTRATO (PORTARIA OU TERMO)', value=df.loc[indice_edicao, 'NRO CONTRATO (PORTARIA OU TERMO)'])
             data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y') if 'DATA DE ENTRADA' in df.columns else datetime.now(), format='DD/MM/YYYY')
             if st.button('Alterar'):
                 if validar_cnpj(cnpj_edit):
-                    if consignataria_edit.strip() == '' or situacao_edit.strip() == '' or situacao_econsig_edit.strip() == '' or verificado_edit.strip() == '':
+                    if consignataria_edit.strip() == '' or situacao_edit.strip() == '' or situacao_econsig_edit.strip() == '':
                         st.error('Os campos marcados com * são obrigatórios.')
                     else:
                         df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] = situacao_econsig_edit
@@ -213,12 +202,12 @@ def main():
                         df.loc[indice_edicao, 'NUP'] = nup_edit
                         df.loc[indice_edicao, 'CÓDIGO'] = codigo_edit
                         df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'] = status_credenciamento_edit
-                        df.loc[indice_edicao, 'AÇÃO'] = acao_edit
-                        df.loc[indice_edicao, 'OFÍCIO PARA EC'] = oficio_para_ec_edit
+                        #df.loc[indice_edicao, 'AÇÃO'] = acao_edit
+                        #df.loc[indice_edicao, 'OFÍCIO PARA EC'] = oficio_para_ec_edit
                         df.loc[indice_edicao, 'CPC STATUS'] = cpc_status_edit
-                        df.loc[indice_edicao, 'Verificado ?'] = verificado_edit
+                        #df.loc[indice_edicao, 'Verificado ?'] = verificado_edit
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
-                        df.loc[indice_edicao, 'NRO CONTRATO (PORTARIA OU TERMO)'] = numero_contrato_edit
+                        df.loc[indice_edicao, 'NRO CONTRATO'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
 
                         st.success('Dados alterados com sucesso.')
