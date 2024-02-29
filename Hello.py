@@ -259,14 +259,14 @@ def main():
 
     st.subheader('Tempo desde a entrada')
     
-   # Copie as colunas necessárias do DataFrame original
+    # Copie as colunas necessárias do DataFrame original
     tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO', 'CNPJ']].copy()
 
     # Converta a coluna 'DATA DE ENTRADA' para o tipo datetime
     tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
 
-    # Obtenha a data atual
-    data_atual = date.today()
+    # Obtenha a data atual como um objeto datetime
+    data_atual = pd.to_datetime(date.today())
 
     # Calcule o número de dias decorridos desde a entrada até a data atual
     tempo_entrada['Dias Decorridos'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
