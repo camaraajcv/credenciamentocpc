@@ -6,3 +6,4 @@ streamlit
 streamlit_pydantic
 matplotlib
 seaborn
+streamlit_masked_input
