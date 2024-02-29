@@ -42,6 +42,20 @@ def validar_cnpj(cnpj):
         st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
         return False
     return True
+# Aplicar máscara de CNPJ enquanto o usuário digita
+def formatar_cnpj(cnpj):
+    cnpj = re.sub(r'\D', '', cnpj)  # Remover caracteres não numéricos
+    if len(cnpj) <= 2:
+        return cnpj
+    elif len(cnpj) <= 5:
+        return f"{cnpj[:2]}.{cnpj[2:]}"
+    elif len(cnpj) <= 8:
+        return f"{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:]}"
+    elif len(cnpj) <= 12:
+        return f"{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:]}"
+    else:
+        return f"{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:]}"
+
 
 def main():
     st.title('Controle Processos CPC 2024')
@@ -82,7 +96,9 @@ def main():
             data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY')
             categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
-            cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+            cnpj = st.text_input('CNPJ*', max_chars=18, key='cnpj')
+            # Formatando CNPJ enquanto o usuário digita
+            cnpj_formatado = formatar_cnpj(cnpj)
             data_entrada = st.date_input('Data de Entrada*', format='DD/MM/YYYY', value=date.today())
 
         with col2:
@@ -104,7 +120,7 @@ def main():
             verificado = st.selectbox('Verificado?*', options=['', 'Sim', 'Não'])
             numero_contrato = st.text_input('NRO CONTRATO (PORTARIA OU TERMO)')
         if st.button('Inserir'):
-            if validar_cnpj(cnpj):
+            if validar_cnpj(cnpj_formatado):
                 if consignataria.strip() == '' or situacao.strip() == '' or situacao_econsig.strip() == '' or verificado.strip() == '':
                     st.error('Os campos marcados com * são obrigatórios.')
                 else:
