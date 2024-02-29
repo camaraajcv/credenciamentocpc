@@ -216,7 +216,7 @@ def main():
             cpc_anual_options = ['', 'CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026']
             cpc_anual_initial_index = cpc_anual_options.index(df.loc[indice_edicao, 'CPC ANUAL']) if df.loc[indice_edicao, 'CPC ANUAL'] in cpc_anual_options else 0
             cpc_anual_edit = st.selectbox('CPC Anual', options=cpc_anual_options, index=cpc_anual_initial_index)
-            numero_contrato_edit = st.text_input('NRO CONTRATO', value=df.loc[indice_edicao, 'NRO CONTRATO'])
+            numero_contrato_edit = st.text_input('NRO CONTRATO', value=str(int(df.loc[indice_edicao, 'NRO CONTRATO'])))
             data_entrada_edit = st.date_input('Data de Entrada*', value=datetime.strptime(df.loc[indice_edicao, 'DATA DE ENTRADA'], '%d/%m/%Y') if 'DATA DE ENTRADA' in df.columns else datetime.now(), format='DD/MM/YYYY')
             if st.button('Alterar'):
                 if validar_cnpj(cnpj_edit):
