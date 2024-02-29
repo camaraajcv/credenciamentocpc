@@ -258,20 +258,21 @@ def main():
     st.write(count_by_natureza)
 
     st.subheader('Tempo desde a entrada')
-    tempo_entrada = df[['DATA DE ENTRADA','STATUS CREDENCIAMENTO']]
-
     # Convertendo a coluna 'DATA DE ENTRADA' para datetime
-    tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'], format='%d/%m/%Y')
+    df['DATA DE ENTRADA'] = pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')
+
+    # Criando uma cópia do DataFrame com as colunas relevantes
+    tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO']].copy()
 
     # Extraindo a parte da data da coluna 'DATA DE ENTRADA'
-    data_entrada = tempo_entrada['DATA DE ENTRADA'].dt.date
+    tempo_entrada['DATA DE ENTRADA'] = tempo_entrada['DATA DE ENTRADA'].dt.date
 
     # Calculando o número de dias desde a entrada até a data atual
     data_atual = datetime.now().date()
-    tempo_entrada['Dias desde a entrada'] = (data_atual - data_entrada).dt.days
+    tempo_entrada['Dias desde a entrada'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
 
     # Exibindo o DataFrame atualizado
-    st.write(df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO', 'Dias desde a entrada']])
+    st.write(tempo_entrada)
 
 
     
