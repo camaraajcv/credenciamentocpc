@@ -261,7 +261,8 @@ def main():
     
     tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO','CNPJ']].copy()
     tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
-   
+    data_atual = date.today()
+    tempo_entrada['Dias Decorridos']= (tempo_entrada['DATA DE ENTRADA']-data_atual).days
 
     # Exibindo o DataFrame atualizado
     st.write(tempo_entrada)
