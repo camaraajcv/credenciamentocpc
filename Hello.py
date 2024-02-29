@@ -4,7 +4,6 @@ import os
 import re
 from datetime import datetime, date
 import matplotlib.pyplot as plt
-from streamlit_masked_input import masked_input
 import re
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
@@ -45,11 +44,11 @@ def validar_cnpj(cnpj):
     return True
 
 # Exibir campo de entrada com máscara para o CNPJ
-cnpj = masked_input("CNPJ*", "__.___.___/____-__", mask="NN.NNN.NNN/NNNN-NN")
+cnpj_input = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX', max_chars=18)
 
 # Validar o CNPJ
 if st.button('Validar CNPJ'):
-    if validar_cnpj(cnpj):
+    if validar_cnpj(cnpj_input):
         st.success('Formato do CNPJ válido.')
     else:
         st.error('Formato do CNPJ inválido.')
