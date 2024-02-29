@@ -259,7 +259,7 @@ def main():
 
     st.subheader('Tempo desde a entrada')
     
-    tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO']].copy()
+    tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO','CNPJ']].copy()
 
    
 
