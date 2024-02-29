@@ -282,6 +282,14 @@ def main():
     
     # Selecionar as colunas relevantes para o novo DataFrame
     novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO','DATA DE ENTRADA']]
+    # Função para calcular o número de dias entre a data de entrada e a data atual
+    def calcular_dias_ate_hoje(data_entrada):
+        hoje = datetime.now().date()
+        dias = (hoje - data_entrada).days
+        return dias
+
+    # Adicionando uma nova coluna ao DataFrame novo_df
+    novo_df['Dias até hoje'] = novo_df['DATA DE ENTRADA'].apply(calcular_dias_ate_hoje)
 
     # Exibir o novo DataFrame
     st.write(novo_df)
