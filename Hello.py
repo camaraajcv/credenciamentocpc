@@ -282,7 +282,7 @@ def main():
     count_by_category = df['CATEGORIA'].value_counts()
     st.bar_chart(count_by_category)
 
-    st.subheader('Percentual por Natureza de Desconto')
+    st.subheader('Processos por Natureza de Desconto')
     count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
     st.write(count_by_natureza)
 
