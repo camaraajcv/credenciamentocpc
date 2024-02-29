@@ -189,9 +189,10 @@ def main():
 
             # Definir o valor para dias_para_fim_vigencia_edit
             dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
-            if dias_para_fim_vigencia < 0:
+            # Verificar se dias_para_fim_vigencia é um número antes de fazer a comparação
+            if isinstance(dias_para_fim_vigencia, int) and dias_para_fim_vigencia < 0:
                 dias_para_fim_vigencia = 'Expirado'
-            else:
+            elif isinstance(dias_para_fim_vigencia, int):
                 dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
             dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
