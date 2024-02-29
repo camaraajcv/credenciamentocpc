@@ -261,12 +261,7 @@ def main():
     
     tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO']].copy()
 
-    # Extraindo a parte da data da coluna 'DATA DE ENTRADA'
-    tempo_entrada['DATA DE ENTRADA'] = tempo_entrada['DATA DE ENTRADA'].dt.date
-
-    # Calculando o número de dias desde a entrada até a data atual
-    data_atual = datetime.now().date()
-    tempo_entrada['Dias desde a entrada'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
+   
 
     # Exibindo o DataFrame atualizado
     st.write(tempo_entrada)
