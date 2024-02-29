@@ -260,7 +260,7 @@ def main():
     st.subheader('Tempo desde a entrada')
     
     # Copie as colunas necessárias do DataFrame original
-    tempo_entrada = df[['SUBPROCESSO SILOMS','CNPJ','DATA DE ENTRADA', 'SITUAÇÃO','SITUAÇÃO ECONSIG', 'CNPJ']].copy()
+    tempo_entrada = df[['SUBPROCESSO SILOMS','CNPJ','CONSIGNATÁRIA','DATA DE ENTRADA', 'SITUAÇÃO','SITUAÇÃO ECONSIG']].copy()
 
     # Converta a coluna 'DATA DE ENTRADA' para o tipo datetime
     tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
