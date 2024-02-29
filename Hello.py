@@ -160,11 +160,14 @@ def main():
             situacao_edit = st.selectbox('Situação*', 
                             options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
                             index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas',  'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
+            # Tratar a entrada de data com possibilidade de valor None ou NaN
             data_expiracao_contratual_str = str(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'])
-            data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual', 
-                                                value=None if data_expiracao_contratual_str == '' else 
-                                                datetime.strptime(data_expiracao_contratual_str, '%d/%m/%Y'), 
-                                                format='DD/MM/YYYY')
+            if data_expiracao_contratual_str == 'nan' or data_expiracao_contratual_str == '':
+                data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual', value=None, format='DD/MM/YYYY')
+            else:
+                data_expiracao_contratual_edit = st.date_input('Data Expiração Contratual', 
+                                                                value=datetime.strptime(data_expiracao_contratual_str, '%d/%m/%Y'), 
+                                                                format='DD/MM/YYYY')
             categoria_edit = st.selectbox('Categoria*', 
                             options=['', 'I', 'II', 'III'], 
                             index=['', 'I', 'II', 'III'].index(df.loc[indice_edicao, 'CATEGORIA']))
