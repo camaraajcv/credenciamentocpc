@@ -258,7 +258,7 @@ def main():
     st.write(count_by_natureza)
 
     st.subheader('Tempo desde a entrada')
-    tempo_entrada = df['DATA DE ENTRADA','STATUS CREDENCIAMENTO']
+    tempo_entrada = df[['DATA DE ENTRADA','STATUS CREDENCIAMENTO']]
     data_atual = datetime.now().date()
     tempo_entrada['Dias desde a entrada'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
 
