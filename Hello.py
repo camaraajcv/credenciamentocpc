@@ -298,7 +298,7 @@ def main():
     data_atual = pd.to_datetime(date.today())
 
     # Calcule o número de dias decorridos desde a entrada até a data atual
-    tempo_entrada['Dias Decorridos'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
+    tempo_entrada['Dias Decorridos'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days.abs()
 
     # Exiba o DataFrame atualizado
     st.write(tempo_entrada.sort_values(by='Dias Decorridos', ascending=False).drop(columns=['DATA DE ENTRADA']))
