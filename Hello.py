@@ -285,19 +285,10 @@ def main():
     hoje = datetime.now().date()
     df['Dias até hoje'] = (hoje - df['DATA DE ENTRADA']).dt.days
 
-    # Selecionar as colunas relevantes para o gráfico
-    df_plot = df[['CNPJ', 'NUP', 'SITUAÇÃO', 'Dias até hoje']]
+    # Selecionar as colunas relevantes para o novo DataFrame
+    novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO', 'Dias até hoje']]
 
-    # Criar o gráfico usando Seaborn
-    plt.figure(figsize=(10, 8))
-    sns.barplot(data=df_plot, y='CNPJ', x='Dias até hoje', hue='SITUAÇÃO', dodge=False)
-    plt.xlabel('Quantidade de dias desde a data de entrada')
-    plt.ylabel('CNPJ')
-    plt.title('Número de dias desde a entrada por CNPJ e Situação')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-
-    # Exibir o gráfico
-    st.pyplot(plt)
+    # Exibir o novo DataFrame
+    print(novo_df)
 if __name__ == "__main__":
     main()
