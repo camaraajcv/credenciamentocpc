@@ -29,7 +29,7 @@ def carregar_dataframe():
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                   'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                   'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
         return pd.DataFrame(columns=colunas)
 
@@ -107,7 +107,7 @@ def main():
 
             # Exibe os dias para o fim da vigência
             st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
-            nup = st.text_input('NUP')
+            #nup = st.text_input('NUP')
             codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento -  Observações')
             cpc_status = st.selectbox('CPC Status', options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
@@ -130,7 +130,7 @@ def main():
                         'SITUAÇÃO': situacao,
                         ##'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual.strftime('%d/%m/%Y'),
                         'Dias para Fim Vigência': dias_para_fim_vigencia,
-                        'NUP': nup,
+                        #'NUP': nup,
                         'CÓDIGO': codigo,
                         'STATUS CREDENCIAMENTO': status_credenciamento,
                         'CPC STATUS': cpc_status,
@@ -207,7 +207,7 @@ def main():
             elif isinstance(dias_para_fim_vigencia, int):
                 dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
             dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
-            nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
+            #nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
             codigo_edit = st.text_input('Código Caixa', value=df.loc[indice_edicao, 'CÓDIGO'])
             status_credenciamento_edit = st.text_input('Status Credenciamento -  Observações', value=df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'])
             cpc_status_edit = st.selectbox('CPC Status', 
@@ -233,7 +233,7 @@ def main():
                         df.loc[indice_edicao, 'SITUAÇÃO'] = situacao_edit
                         ##df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'] = data_expiracao_contratual_edit.strftime('%d/%m/%Y')
                         df.loc[indice_edicao, 'Dias para Fim Vigência'] = dias_para_fim_vigencia_edit
-                        df.loc[indice_edicao, 'NUP'] = nup_edit
+                        #df.loc[indice_edicao, 'NUP'] = nup_edit
                         df.loc[indice_edicao, 'CÓDIGO'] = codigo_edit
                         df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'] = status_credenciamento_edit
                         #df.loc[indice_edicao, 'AÇÃO'] = acao_edit
