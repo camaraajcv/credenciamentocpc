@@ -3,7 +3,7 @@ numpy
 pandas
 pydeck
 streamlit
-
+seaborn
 matplotlib
 
 
