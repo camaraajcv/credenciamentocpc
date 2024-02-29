@@ -80,7 +80,7 @@ def main():
             subprocesso_siloms = st.text_input('SUBPROCESSO SILOMS*',max_chars=6)
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
-            situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'])
+            situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretário(a) da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'])
             data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY')
             categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
@@ -159,7 +159,7 @@ def main():
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
                             options=['', 'Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
-                            index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretária da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas',  'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
+                            index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas',  'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
             # Tratar a entrada de data com possibilidade de valor None ou NaN
             data_expiracao_contratual_str = str(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'])
             if data_expiracao_contratual_str == 'nan' or data_expiracao_contratual_str == '':
