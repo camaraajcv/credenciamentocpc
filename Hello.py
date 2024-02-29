@@ -272,7 +272,7 @@ def main():
     tempo_entrada['Dias Decorridos'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
 
     # Exiba o DataFrame atualizado
-    st.write(tempo_entrada)
+    st.write(tempo_entrada.sort_values(by='Dias Decorridos', ascending=False))
     
 
 
