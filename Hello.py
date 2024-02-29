@@ -4,7 +4,7 @@ import os
 import re
 from datetime import datetime, date
 import matplotlib.pyplot as plt
-import re
+import seaborn as sns
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
@@ -42,16 +42,6 @@ def validar_cnpj(cnpj):
         st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
         return False
     return True
-
-# Exibir campo de entrada com máscara para o CNPJ
-cnpj_input = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX', max_chars=18)
-
-# Validar o CNPJ
-if st.button('Validar CNPJ'):
-    if validar_cnpj(cnpj_input):
-        st.success('Formato do CNPJ válido.')
-    else:
-        st.error('Formato do CNPJ inválido.')
 
 def main():
     st.title('Controle Processos CPC 2024')
