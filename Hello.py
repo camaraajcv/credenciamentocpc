@@ -277,20 +277,6 @@ def main():
     sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
 
-    # Função para carregar ou criar o DataFrame
-    def carregar_dataframe():
-        if os.path.exists("dados.csv"):
-            return pd.read_csv("dados.csv")
-        else:
-            colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                    'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
-            return pd.DataFrame(columns=colunas)
-
-    # Carregar o DataFrame
-    df = carregar_dataframe()
 
     # Calcular a quantidade de dias entre a data atual e a data de entrada
     hoje = date.today()
