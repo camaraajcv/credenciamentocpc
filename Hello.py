@@ -277,7 +277,27 @@ def main():
     sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
 
+    # Converter a coluna 'DATA DE ENTRADA' para tipo datetime
+    df['DATA DE ENTRADA'] = pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')
 
+    # Calcular o número de dias até hoje desde a data de entrada
+    hoje = date.today()
+    df['Dias até hoje'] = (hoje - df['DATA DE ENTRADA']).dt.days
+
+    # Filtrar apenas as colunas necessárias
+    df_plot = df[['SUBPROCESSO SILOMS', 'CNPJ', 'SITUAÇÃO', 'Dias até hoje']]
+
+    # Criar o gráfico usando Seaborn
+    plt.figure(figsize=(10, 8))
+    sns.barplot(data=df_plot, y='SUBPROCESSO SILOMS', x='Dias até hoje', hue='SITUAÇÃO', dodge=False)
+    plt.xlabel('Dias até hoje desde a data de entrada')
+    plt.ylabel('Subprocesso SILOMS')
+    plt.title('Número de dias até hoje desde a data de entrada por Subprocesso SILOMS e Situação')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Exibir o gráfico
+    st.pyplot(plt)
 
 if __name__ == "__main__":
     main()
