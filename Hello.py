@@ -84,9 +84,10 @@ def main():
             categoria = st.selectbox('Categoria*', options=['', 'I', 'II', 'III'])
             natureza_desconto = st.selectbox('Natureza de Desconto*', options=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
             cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
-            data_entrada = st.date_input('Data de Entrada*', format='DD/MM/YYYY', value=date.today())
+           
 
         with col2:
+            data_entrada = st.date_input('Data de Entrada*', format='DD/MM/YYYY', value=date.today())
             data_atual = date.today()  # Obtém a data atual
             dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
             if dias_para_fim_vigencia < 0:
