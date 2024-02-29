@@ -273,7 +273,7 @@ def main():
 
     # Exiba o DataFrame atualizado
     st.write(tempo_entrada)
-    st.write(tempo_entrada.dtypes)
+    
 
 
     
