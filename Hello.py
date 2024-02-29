@@ -48,6 +48,27 @@ def main():
 
     # Carregar ou criar o DataFrame
     df = carregar_dataframe()
+
+    # Variáveis para controle dos checkboxes
+    inserir_checked = st.checkbox('Inserir Novo Processo', key='inserir')
+    editar_checked = st.checkbox('Alterar Processo', key='alterar')
+    excluir_checked = st.checkbox('Excluir Processo', key='excluir')
+
+    # Se um checkbox é marcado, desmarcar os outros
+    if inserir_checked:
+        editar_checked = False
+        excluir_checked = False
+    elif editar_checked:
+        inserir_checked = False
+        excluir_checked = False
+    elif excluir_checked:
+        inserir_checked = False
+        editar_checked = False
+
+    # Exibir formulários conforme os checkboxes selecionados
+    if inserir_checked:
+        # Exibir formulário para inserir dados
+        col1, col2 = st.columns(2)
     # Checkboxes para incluir, editar e excluir processos
     col1, col2, col3 = st.columns(3)
 
