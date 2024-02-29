@@ -187,8 +187,9 @@ def main():
                 # Lidar com o caso em que data_expiracao_contratual_edit é None
                 dias_para_fim_vigencia = ''  # ou qualquer valor que você queira atribuir nesse caso
 
-            # Definir o valor para dias_para_fim_vigencia_edit
-            dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
+           # Definir o valor para dias_para_fim_vigencia_edit
+            dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
+
             # Verificar se dias_para_fim_vigencia é um número antes de fazer a comparação
             if isinstance(dias_para_fim_vigencia, int) and dias_para_fim_vigencia < 0:
                 dias_para_fim_vigencia = 'Expirado'
