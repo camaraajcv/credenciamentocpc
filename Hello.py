@@ -259,8 +259,10 @@ def main():
 
     st.subheader('Tempo desde a entrada')
     tempo_entrada = df[['DATA DE ENTRADA','STATUS CREDENCIAMENTO']]
-    data_atual = datetime.now().date()
-    tempo_entrada['Dias desde a entrada'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
+    tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'], format='%d/%m/%Y')
+    # Calculando o número de dias desde a entrada até a data atual
+    tempo_entrada['Dias desde a entrada'] = (datetime.now().date() - tempo_entrada['DATA DE ENTRADA']).dt.days
+
 
     st.write(tempo_entrada)
 
