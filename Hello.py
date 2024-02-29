@@ -258,10 +258,7 @@ def main():
     st.write(count_by_natureza)
 
     st.subheader('Tempo desde a entrada')
-    # Convertendo a coluna 'DATA DE ENTRADA' para datetime
-    df['DATA DE ENTRADA'] = pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')
-
-    # Criando uma cópia do DataFrame com as colunas relevantes
+    
     tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO']].copy()
 
     # Extraindo a parte da data da coluna 'DATA DE ENTRADA'
