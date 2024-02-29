@@ -4,6 +4,7 @@ import os
 import re
 from datetime import datetime, date
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
