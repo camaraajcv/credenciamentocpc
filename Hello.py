@@ -49,39 +49,27 @@ def main():
     # Carregar ou criar o DataFrame
     df = carregar_dataframe()
 
-    # Variáveis para controle dos checkboxes
-    inserir_checked = st.checkbox('Inserir Novo Processo', key='inserir')
-    editar_checked = st.checkbox('Alterar Processo', key='alterar')
-    excluir_checked = st.checkbox('Excluir Processo', key='excluir')
-
-    # Se um checkbox é marcado, desmarcar os outros
-    if inserir_checked:
-        editar_checked = False
-        excluir_checked = False
-    elif editar_checked:
-        inserir_checked = False
-        excluir_checked = False
-    elif excluir_checked:
-        inserir_checked = False
-        editar_checked = False
-
-    # Exibir formulários conforme os checkboxes selecionados
-    if inserir_checked:
-        # Exibir formulário para inserir dados
-        col1, col2 = st.columns(2)
     # Checkboxes para incluir, editar e excluir processos
     col1, col2, col3 = st.columns(3)
 
+    # Variável para armazenar o valor do checkbox selecionado
+    opcao_selecionada = st.session_state.get('opcao_selecionada', None)
+
+    # Lógica para garantir apenas um checkbox selecionado
     with col1:
-        exibir_formulario_insercao = st.checkbox('Inserir Novo Processo', key='inserir')
-
+        inserir_checked = st.checkbox('Inserir Novo Processo', key='inserir')
+        if inserir_checked:
+            opcao_selecionada = 'inserir'
     with col2:
-        exibir_formulario_edicao = st.checkbox('Alterar Processo', key='alterar')
-
+        editar_checked = st.checkbox('Alterar Processo', key='alterar')
+        if editar_checked:
+            opcao_selecionada = 'editar'
     with col3:
-        exibir_formulario_exclusao = st.checkbox('Excluir Processo', key='excluir')
+        excluir_checked = st.checkbox('Excluir Processo', key='excluir')
+        if excluir_checked:
+            opcao_selecionada = 'excluir'
 
-    if exibir_formulario_insercao:
+    if opcao_selecionada == 'inserir':
         # Exibir formulário para inserir dados
         col1, col2 = st.columns(2)
 
@@ -148,7 +136,7 @@ def main():
 
                     st.success('Dados inseridos com sucesso.')
 
-    if exibir_formulario_exclusao:
+    if opcao_selecionada == 'excluir':
         # Exibir formulário para exclusão de linha
         st.header('Excluir Dados')
 
@@ -159,7 +147,7 @@ def main():
                 df = df.drop(index=indice_exclusao)
                 st.success('Linha excluída com sucesso.')
 
-    if exibir_formulario_edicao:
+    if opcao_selecionada == 'editar':
         # Exibir formulário para edição de dados
         st.header('Editar Dados')
 
