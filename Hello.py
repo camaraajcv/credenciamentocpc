@@ -209,7 +209,11 @@ def main():
             dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             #nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
             codigo_edit = st.text_input('Código Caixa', value=df.loc[indice_edicao, 'CÓDIGO'])
-            status_credenciamento_edit = st.text_input('Status Credenciamento -  Observações', value=df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'])
+            status_credenciamento_value = df.loc[indice_edicao, 'STATUS CREDENCIAMENTO']
+            if pd.isnull(status_credenciamento_value):
+                status_credenciamento_value = ''  # Substitui NaN por uma string vazia
+
+            status_credenciamento_edit = st.text_input('Status Credenciamento - Observações', value=status_credenciamento_value)
             cpc_status_edit = st.selectbox('CPC Status', 
                                 options=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'], 
                                 index=['','EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'].index(df.loc[indice_edicao, 'CPC STATUS']))
