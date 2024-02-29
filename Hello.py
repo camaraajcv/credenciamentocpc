@@ -280,8 +280,8 @@ def main():
 
     
     # Calcular a quantidade de dias entre a data atual e a data de entrada
-    
-    df['Dias até hoje'] = (data_atual - df['DATA DE ENTRADA']).dt.days
+    hoje = pd.Timestamp.now().normalize()  # Obtém a data atual e normaliza para a meia-noite
+    df['Dias até hoje'] = (hoje - df['DATA DE ENTRADA']).dt.days
 
     # Selecionar as colunas relevantes para o novo DataFrame
     novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO', 'Dias até hoje']]
