@@ -277,22 +277,34 @@ def main():
     sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
 
-    # Converter a coluna 'DATA DE ENTRADA' para tipo datetime
-    df['DATA DE ENTRADA'] = pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')
+    # Função para carregar ou criar o DataFrame
+    def carregar_dataframe():
+        if os.path.exists("dados.csv"):
+            return pd.read_csv("dados.csv")
+        else:
+            colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                    'Dias para Fim Vigência', 'NUP', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+            return pd.DataFrame(columns=colunas)
 
-    # Calcular o número de dias até hoje desde a data de entrada
+    # Carregar o DataFrame
+    df = carregar_dataframe()
+
+    # Calcular a quantidade de dias entre a data atual e a data de entrada
     hoje = date.today()
-    df['Dias até hoje'] = (hoje - df['DATA DE ENTRADA']).dt.days
+    df['Dias até hoje'] = (hoje - pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')).dt.days
 
-    # Filtrar apenas as colunas necessárias
-    df_plot = df[['SUBPROCESSO SILOMS', 'CNPJ', 'SITUAÇÃO', 'Dias até hoje']]
+    # Selecionar as colunas relevantes para o gráfico
+    df_plot = df[['CNPJ', 'NUP', 'SITUAÇÃO', 'Dias até hoje']]
 
     # Criar o gráfico usando Seaborn
     plt.figure(figsize=(10, 8))
-    sns.barplot(data=df_plot, y='SUBPROCESSO SILOMS', x='Dias até hoje', hue='SITUAÇÃO', dodge=False)
-    plt.xlabel('Dias até hoje desde a data de entrada')
-    plt.ylabel('Subprocesso SILOMS')
-    plt.title('Número de dias até hoje desde a data de entrada por Subprocesso SILOMS e Situação')
+    sns.barplot(data=df_plot, y='CNPJ', x='Dias até hoje', hue='SITUAÇÃO', dodge=False)
+    plt.xlabel('Quantidade de dias desde a data de entrada')
+    plt.ylabel('CNPJ')
+    plt.title('Número de dias desde a entrada por CNPJ e Situação')
     plt.xticks(rotation=45)
     plt.tight_layout()
 
