@@ -188,7 +188,7 @@ def main():
                 dias_para_fim_vigencia = ''  # ou qualquer valor que você queira atribuir nesse caso
 
             # Definir o valor para dias_para_fim_vigencia_edit
-            dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True
+            dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             if dias_para_fim_vigencia < 0:
                 dias_para_fim_vigencia = 'Expirado'
             else:
