@@ -282,7 +282,7 @@ def main():
     df['DATA DE ENTRADA'] = pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')
 
     # Calcular a quantidade de dias entre a data atual e a data de entrada
-    hoje = datetime.now().date()
+    hoje = pd.Timestamp.now().normalize()  # Obtém a data atual e normaliza para a meia-noite
     df['Dias até hoje'] = (hoje - df['DATA DE ENTRADA']).dt.days
 
     # Selecionar as colunas relevantes para o novo DataFrame
