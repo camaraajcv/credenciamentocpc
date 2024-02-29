@@ -260,7 +260,7 @@ def main():
     st.subheader('Tempo desde a entrada')
     
     tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO','CNPJ']].copy()
-
+    tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
    
 
     # Exibindo o DataFrame atualizado
