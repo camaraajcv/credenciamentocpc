@@ -93,7 +93,7 @@ def main():
             data_atual = date.today()
 
             # Obtém a data de expiração do contrato do usuário
-            data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY')
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
 
             # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
             if data_expiracao_contratual is not None:
@@ -106,7 +106,7 @@ def main():
                 dias_para_fim_vigencia = ''
 
             # Exibe os dias para o fim da vigência
-            st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
+            st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
             nup = st.text_input('NUP')
             codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento -  Observações')
