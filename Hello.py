@@ -271,7 +271,7 @@ def main():
     tempo_entrada['Dias desde a entrada'] = (data_atual - data_entrada).dt.days
 
     # Exibindo o DataFrame atualizado
-    st.write(tempo_entrada[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO', 'Dias desde a entrada']])
+    st.write(df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO', 'Dias desde a entrada']])
 
 
     
