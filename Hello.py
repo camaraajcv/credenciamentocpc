@@ -161,9 +161,10 @@ def main():
         if not df.empty:
             indice_edicao = st.number_input('Índice da Linha a ser Editada', min_value=0, max_value=len(df)-1, step=1, value=0)
 
-            situacao_econsig_edit = st.selectbox('Situação Econsig*', 
-                                    options=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido'], 
-                                    index=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido'].index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'] else 0)
+            situacoes_disponiveis = ['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido']
+            indice_selecionado = situacoes_disponiveis.index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in situacoes_disponiveis else 0
+
+            situacao_econsig_edit = st.selectbox('Situação Econsig*', options=situacoes_disponiveis, index=indice_selecionado)
             subprocesso_siloms_edit = st.text_input('SUBPROCESSO SILOMS*', value=df.loc[indice_edicao, 'SUBPROCESSO SILOMS'],max_chars=6)
             consignataria_edit = st.text_input('Consignatária*', value=df.loc[indice_edicao, 'CONSIGNATÁRIA'])
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
