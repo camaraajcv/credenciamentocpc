@@ -154,7 +154,7 @@ def main():
             situacao_econsig_edit = st.selectbox('Situação Econsig*', 
                                     options=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'], 
                                     index=['', 'Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'].index(df.loc[indice_edicao, 'SITUAÇÃO ECONSIG']) if df.loc[indice_edicao, 'SITUAÇÃO ECONSIG'] in ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado'] else 0)
-            subprocesso_siloms_edit = st.text_input('SUBPROCESSO SILOMS*', value='{:,.0f}'.format(df.loc[indice_edicao, 'SUBPROCESSO SILOMS']), max_chars=6)
+            subprocesso_siloms_edit = st.text_input('SUBPROCESSO SILOMS*', value=df.loc[indice_edicao, 'SUBPROCESSO SILOMS'],max_chars=6)
             consignataria_edit = st.text_input('Consignatária*', value=df.loc[indice_edicao, 'CONSIGNATÁRIA'])
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
