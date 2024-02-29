@@ -237,8 +237,7 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
-    subprocesso_siloms_value = str(df.loc[1, 'SUBPROCESSO SILOMS*']).replace(',', '')
-    subprocesso_siloms = st.text_input('SUBPROCESSO SILOMS*', value=subprocesso_siloms_value, max_chars=6)
+
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
