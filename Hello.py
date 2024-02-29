@@ -259,12 +259,22 @@ def main():
 
     st.subheader('Tempo desde a entrada')
     tempo_entrada = df[['DATA DE ENTRADA','STATUS CREDENCIAMENTO']]
+
+    # Convertendo a coluna 'DATA DE ENTRADA' para datetime
     tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'], format='%d/%m/%Y')
+
+    # Extraindo a parte da data da coluna 'DATA DE ENTRADA'
+    data_entrada = tempo_entrada['DATA DE ENTRADA'].dt.date
+
     # Calculando o número de dias desde a entrada até a data atual
-    tempo_entrada['Dias desde a entrada'] = (datetime.now().date() - tempo_entrada['DATA DE ENTRADA']).dt.days
+    data_atual = datetime.now().date()
+    tempo_entrada['Dias desde a entrada'] = (data_atual - data_entrada).dt.days
+
+    # Exibindo o DataFrame atualizado
+    st.write(tempo_entrada[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO', 'Dias desde a entrada']])
 
 
-    st.write(tempo_entrada)
+    
 
     plt.figure(figsize=(8, 6))
     plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
