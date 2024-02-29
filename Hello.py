@@ -280,10 +280,10 @@ def main():
 
     
     
-    # Selecionar as colunas relevantes para o novo DataFrame
-    novo_df = df[['CNPJ', 'NUP', 'SITUAÇÃO','DATA DE ENTRADA']]
     # Função para calcular o número de dias entre a data de entrada e a data atual
-    def calcular_dias_ate_hoje(data_entrada):
+    def calcular_dias_ate_hoje(data_entrada_str):
+        # Converter a string para o tipo datetime
+        data_entrada = datetime.strptime(data_entrada_str, '%d/%m/%Y').date()
         hoje = datetime.now().date()
         dias = (hoje - data_entrada).days
         return dias
