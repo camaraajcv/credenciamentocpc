@@ -260,7 +260,7 @@ def main():
     st.subheader('Tempo desde a entrada')
     
     # Copie as colunas necessárias do DataFrame original
-    tempo_entrada = df[['DATA DE ENTRADA', 'STATUS CREDENCIAMENTO', 'CNPJ']].copy()
+    tempo_entrada = df[['SUBPROCESSO SILOMS','CNPJ','DATA DE ENTRADA', 'SITUAÇÃO','SITUAÇÃO ECONSIG', 'CNPJ']].copy()
 
     # Converta a coluna 'DATA DE ENTRADA' para o tipo datetime
     tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
@@ -283,20 +283,9 @@ def main():
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot()
 
-    st.header('Gráficos')
+    
    
-    st.subheader('Correlação entre Dias para Fim Vigência e CPC Anual')
-
-    # Converter a coluna 'Dias para Fim Vigência' para numérica
-    df['Dias para Fim Vigência'] = pd.to_numeric(df['Dias para Fim Vigência'].str.split(' ').str[0])
-
-    # Ordenar o DataFrame pela coluna 'Dias para Fim Vigência'
-    df_sorted = df.sort_values(by='Dias para Fim Vigência')
-
-    # Plotar o gráfico de dispersão com o DataFrame ordenado
-    fig, ax = plt.subplots()
-    sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
-    st.pyplot(fig)
+    
 
 
 
