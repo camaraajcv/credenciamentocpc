@@ -176,12 +176,18 @@ def main():
                                     index=['', 'MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA','CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'].index(df.loc[indice_edicao, 'NATUREZA DE DESCONTO']))
             cnpj_edit = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX', value=df.loc[indice_edicao, 'CNPJ'])
             data_atual = date.today()  # Obtém a data atual
-            dias_para_fim_vigencia = (data_expiracao_contratual_edit - data_atual).days
-            if dias_para_fim_vigencia < 0:
-                dias_para_fim_vigencia = 'Expirado'
+            if data_expiracao_contratual_edit is not None:
+                dias_para_fim_vigencia = (data_expiracao_contratual_edit - data_atual).days
+                if dias_para_fim_vigencia < 0:
+                    dias_para_fim_vigencia = 'Expirado'
+                else:
+                    dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
             else:
-                dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
-            dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
+                # Lidar com o caso em que data_expiracao_contratual_edit é None
+                dias_para_fim_vigencia = ''  # ou qualquer valor que você queira atribuir nesse caso
+
+# Definir o valor para dias_para_fim_vigencia_edit
+dias_para_fim_vigencia_edit = st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)
             nup_edit = st.text_input('NUP', value=df.loc[indice_edicao, 'NUP'])
             codigo_edit = st.text_input('Código Caixa', value=df.loc[indice_edicao, 'CÓDIGO'])
             status_credenciamento_edit = st.text_input('Status Credenciamento -  Observações', value=df.loc[indice_edicao, 'STATUS CREDENCIAMENTO'])
