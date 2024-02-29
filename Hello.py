@@ -237,7 +237,6 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
-
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
@@ -277,7 +276,7 @@ def main():
     sns.scatterplot(data=df_sorted, x='Dias para Fim Vigência', y='CPC ANUAL', ax=ax)
     st.pyplot(fig)
 
-    
+
 
 if __name__ == "__main__":
     main()
