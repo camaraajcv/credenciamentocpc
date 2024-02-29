@@ -279,8 +279,8 @@ def main():
 
 
     # Calcular a quantidade de dias entre a data atual e a data de entrada
-    hoje = date.today()
-    df['Dias até hoje'] = (hoje - pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')).dt.days
+    hoje = datetime.now().date()  # Alteração aqui para usar datetime.now() em vez de date.today()
+    df['Dias até hoje'] = (hoje - pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y').dt.date).dt.days  # Alteração aqui
 
     # Selecionar as colunas relevantes para o gráfico
     df_plot = df[['CNPJ', 'NUP', 'SITUAÇÃO', 'Dias até hoje']]
