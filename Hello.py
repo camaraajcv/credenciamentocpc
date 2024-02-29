@@ -256,6 +256,14 @@ def main():
     st.subheader('Percentual por Natureza de Desconto')
     count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
     st.write(count_by_natureza)
+
+    st.subheader('Tempo desde a entrada')
+    tempo_entrada = df['DATA DE ENTRADA','STATUS CREDENCIAMENTO']
+    data_atual = datetime.now().date()
+    tempo_entrada['Dias desde a entrada'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days
+
+    st.write(tempo_entrada)
+
     plt.figure(figsize=(8, 6))
     plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
