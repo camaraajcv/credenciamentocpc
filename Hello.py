@@ -278,9 +278,12 @@ def main():
     st.pyplot(fig)
 
 
+    # Converter a coluna 'DATA DE ENTRADA' para datetime
+    df['DATA DE ENTRADA'] = pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y')
+
     # Calcular a quantidade de dias entre a data atual e a data de entrada
-    hoje = datetime.now().date()  # Alteração aqui para usar datetime.now() em vez de date.today()
-    df['Dias até hoje'] = (hoje - pd.to_datetime(df['DATA DE ENTRADA'], format='%d/%m/%Y').dt.date).dt.days  # Alteração aqui
+    hoje = datetime.now().date()
+    df['Dias até hoje'] = (hoje - df['DATA DE ENTRADA']).dt.days
 
     # Selecionar as colunas relevantes para o gráfico
     df_plot = df[['CNPJ', 'NUP', 'SITUAÇÃO', 'Dias até hoje']]
@@ -296,6 +299,5 @@ def main():
 
     # Exibir o gráfico
     st.pyplot(plt)
-
 if __name__ == "__main__":
     main()
