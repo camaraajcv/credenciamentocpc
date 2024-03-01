@@ -78,7 +78,11 @@ def main():
 
         with col1:
             situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido'])
-            subprocesso_siloms = st.text_input('SUBPROCESSO SILOMS*',max_chars=6)
+            
+            subprocesso_siloms = subprocesso_siloms.replace(',', '')
+
+            # Adicionar o valor convertido ao DataFrame
+            df['SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'])
@@ -274,9 +278,6 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
-    # Substituir vírgulas por uma string vazia na coluna específica
-    df['SUBPROCESSO SILOMS'] = pd.to_numeric(df['SUBPROCESSO SILOMS'].str.replace(',', ''), errors='coerce')
-
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
