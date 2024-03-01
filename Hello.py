@@ -274,6 +274,9 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
+    # Substituir vírgulas por uma string vazia na coluna específica
+    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '')
+
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
