@@ -290,7 +290,7 @@ def main():
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
     # Remover vírgulas da coluna "SUBPROCESSO SILOMS"
-    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].apply(lambda x: int(x.replace(',', '')) if ',' in x else int(x))
+    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '').astype(int)
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
