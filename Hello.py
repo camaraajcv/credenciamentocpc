@@ -171,7 +171,7 @@ def main():
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
                             options=['', 'Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E', 'Aguardando Assinaturas', 'Encaminhado para a PP1'], 
-                            index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe 1', 'Análise Equipe 2', 'Análise Equipe 3', 'Análise Equipe 4', 'Aguardando Assinaturas',  'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
+                            index=0 if df.loc[indice_edicao, 'SITUAÇÃO'] == '' else ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E','Aguardando Assinaturas',  'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'].index(df.loc[indice_edicao, 'SITUAÇÃO']) + 1)
             # Tratar a entrada de data com possibilidade de valor None ou NaN
             data_expiracao_contratual_str = str(df.loc[indice_edicao, 'DATA EXPIRAÇÃO CONTRATUAL'])
             if data_expiracao_contratual_str == 'nan' or data_expiracao_contratual_str == '':
