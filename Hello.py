@@ -287,7 +287,7 @@ def main():
                         st.success('Dados alterados com sucesso.')
 
     
-    st.dataframe(df)
+    #st.dataframe(df)
     
     # Configuração para desativar o aviso PyplotGlobalUseWarning
     st.set_option('deprecation.showPyplotGlobalUse', False)
