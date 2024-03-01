@@ -289,10 +289,11 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
-    # Remover vírgulas da coluna "SUBPROCESSO SILOMS"
+    # Remover vírgulas da coluna "SUBPROCESSO SILOMS" e converter para inteiro
     df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '').astype(int)
-    st.write(df.to_string(index=False))
 
+    # Exibir o DataFrame e usar uma função lambda para remover as vírgulas ao exibir
+    st.write(df.applymap(lambda x: '{:,.0f}'.format(x) if isinstance(x, (int, float)) else x), index=False)
     # Salvar DataFrame em arquivo CSV
     salvar_dataframe(df)
     # Configuração para desativar o aviso PyplotGlobalUseWarning
