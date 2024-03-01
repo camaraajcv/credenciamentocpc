@@ -284,13 +284,12 @@ def main():
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
                         df.loc[indice_edicao, 'NRO CONTRATO'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
-
                         st.success('Dados alterados com sucesso.')
 
     
     st.dataframe(df)
     # Salvar DataFrame em arquivo CSV
-    salvar_dataframe(df)
+    st.table(df)
     # Configuração para desativar o aviso PyplotGlobalUseWarning
     st.set_option('deprecation.showPyplotGlobalUse', False)
     # Adicionar gráficos e indicadores
