@@ -290,8 +290,8 @@ def main():
     # Remover vírgulas da coluna "SUBPROCESSO SILOMS" e converter para inteiro
     df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '').astype(int)
 
-    # Exibir o DataFrame sem formatação automática dos números
-    st.write(df.to_string(index=False, col_space=100))
+    # Exibir o DataFrame e usar a função format() para formatar os números sem vírgulas
+    st.write(df.applymap(lambda x: '{:,.0f}'.format(x) if isinstance(x, (int, float)) else x), index=False)
 
     # Exibir o DataFrame e usar uma função lambda para remover as vírgulas ao exibir
     st.write(df.applymap(lambda x: '{:,.0f}'.format(x) if isinstance(x, (int, float)) else x), index=False)
