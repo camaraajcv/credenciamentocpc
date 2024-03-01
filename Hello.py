@@ -275,7 +275,7 @@ def main():
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
     # Substituir vírgulas por uma string vazia na coluna específica
-    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '')
+    df['SUBPROCESSO SILOMS'] = pd.to_numeric(df['SUBPROCESSO SILOMS'].str.replace(',', ''), errors='coerce')
 
     st.write(df)
 
