@@ -288,8 +288,7 @@ def main():
 
     
     st.dataframe(df)
-    # Salvar DataFrame em arquivo CSV
-    st.table(df)
+    
     # Configuração para desativar o aviso PyplotGlobalUseWarning
     st.set_option('deprecation.showPyplotGlobalUse', False)
     # Adicionar gráficos e indicadores
