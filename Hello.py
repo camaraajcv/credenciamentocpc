@@ -287,9 +287,7 @@ def main():
 
                         st.success('Dados alterados com sucesso.')
 
-    # Remover vírgulas da coluna "SUBPROCESSO SILOMS" e converter para inteiro
-    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '').astype(int)
-
+    
     st.dataframe(df)
     # Salvar DataFrame em arquivo CSV
     salvar_dataframe(df)
