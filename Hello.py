@@ -172,16 +172,16 @@ def main():
             situacao_econsig_edit = st.selectbox('Situação Econsig*', options=situacoes_disponiveis, index=indice_selecionado)
             subprocesso_siloms_edit = st.text_input('SUBPROCESSO SILOMS*', value=str(df.loc[indice_edicao, 'SUBPROCESSO SILOMS']), max_chars=6)
 
-            # Remover vírgulas
-            subprocesso_siloms_edit = subprocesso_siloms_edit.replace(',', '')
+        # Remover vírgulas
+        subprocesso_siloms_edit = subprocesso_siloms_edit.replace(',', '')
 
-            # Verificar se é um número inteiro
-            if subprocesso_siloms_edit.isdigit():
-                # Convertendo para inteiro
-                subprocesso_siloms_edit = int(subprocesso_siloms_edit)
-            else:
-                # Se não for um número válido, você pode tratar de acordo com sua lógica
-                st.error("Por favor, insira um número inteiro válido.")
+        # Verificar se é um número inteiro
+        if subprocesso_siloms_edit.isdigit():
+            # Convertendo para inteiro
+            subprocesso_siloms_edit = int(subprocesso_siloms_edit)
+        else:
+            # Se não for um número válido, você pode tratar de acordo com sua lógica
+            st.error("Por favor, insira um número inteiro válido.")
             consignataria_edit = st.text_input('Consignatária*', value=df.loc[indice_edicao, 'CONSIGNATÁRIA'])
             bca_ou_dou_edit = st.text_input('BCA ou DOU', value=df.loc[indice_edicao, 'BCA OU DOU'])
             situacao_edit = st.selectbox('Situação*', 
