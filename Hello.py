@@ -289,7 +289,7 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
-    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].astype(str).str.replace(',', '')
+    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '').astype(int)
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
