@@ -284,11 +284,18 @@ def main():
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
                         df.loc[indice_edicao, 'NRO CONTRATO'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
+
                         st.success('Dados alterados com sucesso.')
 
-    
-    #st.dataframe(df)
-    
+    # Exibir DataFrame atualizado
+    st.header('Processos Atualizados')
+    # Remover vírgulas da coluna "SUBPROCESSO SILOMS" e converter para inteiro
+    df['SUBPROCESSO SILOMS'] = df['SUBPROCESSO SILOMS'].str.replace(',', '').astype(int)
+
+    # Exibir o DataFrame e usar uma função lambda para remover as vírgulas ao exibir
+    st.write(df.applymap(lambda x: '{:,.0f}'.format(x) if isinstance(x, (int, float)) else x), index=False)
+    # Salvar DataFrame em arquivo CSV
+    salvar_dataframe(df)
     # Configuração para desativar o aviso PyplotGlobalUseWarning
     st.set_option('deprecation.showPyplotGlobalUse', False)
     # Adicionar gráficos e indicadores
