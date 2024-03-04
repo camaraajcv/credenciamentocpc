@@ -32,6 +32,10 @@ def carregar_dataframe():
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+        # Cria um DataFrame vazio com as colunas especificadas
+        df = pd.DataFrame(columns=colunas)
+        # Salva o DataFrame em um arquivo CSV
+        df.to_csv("dados.csv", index=False)
         return pd.DataFrame(columns=colunas)
 
 # Função para salvar o DataFrame em um arquivo CSV
