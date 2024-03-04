@@ -78,7 +78,7 @@ def main():
 
         with col1:
             situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido'])
-            
+            subprocesso_siloms = st.text_input('Subprocesso Siloms*')
             subprocesso_siloms = subprocesso_siloms.replace(',', '')
 
             # Adicionar o valor convertido ao DataFrame
