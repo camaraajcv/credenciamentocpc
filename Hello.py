@@ -364,8 +364,12 @@ def main():
     
    
     
+    # Adicionar botão para fazer o download do arquivo CSV
+    if not df.empty:
+        st.subheader('Baixar Arquivo CSV')
+        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados.csv', mime='text/csv')
 
 
 
-if __name__ == "__main__":
-    main()
+    if __name__ == "__main__":
+        main()
