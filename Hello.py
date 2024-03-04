@@ -24,7 +24,7 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 def salvar_dataframe(df):
     try:
-        df.to_csv("dados.csv", index=False)
+        df.to_csv("credenciamentocpc/dados.csv", index=False)
         print("DataFrame salvo com sucesso em 'dados.csv'")
     except Exception as e:
         print(f"Erro ao salvar DataFrame: {e}")
