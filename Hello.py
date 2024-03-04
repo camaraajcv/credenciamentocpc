@@ -25,8 +25,30 @@ st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
     if os.path.exists("dados.csv"):
-        return pd.read_csv("dados.csv")
+        print("Arquivo 'dados.csv' encontrado.")
+        try:
+            # Tentar ler o arquivo CSV com o encoding 'utf-8'
+            df = pd.read_csv("dados.csv", encoding='utf-8')
+            print("Arquivo 'dados.csv' lido com sucesso.")
+            return df
+        except UnicodeDecodeError as e:
+            print(f"Erro ao ler o arquivo CSV: {e}")
+            print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
+            try:
+                # Se ocorrer um erro de decodificação, tentar ler o arquivo CSV com o encoding 'latin-1'
+                df = pd.read_csv("dados.csv", encoding='latin-1')
+                print("Arquivo 'dados.csv' lido com sucesso.")
+                return df
+            except Exception as e:
+                print(f"Erro ao ler o arquivo CSV com encoding 'latin-1': {e}")
+                print("Não foi possível ler o arquivo 'dados.csv'. Criando novo DataFrame vazio.")
+                return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                                             'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+                                             'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                                             'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                                             'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
     else:
+        print("Arquivo 'dados.csv' não encontrado. Criando novo arquivo.")
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
