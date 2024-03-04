@@ -22,12 +22,17 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
+def salvar_dataframe(df):
+    try:
+        df.to_csv("dados.csv", index=False)
+        print("DataFrame salvo com sucesso em 'dados.csv'")
+    except Exception as e:
+        print(f"Erro ao salvar DataFrame: {e}")
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
     if os.path.exists("dados.csv"):
         print("Arquivo 'dados.csv' encontrado.")
         try:
-            # Tentar ler o arquivo CSV com o encoding 'utf-8'
             df = pd.read_csv("dados.csv", encoding='utf-8')
             print("Arquivo 'dados.csv' lido com sucesso.")
             return df
@@ -35,7 +40,6 @@ def carregar_dataframe():
             print(f"Erro ao ler o arquivo CSV: {e}")
             print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
             try:
-                # Se ocorrer um erro de decodificação, tentar ler o arquivo CSV com o encoding 'latin-1'
                 df = pd.read_csv("dados.csv", encoding='latin-1')
                 print("Arquivo 'dados.csv' lido com sucesso.")
                 return df
@@ -54,15 +58,11 @@ def carregar_dataframe():
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
-        # Cria um DataFrame vazio com as colunas especificadas
         df = pd.DataFrame(columns=colunas)
-        # Salva o DataFrame em um arquivo CSV
-        df.to_csv("dados.csv", index=False)
-        return pd.DataFrame(columns=colunas)
+        salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
+        return df
 
-# Função para salvar o DataFrame em um arquivo CSV
-def salvar_dataframe(df):
-    df.to_csv("dados.csv", index=False)
+
 
 # Função para validar o formato do CNPJ
 def validar_cnpj(cnpj):
