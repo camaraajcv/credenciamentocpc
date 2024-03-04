@@ -24,23 +24,23 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 def salvar_dataframe(df):
     try:
-        df.to_csv("camaraajcv/credenciamentocpc/dados.csv", index=False)
+        df.to_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", index=False)
         print("DataFrame salvo com sucesso em 'dados.csv'")
     except Exception as e:
         print(f"Erro ao salvar DataFrame: {e}")
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
-    if os.path.exists("dados.csv"):
+    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.csv"):
         print("Arquivo 'dados.csv' encontrado.")
         try:
-            df = pd.read_csv("dados.csv", encoding='utf-8')
+            df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='utf-8')
             print("Arquivo 'dados.csv' lido com sucesso.")
             return df
         except UnicodeDecodeError as e:
             print(f"Erro ao ler o arquivo CSV: {e}")
             print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
             try:
-                df = pd.read_csv("dados.csv", encoding='latin-1')
+                df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='latin-1')
                 print("Arquivo 'dados.csv' lido com sucesso.")
                 return df
             except Exception as e:
