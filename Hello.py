@@ -22,12 +22,53 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
+# Função para salvar o DataFrame em um arquivo CSV e no GitHub
 def salvar_dataframe(df):
-    try:
-        df.to_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", index=False)
-        print("DataFrame salvo com sucesso em 'dados.csv'")
-    except Exception as e:
-        print(f"Erro ao salvar DataFrame: {e}")
+    if not os.path.exists("dados.csv"):
+        # Se não existir, criar o arquivo com as colunas do DataFrame
+        with open("dados.csv", "w") as file:
+            file.write(",".join(df.columns) + "\n")
+
+    # Salvar o DataFrame em um arquivo CSV local
+    df.to_csv("dados.csv", mode='a', header=False, index=False)
+    # Salvar o DataFrame em um arquivo CSV local
+    df.to_csv("dados.csv", index=False)
+    
+    # Informações do repositório no GitHub
+    usuario = "camaraajcv"
+    repositorio = "credenciamentocpc"
+    caminho_arquivo = "dados.csv"
+
+    # Token de acesso pessoal do GitHub
+    token = "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"
+
+    # Conteúdo do arquivo CSV
+    conteudo_csv = df.to_csv(index=False)
+
+    # URL da API do GitHub para criar ou atualizar um arquivo
+    url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
+
+    # Cabeçalhos HTTP
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Corpo da requisição para criar o arquivo
+    data = {
+        "message": "Atualizando dados.csv",
+        "content": conteudo_csv
+    }
+
+    # Envia a requisição PUT para criar ou atualizar o arquivo
+    response = requests.put(url, headers=headers, json=data)
+
+    # Verifica o resultado
+    if response.status_code == 201:
+        print("Arquivo dados.csv atualizado com sucesso no GitHub!")
+    else:
+        print("Falha ao atualizar o arquivo dados.csv no GitHub.")
+        print(response.text)
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
     if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.csv"):
