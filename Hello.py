@@ -68,6 +68,24 @@ def salvar_dataframe(df):
         st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
         st.error(response.text)
 # Função para carregar ou criar o DataFrame
+        
+# Check if the Excel file exists
+if not os.path.exists("dados.xlsx"):
+    # If it doesn't exist, create a DataFrame with the required columns
+    colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+               'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+               'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+               'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+               'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+    df = pd.DataFrame(columns=colunas)
+    # Save the DataFrame to an Excel file
+    df.to_excel("dados.xlsx", index=False)
+
+# Now you can proceed with loading or working with the Excel file
+# For example, loading the DataFrame from the Excel file
+df = pd.read_excel("dados.xlsx")
+
+
 def carregar_dataframe():
     if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.csv"):
         print("Arquivo 'dados.csv' encontrado.")
