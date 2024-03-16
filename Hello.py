@@ -198,18 +198,15 @@ def main():
         # Exibir formulário para exclusão de linha
         st.header('Excluir Dados')
 
-        if not df.empty:
-            indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
+    df = carregar_dataframe()  # Carregar o DataFrame antes de verificar se está vazio
 
-            if st.button('Excluir'):
-                df = df.drop(index=indice_exclusao)
-                salvar_dataframe(df)  # Salvar o DataFrame atualizado no arquivo Excel
-                st.success('Linha excluída com sucesso.')
-                # Agora você deve atualizar o DataFrame após excluir uma linha
-                df = carregar_dataframe()  # Atualiza o DataFrame com os dados recém-excluídosndice_exclusao)
-                salvar_dataframe(df)  # Salvar o DataFrame atualizado no arquivo Excel
-                st.success('Linha excluída com sucesso.')
-                carregar_dataframe()
+    if df is not None and not df.empty:  # Verificar se o DataFrame não é None e não está vazio
+        indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
+
+        if st.button('Excluir'):
+            df = df.drop(index=indice_exclusao)
+            salvar_dataframe(df)  # Salvar o DataFrame atualizado no arquivo Excel
+            st.success('Linha excluída com sucesso.')
     if opcao_selecionada == 'editar':
         # Exibir formulário para edição de dados
         st.header('Editar Dados')
