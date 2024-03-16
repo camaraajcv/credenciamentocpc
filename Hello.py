@@ -31,11 +31,11 @@ def salvar_dataframe(df):
 # Função para carregar o DataFrame a partir de um arquivo Excel
 # Função para carregar o DataFrame a partir de um arquivo Excel
 def carregar_dataframe():
-    if os.path.exists("dados.xlsx"):
-        print("Arquivo 'dados.xlsx' encontrado.")
+    if os.path.exists("dados_cpc.xlsx"):
+        print("Arquivo 'dados_cpc.xlsx' encontrado.")
         try:
-            df = pd.read_excel("dados.xlsx", engine='openpyxl')
-            print("Arquivo 'dados.xlsx' lido com sucesso.")
+            df = pd.read_excel("dados_cpc.xlsx", engine='openpyxl')
+            print("Arquivo 'dados_cpc.xlsx' lido com sucesso.")
             return df
         except Exception as e:
             print(f"Erro ao ler o arquivo Excel: {e}")
@@ -308,7 +308,7 @@ def main():
         # Cria um link para download do DataFrame como CSV
         csv = df.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()  # codifica em bytes para base64
-        href = f'<a href="data:file/csv;base64,{b64}" download="dados.csv">Baixar arquivo CSV</a>'
+        href = f'<a href="data:file/csv;base64,{b64}" download="dados_cpc.csv">Baixar arquivo CSV</a>'
         return href
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
@@ -364,7 +364,7 @@ def main():
     # Adicionar botão para fazer o download do arquivo CSV
     if not df.empty:
         st.subheader('Baixar Arquivo CSV')
-        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados.csv', mime='text/csv')
+        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados_cpc.xlsx', mime='text/csv')
 
 
 
