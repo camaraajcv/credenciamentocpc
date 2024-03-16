@@ -2,16 +2,56 @@ import streamlit as st
 import mysql.connector
 import pandas as pd
 from datetime import date
+import re
 
 # Função para inserir dados no banco de dados
 def insert_data(data):
-    # Código para inserir dados no banco de dados MySQL
-    pass
+    try:
+        # Conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host="monorail.proxy.rlwy.net",
+            user="root",
+            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+            database="railway",
+            port=52280
+        )
 
+        # Verifica se a conexão foi bem-sucedida
+        if conn.is_connected():
+            cursor = conn.cursor()
+
+            # Prepara a instrução SQL para inserir os dados
+            sql = """
+            INSERT INTO credenciamentocpc 
+            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada) 
+            VALUES 
+            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+
+            # Executa a instrução SQL
+            cursor.execute(sql, data)
+
+            # Confirma a transação
+            conn.commit()
+
+            # Fecha o cursor e a conexão
+            cursor.close()
+            conn.close()
+
+            return True
+        else:
+            print("Erro ao conectar ao banco de dados MySQL.")
+            return False
+
+    except Exception as e:
+        print("Erro durante a inserção de dados:", e)
+        return False
 # Função para validar o CNPJ
 def validar_cnpj(cnpj):
-    # Código para validar CNPJ
-    pass
+    if not re.match(r'\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}', cnpj):
+        st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
+        return False
+    return True
 
 # Função principal
 def main():
@@ -65,12 +105,12 @@ def main():
 
             with col2:
                 situacao = st.selectbox('Situação*', options=[''] + ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
-                data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY', key='data_expiracao_contratual')
+                data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
                 codigo = st.text_input('Código Caixa')
                 status_credenciamento = st.text_input('Status Credenciamento - Observações')
                 cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
                 cpc_anual = st.selectbox('CPC Anual', options=[''] + ['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
-                data_entrada = st.date_input('Data de Entrada', format='DD/MM/YYYY', value=date.today())
+                data_entrada = st.date_input('Data de Entrada' , None,format='DD/MM/YYYY', value=date.today())
 
             # Botão para enviar os dados
             if st.button("Enviar"):
