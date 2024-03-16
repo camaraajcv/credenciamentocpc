@@ -22,7 +22,7 @@ def main():
         df = df.drop(index=rows_to_delete)
         
         # Atualiza o arquivo Excel com as linhas excluídas (opcional)
-        # df.to_excel(excel_url, index=False)  # Descomente esta linha se desejar atualizar o arquivo Excel no GitHub
+        df.to_excel(excel_url, index=False)  # Descomente esta linha se desejar atualizar o arquivo Excel no GitHub
         
         # Mostra os dados atualizados na tabela
         st.write("## Dados do Excel Atualizados")
