@@ -87,17 +87,17 @@ df = pd.read_excel("dados.xlsx")
 
 
 def carregar_dataframe():
-    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.csv"):
+    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx"):
         print("Arquivo 'dados.csv' encontrado.")
         try:
-            df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='utf-8')
-            print("Arquivo 'dados.csv' lido com sucesso.")
+            df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='utf-8')
+            print("Arquivo 'dados.xlsx' lido com sucesso.")
             return df
         except UnicodeDecodeError as e:
             print(f"Erro ao ler o arquivo CSV: {e}")
             print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
             try:
-                df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='latin-1')
+                df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='latin-1')
                 print("Arquivo 'dados.csv' lido com sucesso.")
                 return df
             except Exception as e:
