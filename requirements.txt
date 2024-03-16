@@ -5,6 +5,4 @@ pydeck
 streamlit
 seaborn
 matplotlib
-openpyxl
-gspread
-oauth2client
+mysql
