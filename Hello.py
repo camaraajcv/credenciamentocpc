@@ -53,19 +53,47 @@ def carregar_dataframe():
 
 # Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
-    try:
-        # Salvar o DataFrame em um arquivo Excel temporário
-        with pd.ExcelWriter("temp.xlsx", engine='openpyxl') as writer:
-            df.to_excel(writer, index=False)
-        # Carregar o conteúdo do arquivo Excel temporário
-        with open("temp.xlsx", "rb") as file:
-            file_content = file.read()
-        # Enviar o arquivo Excel para o GitHub
-        response = requests.put(excel_url, data=file_content)
-        response.raise_for_status()  # Lança uma exceção se a solicitação não for bem-sucedida
-        st.success("Dados salvos com sucesso!")
-    except Exception as e:
-        st.error(f"Erro ao salvar os dados: {e}")
+    # Save DataFrame as Excel file locally using openpyxl
+    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+    
+    # Information for GitHub repository
+    usuario = "camaraajcv"
+    repositorio = "credenciamentocpc"
+    caminho_arquivo = "dados_cpc.xlsx"
+    token = "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"
+
+    # Read Excel file as binary
+    with open(caminho_arquivo, "rb") as file:
+        conteudo_xls = file.read()
+
+    # Base64 encode the binary content
+    conteudo_base64 = conteudo_xls.hex()
+
+    # URL of the GitHub API to create or update a file
+    url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
+
+    # Headers for HTTP request
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Body of the request to create or update the file
+    data = {
+        "message": "Atualizando dados.xlsx",
+        "content": conteudo_base64
+    }
+
+    # Send PUT request to create or update the file
+    response = requests.put(url, headers=headers, json=data)
+
+    # Check the result
+    if response.status_code == 201:
+        st.success("Arquivo dados.xlsx atualizado com sucesso no GitHub!")
+    else:
+        st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
+        st.error(response.text)
 
 
 # Função para validar o formato do CNPJ
