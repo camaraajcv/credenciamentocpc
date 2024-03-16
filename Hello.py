@@ -41,8 +41,7 @@ def salvar_dataframe(df):
         conteudo_xls = file.read()
 
     # Convert binary content to base64
-    conteudo_base64 = conteudo_xls.encode("base64").decode()
-
+    conteudo_base64 = base64.b64encode(conteudo_xls).decode()
     # URL of the GitHub API to create or update a file
     url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
 
