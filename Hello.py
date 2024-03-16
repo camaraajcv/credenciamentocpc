@@ -21,46 +21,113 @@ st.markdown(html_code, unsafe_allow_html=True)
 st.markdown("<h1 style='text-align: center; font-size: 1.5em;'>DIRETORIA DE ADMINISTRAÇÃO DA AERONÁUTICA</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center; font-size: 1.2em;'>SUBDIRETORIA DE PAGAMENTO DE PESSOAL</h2>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: underline;'>PP1 - DIVISÃO DE DESCONTOS</h3>", unsafe_allow_html=True)
-excel_url="https://docs.google.com/spreadsheets/d/1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg/edit?usp=sharingexcel"
+
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para salvar o DataFrame em um arquivo CSV e no GitHub
-def carregar_dataframe():
-    try:
-        # Carregar o arquivo Excel a partir da URL
-        response = requests.get(excel_url)
-        response.raise_for_status()  # Lança uma exceção se a solicitação não for bem-sucedida
-        # Ler o DataFrame a partir do arquivo Excel
-        df = pd.read_excel(response.content, engine='openpyxl')
-        return df
-    except Exception as e:
-        st.error(f"Erro ao carregar os dados: {e}")
-        return pd.DataFrame()  # Retorna um DataFrame vazio se houver algum erro
-
-# Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
-    try:
-        # Salvar DataFrame como um arquivo Excel temporário
-        temp_file = "temp_dados_cpc.xlsx"
-        df.to_excel(temp_file, index=False)
-        
-        # Remover o arquivo Excel original, se existir
-        if os.path.exists("dados_cpc.xlsx"):
-            os.remove("dados_cpc.xlsx")
-        
-        # Renomear o arquivo temporário para o nome original
-        os.rename(temp_file, "dados_cpc.xlsx")
-        
-        st.success('Dados salvos com sucesso.')
-    except Exception as e:
-        st.error(f"Erro ao salvar os dados: {e}")
+    # Save DataFrame as Excel file locally using openpyxl
+    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
     
+    # Information for GitHub repository
+    usuario = "camaraajcv"
+    repositorio = "credenciamentocpc"
+    caminho_arquivo = "dados_cpc.xlsx"
+    token = "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"
+
+    # Read Excel file as binary
+    with open(caminho_arquivo, "rb") as file:
+        conteudo_xls = file.read()
+
+    # Base64 encode the binary content
+    conteudo_base64 = conteudo_xls.hex()
+
+    # URL of the GitHub API to create or update a file
+    url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
+
+    # Headers for HTTP request
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Body of the request to create or update the file
+    data = {
+        "message": "Atualizando dados_cpc.xlsx",
+        "content": conteudo_base64
+    }
+
+    # Send PUT request to create or update the file
+    response = requests.put(url, headers=headers, json=data)
+
+    # Check the result
+    if response.status_code == 201:
+        st.success("Arquivo dados.xlsx atualizado com sucesso no GitHub!")
+    else:
+        st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
+        st.error(response.text)
+# Função para carregar ou criar o DataFrame
+        
+# Check if the Excel file exists
+if not os.path.exists("dados.xlsx"):
+    # If it doesn't exist, create a DataFrame with the required columns
+    colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+               'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+               'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+               'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+               'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+    df = pd.DataFrame(columns=colunas)
+    # Save the DataFrame to an Excel file
+    df.to_excel("dados_cpc.xlsx", index=False)
+
+# Now you can proceed with loading or working with the Excel file
+# For example, loading the DataFrame from the Excel file
+df = pd.read_excel("dados_cpc.xlsx")
+
+
+def carregar_dataframe():
+    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.csv"):
+        print("Arquivo 'dados.csv' encontrado.")
+        try:
+            df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='utf-8')
+            print("Arquivo 'dados.csv' lido com sucesso.")
+            return df
+        except UnicodeDecodeError as e:
+            print(f"Erro ao ler o arquivo CSV: {e}")
+            print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
+            try:
+                df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='latin-1')
+                print("Arquivo 'dados.csv' lido com sucesso.")
+                return df
+            except Exception as e:
+                print(f"Erro ao ler o arquivo CSV com encoding 'latin-1': {e}")
+                print("Não foi possível ler o arquivo 'dados.csv'. Criando novo DataFrame vazio.")
+                return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                                             'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+                                             'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                                             'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                                             'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
+    else:
+        print("Arquivo 'dados.csv' não encontrado. Criando novo arquivo.")
+        colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+                   'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                   'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                   'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+        df = pd.DataFrame(columns=colunas)
+        salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
+        return df
+
+
+
 # Função para validar o formato do CNPJ
 def validar_cnpj(cnpj):
     if not re.match(r'\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}', cnpj):
         st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
         return False
     return True
+
 
 def main():
     st.title('Controle Processos CPC 2024')
@@ -161,7 +228,7 @@ def main():
 
                     novo_df = pd.DataFrame([novo_dado])
                     df = pd.concat([df, novo_df], ignore_index=True)
-                    salvar_dataframe(df) 
+
                     st.success('Dados inseridos com sucesso.')
 
     if opcao_selecionada == 'excluir':
@@ -174,7 +241,7 @@ def main():
             if st.button('Excluir'):
                 df = df.drop(index=indice_exclusao)
                 st.success('Linha excluída com sucesso.')
-                salvar_dataframe(df) 
+
     if opcao_selecionada == 'editar':
         # Exibir formulário para edição de dados
         st.header('Editar Dados')
@@ -300,9 +367,9 @@ def main():
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
                         df.loc[indice_edicao, 'NRO CONTRATO'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
-                        salvar_dataframe(df) 
+
                         st.success('Dados alterados com sucesso.')
-    
+
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
     st.write(df)
@@ -357,7 +424,7 @@ def main():
     # Adicionar botão para fazer o download do arquivo CSV
     if not df.empty:
         st.subheader('Baixar Arquivo CSV')
-        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados_cpc.xlsx', mime='text/csv')
+        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados.csv', mime='text/csv')
 
 
 
