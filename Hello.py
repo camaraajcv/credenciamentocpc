@@ -1,64 +1,26 @@
 import streamlit as st
 import mysql.connector
 import pandas as pd
+from datetime import date
 
+# Função para inserir dados no banco de dados
 def insert_data(data):
-    # Estabelece a conexão com o banco de dados MySQL
-    conn = mysql.connector.connect(
-        host="monorail.proxy.rlwy.net",
-        user="root",
-        password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
-        database="railway",
-        port=52280
-    )
+    # Código para inserir dados no banco de dados MySQL
+    pass
 
-    # Verifica se a conexão foi bem-sucedida
-    if conn.is_connected():
-        # Cria um cursor para executar comandos SQL
-        cursor = conn.cursor()
+# Função para validar o CNPJ
+def validar_cnpj(cnpj):
+    # Código para validar CNPJ
+    pass
 
-        # Define a consulta SQL para inserir os dados
-        query = """
-        INSERT INTO credenciamentocpc (
-            SITUACAO_ECONSIG,
-            SUBPROCESSO_SILOMS,
-            CATEGORIA,
-            NATUREZA_DE_DESCONTO,
-            CONSIGNATARIA,
-            CNPJ,
-            NRO_CONTRATO,
-            DOU,
-            SITUACAO,
-            DATA_EXPIRACAO_CONTRATUAL,
-            Dias_para_Fim_Vigencia,
-            CODIGO,
-            STATUS_CREDENCIAMENTO,
-            CPC_STATUS,
-            CPC_ANUAL,
-            DATA_DE_ENTRADA
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
-
-        # Executa a consulta SQL com os parâmetros
-        cursor.execute(query, data)
-
-        # Comita as mudanças no banco de dados
-        conn.commit()
-
-        # Fecha o cursor e a conexão
-        cursor.close()
-        conn.close()
-
-        # Retorna True para indicar que a inserção foi bem-sucedida
-        return True
-    else:
-        # Retorna False se não foi possível conectar ao banco de dados
-        return False
-
+# Função principal
 def main():
     st.title('Banco de Dados CredenciamentoCPC')
 
-    # Estabelece a conexão com o banco de dados MySQL
+    # Opções de menu
+    opcao_selecionada = st.radio('Selecione uma opção:', ['Visualizar', 'Inserir'])
+
+    # Conexão com o banco de dados MySQL
     conn = mysql.connector.connect(
         host="monorail.proxy.rlwy.net",
         user="root",
@@ -69,7 +31,7 @@ def main():
 
     # Verifica se a conexão foi bem-sucedida
     if conn.is_connected():
-        # Define a consulta SQL para recuperar todos os dados da tabela
+        # Consulta SQL para recuperar todos os dados da tabela
         query = "SELECT * FROM credenciamentocpc"
 
         # Carrega os dados do banco de dados em um DataFrame pandas
@@ -78,56 +40,54 @@ def main():
         # Fecha a conexão
         conn.close()
 
-        # Mostra o DataFrame
-        st.write("## Dados do Banco de Dados:")
-        st.write(df)
-    else:
-        st.error("Erro ao conectar ao banco de dados MySQL.")
+        # Mostra o DataFrame apenas se a opção selecionada for 'Visualizar'
+        if opcao_selecionada == 'Visualizar':
+            st.write("## Dados do Banco de Dados:")
+            st.write(df)
 
-    # Botão para mostrar o formulário de inserção
-    if st.button("Inserir"):
-        # Coleta os dados do usuário através de inputs
-        situacao_econsig = st.text_input("SITUACAO_ECONSIG:")
-        subprocesso_siloms = st.text_input("SUBPROCESSO_SILOMS:")
-        categoria = st.text_input("CATEGORIA:")
-        natureza_de_desconto = st.text_input("NATUREZA_DE_DESCONTO:")
-        consignataria = st.text_input("CONSIGNATARIA:")
-        cnpj = st.text_input("CNPJ:")
-        nro_contrato = st.text_input("NRO_CONTRATO:")
-        dou = st.text_input("DOU:")
-        situacao = st.text_input("SITUACAO:")
-        data_expiracao_contratual = st.text_input("DATA_EXPIRACAO_CONTRATUAL:")
-        dias_para_fim_vigencia = st.text_input("Dias_para_Fim_Vigencia:")
-        codigo = st.text_input("CODIGO:")
-        status_credenciamento = st.text_input("STATUS_CREDENCIAMENTO:")
-        cpc_status = st.text_input("CPC_STATUS:")
-        cpc_anual = st.text_input("CPC_ANUAL:")
-        data_de_entrada = st.text_input("DATA_DE_ENTRADA:")
+        # Se a opção selecionada for 'Inserir', mostra o formulário para inserir dados
+        elif opcao_selecionada == 'Inserir':
+            st.write("## Inserir Dados:")
 
-        # Botão para enviar os dados
-        if st.button("Enviar"):
-            # Verifica se todos os campos estão preenchidos
-            if (
-                situacao_econsig and subprocesso_siloms and categoria and
-                natureza_de_desconto and consignataria and cnpj and
-                nro_contrato and dou and situacao and data_expiracao_contratual and
-                dias_para_fim_vigencia and codigo and status_credenciamento and
-                cpc_status and cpc_anual and data_de_entrada
-            ):
-                # Tenta inserir os dados no banco de dados
-                data = (
-                    situacao_econsig, subprocesso_siloms, categoria,
-                    natureza_de_desconto, consignataria, cnpj, nro_contrato,
-                    dou, situacao, data_expiracao_contratual, dias_para_fim_vigencia,
-                    codigo, status_credenciamento, cpc_status, cpc_anual,
-                    data_de_entrada
-                )
-                if insert_data(data):
-                    st.success("Dados inseridos com sucesso!")
+            # Coleta os dados do usuário através de inputs
+            situacao_econsig = st.selectbox('Situação Econsig*', options=['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado', 'Bloqueado', 'Credenciamento Vencido'])
+            subprocesso_siloms = st.text_input('Subprocesso Siloms*')
+            categoria = st.selectbox('Categoria*', options=['I', 'II', 'III'])
+            natureza_de_desconto = st.selectbox('Natureza de Desconto*', options=['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
+            consignataria = st.text_input('Consignatária*')
+            cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+            nro_contrato = st.text_input('NRO CONTRATO*')
+            dou = st.text_input('DOU')
+            situacao = st.selectbox('Situação*', options=['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY', key='data_expiracao_contratual')
+            codigo = st.text_input('Código Caixa')
+            status_credenciamento = st.text_input('Status Credenciamento - Observações')
+            cpc_status = st.selectbox('CPC Status', options=['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
+            cpc_anual = st.selectbox('CPC Anual', options=['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
+            data_entrada = st.date_input('Data de Entrada', format='DD/MM/YYYY', value=date.today())
+
+            # Botão para enviar os dados
+            if st.button("Enviar"):
+                # Verifica se todos os campos obrigatórios foram preenchidos
+                if (
+                    situacao_econsig and subprocesso_siloms and categoria and
+                    natureza_de_desconto and consignataria and cnpj and nro_contrato and
+                    situacao and data_entrada
+                ):
+                    # Tenta inserir os dados no banco de dados
+                    data = (
+                        situacao_econsig, subprocesso_siloms, categoria,
+                        natureza_de_desconto, consignataria, cnpj, nro_contrato,
+                        dou, situacao, data_expiracao_contratual, codigo,
+                        status_credenciamento, cpc_status, cpc_anual, data_entrada
+                    )
+                    if insert_data(data):
+                        st.success("Dados inseridos com sucesso!")
+                    else:
+                        st.error("Erro ao inserir os dados. Verifique a conexão com o banco de dados.")
                 else:
-                    st.error("Erro ao inserir os dados. Verifique a conexão com o banco de dados.")
-            else:
-                st.warning("Por favor, preencha todos os campos.")
+                    st.warning("Por favor, preencha todos os campos obrigatórios.")
 
+# Executa a função principal
 if __name__ == "__main__":
     main()
