@@ -10,7 +10,8 @@ def main():
         host="monorail.proxy.rlwy.net",
         user="root",
         password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
-        database="railway"
+        database="railway",
+        port = 52280
     )
 
     # Verifica se a conexão foi bem-sucedida
