@@ -12,20 +12,6 @@ import openpyxl
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
-import requests
-
-excel_url = 'https://raw.githubusercontent.com/camaraajcv/credenciamentocpc/main/dados_cpc.xlsx'
-token = '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'
-
-headers = {'Authorization': f'token {token}'}
-response = requests.get(excel_url, headers=headers)
-
-if response.status_code == 200:
-    # O acesso foi bem-sucedido, você pode prosseguir com o processamento dos dados
-    dados = response.content
-    # Faça o que precisar com os dados
-else:
-    print(f'Erro ao acessar o recurso: {response.status_code}')
 #Código HTML e CSS para ajustar a largura da imagem para 20% da largura da coluna e centralizar
 html_code = f'<div style="display: flex; justify-content: center;"><img src="{image_url}" alt="Imagem" style="width:8vw;"/></div>'
 # Exibir a imagem usando HTML
@@ -53,9 +39,21 @@ def carregar_dataframe():
 
 # Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
-    # Save DataFrame as Excel file locally using openpyxl
-    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
-        df.to_excel(writer, index=False)
+    try:
+        # Salvar DataFrame como um arquivo Excel temporário
+        temp_file = "temp_dados_cpc.xlsx"
+        df.to_excel(temp_file, index=False)
+        
+        # Remover o arquivo Excel original, se existir
+        if os.path.exists("dados_cpc.xlsx"):
+            os.remove("dados_cpc.xlsx")
+        
+        # Renomear o arquivo temporário para o nome original
+        os.rename(temp_file, "dados_cpc.xlsx")
+        
+        st.success('Dados salvos com sucesso.')
+    except Exception as e:
+        st.error(f"Erro ao salvar os dados: {e}")
     
 # Função para validar o formato do CNPJ
 def validar_cnpj(cnpj):
@@ -304,13 +302,7 @@ def main():
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
                         salvar_dataframe(df) 
                         st.success('Dados alterados com sucesso.')
-    # Função para criar link de download do DataFrame
-    def get_table_download_link(df):
-        # Cria um link para download do DataFrame como CSV
-        csv = df.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()  # codifica em bytes para base64
-        href = f'<a href="data:file/csv;base64,{b64}" download="dados_cpc.csv">Baixar arquivo CSV</a>'
-        return href
+    
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
     st.write(df)
