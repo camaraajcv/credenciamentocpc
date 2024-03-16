@@ -25,6 +25,7 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para salvar o DataFrame em um arquivo CSV e no GitHub
+# Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
     # Save DataFrame as Excel file locally using openpyxl
     with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
@@ -41,7 +42,7 @@ def salvar_dataframe(df):
         conteudo_xls = file.read()
 
     # Base64 encode the binary content
-    conteudo_base64 = conteudo_xls.hex()
+    conteudo_base64 = base64.b64encode(conteudo_xls).decode()
 
     # URL of the GitHub API to create or update a file
     url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
@@ -63,61 +64,29 @@ def salvar_dataframe(df):
 
     # Check the result
     if response.status_code == 201:
-        st.success("Arquivo dados.xlsx atualizado com sucesso no GitHub!")
+        print("Arquivo dados_cpc.xlsx atualizado com sucesso no GitHub!")
     else:
-        st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
-        st.error(response.text)
+        print("Falha ao atualizar o arquivo dados_cpc.xlsx no GitHub.")
+        print(response.text)
+
 # Função para carregar ou criar o DataFrame
-        
-# Check if the Excel file exists
-if not os.path.exists("dados_cpc.xlsx"):
-    # If it doesn't exist, create a DataFrame with the required columns
-    colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-               'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-               'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-               'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-               'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
-    df = pd.DataFrame(columns=colunas)
-    # Save the DataFrame to an Excel file
-    df.to_excel("dados_cpc.xlsx", index=False)
-
-# Now you can proceed with loading or working with the Excel file
-# For example, loading the DataFrame from the Excel file
-df = pd.read_excel("dados_cpc.xlsx")
-
-
 def carregar_dataframe():
-    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.csv"):
-        print("Arquivo 'dados.csv' encontrado.")
-        try:
-            df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.csv", encoding='utf-8')
-            print("Arquivo 'dados.csv' lido com sucesso.")
-            return df
-        except UnicodeDecodeError as e:
-            print(f"Erro ao ler o arquivo CSV: {e}")
-            print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
-            try:
-                df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.csv", encoding='latin-1')
-                print("Arquivo 'dados.csv' lido com sucesso.")
-                return df
-            except Exception as e:
-                print(f"Erro ao ler o arquivo CSV com encoding 'latin-1': {e}")
-                print("Não foi possível ler o arquivo 'dados.csv'. Criando novo DataFrame vazio.")
-                return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                                             'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                                             'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                                             'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                                             'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
-    else:
-        print("Arquivo 'dados.csv' não encontrado. Criando novo arquivo.")
+    # Check if the Excel file exists
+    if not os.path.exists("dados_cpc.xlsx"):
+        # If it doesn't exist, create a DataFrame with the required columns
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
         df = pd.DataFrame(columns=colunas)
+        # Save the DataFrame to an Excel file
+        df.to_excel("dados_cpc.xlsx", index=False)
         salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
-        return df
+    else:
+        # If it exists, load the DataFrame from the Excel file
+        df = pd.read_excel("dados_cpc.xlsx")
+    return df
 
 
 
