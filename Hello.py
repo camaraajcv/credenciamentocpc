@@ -11,27 +11,12 @@ import openpyxl
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# Definir escopo e credenciais
+# Configurações para acessar a API do Google Sheets
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+client = gspread.authorize(credentials)
 
-# Autenticar e abrir a planilha
-gc = gspread.authorize(credentials)
-spreadsheet_key = '1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg'  # ID da planilha
-spreadsheet = gc.open_by_key(spreadsheet_key)
-# Acessar a planilha 'dados_cpc'
-worksheet_name = 'dados_cpc'
-try:
-    sheet = spreadsheet.worksheet(worksheet_name)
-    data = sheet.get_all_values()
-    df = pd.DataFrame(data[1:], columns=data[0])  # Cria o DataFrame
-    print("Dados carregados com sucesso!")
-    print(df.head())  # Exibe as primeiras linhas do DataFrame
-except gspread.exceptions.WorksheetNotFound:
-    print(f"A planilha '{worksheet_name}' não foi encontrada.")
-# Imprimir os nomes de todas as planilhas na pasta de trabalho
-for worksheet in spreadsheet.worksheets():
-    print(worksheet.title)
+
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
@@ -64,38 +49,15 @@ st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para carregar o DataFrame a partir do Google Sheets
 def carregar_dataframe():
     try:
-        # Definir escopo e credenciais
-        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
-
-        # Autenticar e abrir a planilha
-        gc = gspread.authorize(credentials)
-        spreadsheet_key = '1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg'  # ID da planilha
-        spreadsheet = gc.open_by_key(spreadsheet_key)
-
-        # Acessar a planilha 'dados_cpc'
-        worksheet_name = 'dados_cpc'
-        sheet = None
-        for worksheet in spreadsheet.worksheets():
-            if worksheet.title == worksheet_name:
-                sheet = worksheet
-                break
-        
-        if sheet is None:
-            raise gspread.exceptions.WorksheetNotFound
-
+        # Ler os dados da planilha
         data = sheet.get_all_values()
-        df = pd.DataFrame(data[1:], columns=data[0])  # Cria o DataFrame
-        print("Dados carregados com sucesso!")
-        print(df.head())  # Exibe as primeiras linhas do DataFrame
+        # Transformar os dados em DataFrame
+        df = pd.DataFrame(data[1:], columns=data[0])
         return df
-    except gspread.exceptions.WorksheetNotFound:
-        print(f"A planilha '{worksheet_name}' não foi encontrada.")
     except Exception as e:
-        print(f"Erro ao carregar os dados: {e}")
+        st.error(f"Erro ao carregar os dados: {e}")
         return pd.DataFrame()  # Retorna um DataFrame vazio se houver algum erro
 
-carregar_dataframe()
 # Função para salvar o DataFrame de volta para o Google Sheets
 def salvar_dataframe(df):
     try:
