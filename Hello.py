@@ -109,6 +109,18 @@ def main():
             with col2:
                 situacao = st.selectbox('Situação*', options=[''] + ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
                 data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
+                # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
+                if data_expiracao_contratual is not None:
+                    dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
+                    if dias_para_fim_vigencia < 0:
+                        dias_para_fim_vigencia = 'Expirado'
+                    else:
+                        dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
+                else:
+                    dias_para_fim_vigencia = ''
+
+                # Exibe os dias para o fim da vigência
+                st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
                 codigo = st.text_input('Código Caixa')
                 status_credenciamento = st.text_input('Status Credenciamento - Observações')
                 cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
