@@ -61,7 +61,7 @@ def salvar_dataframe(df):
     usuario = "camaraajcv"
     repositorio = "credenciamentocpc"
     caminho_arquivo = "dados_cpc.xlsx"
-    token = "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"
+    token = "VxBGhB350H4/A/GTkqceIogIQNnH7eC9ABOqYI0lzsM"
 
     # Read Excel file as binary
     with open(caminho_arquivo, "rb") as file:
