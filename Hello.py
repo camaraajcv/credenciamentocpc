@@ -195,7 +195,7 @@ def main():
 
                     novo_df = pd.DataFrame([novo_dado])
                     df = pd.concat([df, novo_df], ignore_index=True)
-
+                    salvar_dataframe()
                     st.success('Dados inseridos com sucesso.')
 
     if opcao_selecionada == 'excluir':
@@ -207,6 +207,7 @@ def main():
 
             if st.button('Excluir'):
                 df = df.drop(index=indice_exclusao)
+                salvar_dataframe()
                 st.success('Linha excluída com sucesso.')
 
     if opcao_selecionada == 'editar':
@@ -334,7 +335,7 @@ def main():
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
                         df.loc[indice_edicao, 'NRO CONTRATO'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
-
+                        salvar_dataframe()
                         st.success('Dados alterados com sucesso.')
 
     # Exibir DataFrame atualizado
