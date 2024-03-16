@@ -207,7 +207,9 @@ def main():
 
             if st.button('Excluir'):
                 df = df.drop(index=indice_exclusao)
-                salvar_dataframe(df)
+                print("DataFrame após a exclusão:")
+                print(df)  # Verificar se a linha foi removida corretamente do DataFrame
+                salvar_dataframe(df)  # Salvar o DataFrame atualizado no arquivo Excel
                 st.success('Linha excluída com sucesso.')
 
     if opcao_selecionada == 'editar':
