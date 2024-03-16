@@ -113,7 +113,7 @@ def main():
                 status_credenciamento = st.text_input('Status Credenciamento - Observações')
                 cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
                 cpc_anual = st.selectbox('CPC Anual', options=[''] + ['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
-                data_entrada = st.date_input('Data de Entrada', None, format='DD/MM/YYYY', value=date.today())
+                data_entrada = st.date_input('Data de Entrada', None, format='DD/MM/YYYY')
 
             # Botão para enviar os dados
             if st.button("Enviar"):
