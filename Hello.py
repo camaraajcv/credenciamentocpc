@@ -29,6 +29,7 @@ def salvar_dataframe(df):
     df.to_excel("dados.xlsx", index=False)
 
 # Função para carregar o DataFrame a partir de um arquivo Excel
+# Função para carregar o DataFrame a partir de um arquivo Excel
 def carregar_dataframe():
     if os.path.exists("dados.xlsx"):
         print("Arquivo 'dados.xlsx' encontrado.")
