@@ -88,7 +88,7 @@ df = pd.read_excel("dados_cpc.xlsx")
 
 def carregar_dataframe():
     if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.xlsx"):
-        print("Arquivo 'dados.csv' encontrado.")
+        print("Arquivo 'dados_cpc.xlsx' encontrado.")
         try:
             df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.xlsx", encoding='utf-8')
             print("Arquivo 'dados_cpc.xlsx' lido com sucesso.")
@@ -98,18 +98,18 @@ def carregar_dataframe():
             print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
             try:
                 df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.xlsx", encoding='latin-1')
-                print("Arquivo 'dados.csv' lido com sucesso.")
+                print("Arquivo 'dados_cpc.xlsx' lido com sucesso.")
                 return df
             except Exception as e:
                 print(f"Erro ao ler o arquivo CSV com encoding 'latin-1': {e}")
-                print("Não foi possível ler o arquivo 'dados.csv'. Criando novo DataFrame vazio.")
+                print("Não foi possível ler o arquivo 'dados_cpc.xlsx'. Criando novo DataFrame vazio.")
                 return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                                              'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                                              'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                                              'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                                              'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
     else:
-        print("Arquivo 'dados.csv' não encontrado. Criando novo arquivo.")
+        print("Arquivo 'dados_cpc.xlsx' não encontrado. Criando novo arquivo.")
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
@@ -424,7 +424,7 @@ def main():
     # Adicionar botão para fazer o download do arquivo CSV
     if not df.empty:
         st.subheader('Baixar Arquivo CSV')
-        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados.csv', mime='text/csv')
+        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados_cpc.xlsx', mime='text/csv')
 
 
 
