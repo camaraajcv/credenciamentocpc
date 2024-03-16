@@ -111,6 +111,7 @@ def main():
                 data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
                 # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
                 if data_expiracao_contratual is not None:
+                    data_atual = date.today()
                     dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
                     if dias_para_fim_vigencia < 0:
                         dias_para_fim_vigencia = 'Expirado'
