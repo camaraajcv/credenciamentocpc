@@ -218,7 +218,7 @@ def main():
                 print(df)  # Verificar se a linha foi removida corretamente do DataFrame
                 salvar_dataframe(df)  # Salvar o DataFrame atualizado no arquivo Excel
                 st.success('Linha excluída com sucesso.')
-
+                carregar_dataframe()
     if opcao_selecionada == 'editar':
         # Exibir formulário para edição de dados
         st.header('Editar Dados')
