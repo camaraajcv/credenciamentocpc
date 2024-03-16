@@ -27,13 +27,13 @@ st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para salvar o DataFrame em um arquivo CSV e no GitHub
 def salvar_dataframe(df):
     # Save DataFrame as Excel file locally using openpyxl
-    with pd.ExcelWriter("dados.xlsx", engine='openpyxl') as writer:
+    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
         df.to_excel(writer, index=False)
     
     # Information for GitHub repository
     usuario = "camaraajcv"
     repositorio = "credenciamentocpc"
-    caminho_arquivo = "dados.xlsx"
+    caminho_arquivo = "dados_cpc.xlsx"
     token = "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"
 
     # Read Excel file as binary
@@ -54,7 +54,7 @@ def salvar_dataframe(df):
 
     # Body of the request to create or update the file
     data = {
-        "message": "Atualizando dados.xlsx",
+        "message": "Atualizando dados_cpc.xlsx",
         "content": conteudo_base64
     }
 
@@ -63,14 +63,14 @@ def salvar_dataframe(df):
 
     # Check the result
     if response.status_code == 201:
-        st.success("Arquivo dados.xlsx atualizado com sucesso no GitHub!")
+        st.success("Arquivo dados_cpc.xlsx atualizado com sucesso no GitHub!")
     else:
-        st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
+        st.error("Falha ao atualizar o arquivo dados_cpc.xlsx no GitHub.")
         st.error(response.text)
 # Função para carregar ou criar o DataFrame
         
 # Check if the Excel file exists
-if not os.path.exists("dados.xlsx"):
+if not os.path.exists("dados_cpc.xlsx"):
     # If it doesn't exist, create a DataFrame with the required columns
     colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
@@ -79,25 +79,25 @@ if not os.path.exists("dados.xlsx"):
                'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
     df = pd.DataFrame(columns=colunas)
     # Save the DataFrame to an Excel file
-    df.to_excel("dados.xlsx", index=False)
+    df.to_excel("dados_cpc.xlsx", index=False)
 
 # Now you can proceed with loading or working with the Excel file
 # For example, loading the DataFrame from the Excel file
-df = pd.read_excel("dados.xlsx")
+df = pd.read_excel("dados_cpc.xlsx")
 
 
 def carregar_dataframe():
-    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx"):
+    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.xlsx"):
         print("Arquivo 'dados.csv' encontrado.")
         try:
-            df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='utf-8')
-            print("Arquivo 'dados.xlsx' lido com sucesso.")
+            df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.xlsx", encoding='utf-8')
+            print("Arquivo 'dados_cpc.xlsx' lido com sucesso.")
             return df
         except UnicodeDecodeError as e:
             print(f"Erro ao ler o arquivo CSV: {e}")
             print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
             try:
-                df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='latin-1')
+                df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.xlsx", encoding='latin-1')
                 print("Arquivo 'dados.csv' lido com sucesso.")
                 return df
             except Exception as e:
