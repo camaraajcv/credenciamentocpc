@@ -70,7 +70,7 @@ def salvar_dataframe(df):
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
     df = pd.read_excel("dados_cpc.xlsx")
-    return df
+    st.write(df)
 
 
 
@@ -328,7 +328,7 @@ def main():
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
     carregar_dataframe()
-    st.write(df)
+
 
     # Configuração para desativar o aviso PyplotGlobalUseWarning
     st.set_option('deprecation.showPyplotGlobalUse', False)
