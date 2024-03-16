@@ -11,16 +11,18 @@ import openpyxl
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-# Configurações para acessar a API do Google Sheets
+# Definir escopo e credenciais
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
-client = gspread.authorize(credentials)
 
 # Autenticar e abrir a planilha
 gc = gspread.authorize(credentials)
 spreadsheet_key = '1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg'  # ID da planilha
-worksheet_name = 'dados_cpc'
-worksheet = gc.open_by_key(spreadsheet_key).worksheet(worksheet_name)
+spreadsheet = gc.open_by_key(spreadsheet_key)
+
+# Imprimir os nomes de todas as planilhas na pasta de trabalho
+for worksheet in spreadsheet.worksheets():
+    print(worksheet.title)
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
