@@ -29,7 +29,7 @@ def salvar_dataframe(df):
     # Save DataFrame as Excel file locally using openpyxl
     with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
         df.to_excel(writer, index=False)
-    
+
     # Information for GitHub repository
     usuario = "camaraajcv"
     repositorio = "credenciamentocpc"
