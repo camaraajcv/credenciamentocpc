@@ -80,12 +80,12 @@ def carregar_dataframe():
         df = pd.DataFrame(columns=colunas)
         # Save the DataFrame to an Excel file
         # Verificar se o arquivo dados.xlsx já existe
-        if os.path.exists("dados.xlsx"):
+        if os.path.exists("dados_cpc.xlsx"):
             # Se existir, exclua-o
-            os.remove("dados.xlsx")
+            os.remove("dados_cpc.xlsx")
 
         # Save DataFrame as Excel file locally using openpyxl
-        with pd.ExcelWriter("dados.xlsx", engine='openpyxl') as writer:
+        with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
             df.to_excel(writer, index=False)
         salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
     else:
