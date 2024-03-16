@@ -6,4 +6,4 @@ streamlit
 seaborn
 matplotlib
 openpyxl
-
+gspread
