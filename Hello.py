@@ -33,46 +33,6 @@ def salvar_dataframe(df):
                'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
     df = pd.DataFrame(columns=colunas)
-    # Save the DataFrame to an Excel file
-    df.to_excel("dados.xlsx", index=False)
-
-# Now you can proceed with loading or working with the Excel file
-# For example, loading the DataFrame from the Excel file
-df = pd.read_excel("dados.xlsx")
-
-
-def carregar_dataframe():
-    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx"):
-        print("Arquivo 'dados.csv' encontrado.")
-        try:
-            df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='utf-8')
-            print("Arquivo 'dados.xlsx' lido com sucesso.")
-            return df
-        except UnicodeDecodeError as e:
-            print(f"Erro ao ler o arquivo CSV: {e}")
-            print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
-            try:
-                df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='latin-1')
-                print("Arquivo 'dados.csv' lido com sucesso.")
-                return df
-            except Exception as e:
-                print(f"Erro ao ler o arquivo CSV com encoding 'latin-1': {e}")
-                print("Não foi possível ler o arquivo 'dados.csv'. Criando novo DataFrame vazio.")
-                return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                                             'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                                             'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                                             'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                                             'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
-    else:
-        print("Arquivo 'dados.csv' não encontrado. Criando novo arquivo.")
-        colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                   'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                   'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                   'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
-        df = pd.DataFrame(columns=colunas)
-        salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
-        return df
 
 
 
