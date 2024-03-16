@@ -24,7 +24,6 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
-# Função para salvar o DataFrame em um arquivo CSV e no GitHub
 # Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
     # Save DataFrame as Excel file locally using openpyxl
@@ -41,8 +40,8 @@ def salvar_dataframe(df):
     with open(caminho_arquivo, "rb") as file:
         conteudo_xls = file.read()
 
-    # Base64 encode the binary content
-    conteudo_base64 = base64.b64encode(conteudo_xls).decode()
+    # Convert binary content to base64
+    conteudo_base64 = conteudo_xls.encode("base64").decode()
 
     # URL of the GitHub API to create or update a file
     url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
