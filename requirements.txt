@@ -5,4 +5,4 @@ pydeck
 streamlit
 seaborn
 matplotlib
-mysql
+mysql-connector-python
