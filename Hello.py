@@ -19,7 +19,16 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json
 gc = gspread.authorize(credentials)
 spreadsheet_key = '1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg'  # ID da planilha
 spreadsheet = gc.open_by_key(spreadsheet_key)
-
+# Acessar a planilha 'dados_cpc'
+worksheet_name = 'dados_cpc'
+try:
+    sheet = spreadsheet.worksheet(worksheet_name)
+    data = sheet.get_all_values()
+    df = pd.DataFrame(data[1:], columns=data[0])  # Cria o DataFrame
+    print("Dados carregados com sucesso!")
+    print(df.head())  # Exibe as primeiras linhas do DataFrame
+except gspread.exceptions.WorksheetNotFound:
+    print(f"A planilha '{worksheet_name}' não foi encontrada.")
 # Imprimir os nomes de todas as planilhas na pasta de trabalho
 for worksheet in spreadsheet.worksheets():
     print(worksheet.title)
