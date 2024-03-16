@@ -330,57 +330,5 @@ def main():
     carregar_dataframe()
 
 
-    # Configuração para desativar o aviso PyplotGlobalUseWarning
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    # Adicionar gráficos e indicadores
-    st.header('Indicadores')
-    st.subheader('Total de Processos por Situação')
-    count_by_situation = df['SITUAÇÃO'].value_counts()
-    st.bar_chart(count_by_situation)
-
-    st.subheader('Distribuição das Categorias')
-    count_by_category = df['CATEGORIA'].value_counts()
-    st.bar_chart(count_by_category)
-
-    st.subheader('Processos por Natureza de Desconto')
-    count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
-    st.write(count_by_natureza)
-
-    st.subheader('Tempo desde a entrada')
-    
-    # Copie as colunas necessárias do DataFrame original
-    tempo_entrada = df[['SUBPROCESSO SILOMS','CNPJ','CONSIGNATÁRIA','DATA DE ENTRADA', 'SITUAÇÃO']].copy()
-
-    # Converta a coluna 'DATA DE ENTRADA' para o tipo datetime
-    tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
-
-    # Obtenha a data atual como um objeto datetime
-    data_atual = pd.to_datetime(date.today())
-
-    # Calcule o número de dias decorridos desde a entrada até a data atual
-    tempo_entrada['Dias Decorridos'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days.abs()
-
-    # Exiba o DataFrame atualizado
-    st.write(tempo_entrada.sort_values(by='Dias Decorridos', ascending=False).drop(columns=['DATA DE ENTRADA']))
-    
-
-
-    
-
-    plt.figure(figsize=(8, 6))
-    plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
-    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    st.pyplot()
-
-    
-   
-    
-    # Adicionar botão para fazer o download do arquivo CSV
-    if not df.empty:
-        st.subheader('Baixar Arquivo CSV')
-        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados.csv', mime='text/csv')
-
-
-
 if __name__ == "__main__":
         main()
