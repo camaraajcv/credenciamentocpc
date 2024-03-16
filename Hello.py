@@ -49,22 +49,28 @@ def main():
         elif opcao_selecionada == 'Inserir':
             st.write("## Inserir Dados:")
 
+            # Divide o formulário em duas colunas
+            col1, col2 = st.columns(2)
+
             # Coleta os dados do usuário através de inputs
-            situacao_econsig = st.selectbox('Situação Econsig*', options=['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado', 'Bloqueado', 'Credenciamento Vencido'])
-            subprocesso_siloms = st.text_input('Subprocesso Siloms*')
-            categoria = st.selectbox('Categoria*', options=['I', 'II', 'III'])
-            natureza_de_desconto = st.selectbox('Natureza de Desconto*', options=['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
-            consignataria = st.text_input('Consignatária*')
-            cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
-            nro_contrato = st.text_input('NRO CONTRATO*')
-            dou = st.text_input('DOU')
-            situacao = st.selectbox('Situação*', options=['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
-            data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY', key='data_expiracao_contratual')
-            codigo = st.text_input('Código Caixa')
-            status_credenciamento = st.text_input('Status Credenciamento - Observações')
-            cpc_status = st.selectbox('CPC Status', options=['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
-            cpc_anual = st.selectbox('CPC Anual', options=['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
-            data_entrada = st.date_input('Data de Entrada', format='DD/MM/YYYY', value=date.today())
+            with col1:
+                situacao_econsig = st.selectbox('Situação Econsig*', options=[''] + ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado', 'Bloqueado', 'Credenciamento Vencido'])
+                subprocesso_siloms = st.text_input('Subprocesso Siloms*')
+                categoria = st.selectbox('Categoria*', options=[''] + ['I', 'II', 'III'])
+                natureza_de_desconto = st.selectbox('Natureza de Desconto*', options=[''] + ['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
+                consignataria = st.text_input('Consignatária*')
+                cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+                nro_contrato = st.text_input('NRO CONTRATO*')
+                dou = st.text_input('DOU')
+
+            with col2:
+                situacao = st.selectbox('Situação*', options=[''] + ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
+                data_expiracao_contratual = st.date_input('Data Expiração Contratual', format='DD/MM/YYYY', key='data_expiracao_contratual')
+                codigo = st.text_input('Código Caixa')
+                status_credenciamento = st.text_input('Status Credenciamento - Observações')
+                cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
+                cpc_anual = st.selectbox('CPC Anual', options=[''] + ['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
+                data_entrada = st.date_input('Data de Entrada', format='DD/MM/YYYY', value=date.today())
 
             # Botão para enviar os dados
             if st.button("Enviar"):
@@ -91,3 +97,4 @@ def main():
 # Executa a função principal
 if __name__ == "__main__":
     main()
+
