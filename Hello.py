@@ -11,7 +11,21 @@ import openpyxl
 
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
-excel_url="https://raw.githubusercontent.com/camaraajcv/credenciamentocpc/main/dados_cpc.xlsx"
+
+import requests
+
+excel_url = 'https://raw.githubusercontent.com/camaraajcv/credenciamentocpc/main/dados_cpc.xlsx'
+token = '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'
+
+headers = {'Authorization': f'token {token}'}
+response = requests.get(excel_url, headers=headers)
+
+if response.status_code == 200:
+    # O acesso foi bem-sucedido, você pode prosseguir com o processamento dos dados
+    dados = response.content
+    # Faça o que precisar com os dados
+else:
+    print(f'Erro ao acessar o recurso: {response.status_code}')
 #Código HTML e CSS para ajustar a largura da imagem para 20% da largura da coluna e centralizar
 html_code = f'<div style="display: flex; justify-content: center;"><img src="{image_url}" alt="Imagem" style="width:8vw;"/></div>'
 # Exibir a imagem usando HTML
