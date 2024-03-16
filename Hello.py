@@ -26,7 +26,7 @@ def main():
         
         # Mostra os dados atualizados na tabela
         st.write("## Dados do Excel Atualizados")
-        st.write(df)
+        st.write(pd.read_excel(excel_url))
 
 if __name__ == "__main__":
     main()
