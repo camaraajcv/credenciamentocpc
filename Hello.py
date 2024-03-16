@@ -1,4 +1,3 @@
-import streamlit as st
 import pandas as pd
 import os
 import re
@@ -8,7 +7,7 @@ import seaborn as sns
 import numpy as np
 import requests 
 import openpyxl
-import base64
+
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
@@ -24,24 +23,25 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
-# Função para salvar o DataFrame em um arquivo Excel no GitHub
+# Função para salvar o DataFrame em um arquivo CSV e no GitHub
 def salvar_dataframe(df):
     # Save DataFrame as Excel file locally using openpyxl
-    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
+    with pd.ExcelWriter("dados.xlsx", engine='openpyxl') as writer:
         df.to_excel(writer, index=False)
     
     # Information for GitHub repository
     usuario = "camaraajcv"
     repositorio = "credenciamentocpc"
-    caminho_arquivo = "dados_cpc.xlsx"  # Alterado o nome do arquivo
+    caminho_arquivo = "dados.xlsx"
     token = "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"
 
     # Read Excel file as binary
     with open(caminho_arquivo, "rb") as file:
         conteudo_xls = file.read()
 
-    # Convert binary content to base64
-    conteudo_base64 = base64.b64encode(conteudo_xls).decode()
+    # Base64 encode the binary content
+    conteudo_base64 = conteudo_xls.hex()
+
     # URL of the GitHub API to create or update a file
     url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
 
@@ -53,7 +53,7 @@ def salvar_dataframe(df):
 
     # Body of the request to create or update the file
     data = {
-        "message": "Atualizando dados.xlsx",  # Alterado o nome do arquivo na mensagem
+        "message": "Atualizando dados.xlsx",
         "content": conteudo_base64
     }
 
@@ -62,15 +62,61 @@ def salvar_dataframe(df):
 
     # Check the result
     if response.status_code == 201:
-        print("Arquivo dados.xlsx atualizado com sucesso no GitHub!")  # Alterado o nome do arquivo na mensagem
+        st.success("Arquivo dados.xlsx atualizado com sucesso no GitHub!")
     else:
-        print("Falha ao atualizar o arquivo dados.xlsx no GitHub.")  # Alterado o nome do arquivo na mensagem
-        print(response.text)
-
+        st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
+        st.error(response.text)
 # Função para carregar ou criar o DataFrame
+        
+# Check if the Excel file exists
+if not os.path.exists("dados.xlsx"):
+    # If it doesn't exist, create a DataFrame with the required columns
+    colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+               'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+               'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+               'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+               'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+    df = pd.DataFrame(columns=colunas)
+    # Save the DataFrame to an Excel file
+    df.to_excel("dados.xlsx", index=False)
+
+# Now you can proceed with loading or working with the Excel file
+# For example, loading the DataFrame from the Excel file
+df = pd.read_excel("dados.xlsx")
+
+
 def carregar_dataframe():
-    df = pd.read_excel("dados_cpc.xlsx")
-    st.write(df)
+    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx"):
+        print("Arquivo 'dados.csv' encontrado.")
+        try:
+            df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='utf-8')
+            print("Arquivo 'dados.xlsx' lido com sucesso.")
+            return df
+        except UnicodeDecodeError as e:
+            print(f"Erro ao ler o arquivo CSV: {e}")
+            print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
+            try:
+                df = pd.read_excel("https://github.com/camaraajcv/credenciamentocpc/dados.xlsx", encoding='latin-1')
+                print("Arquivo 'dados.csv' lido com sucesso.")
+                return df
+            except Exception as e:
+                print(f"Erro ao ler o arquivo CSV com encoding 'latin-1': {e}")
+                print("Não foi possível ler o arquivo 'dados.csv'. Criando novo DataFrame vazio.")
+                return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                                             'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+                                             'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                                             'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                                             'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
+    else:
+        print("Arquivo 'dados.csv' não encontrado. Criando novo arquivo.")
+        colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
+                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
+                   'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
+                   'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
+                   'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
+        df = pd.DataFrame(columns=colunas)
+        salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
+        return df
 
 
 
@@ -325,8 +371,62 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
-    carregar_dataframe()
+    st.write(df)
+
+    # Salvar DataFrame em arquivo CSV
+    salvar_dataframe(df)
+    # Configuração para desativar o aviso PyplotGlobalUseWarning
+    st.set_option('deprecation.showPyplotGlobalUse', False)
+    # Adicionar gráficos e indicadores
+    st.header('Indicadores')
+    st.subheader('Total de Processos por Situação')
+    count_by_situation = df['SITUAÇÃO'].value_counts()
+    st.bar_chart(count_by_situation)
+
+    st.subheader('Distribuição das Categorias')
+    count_by_category = df['CATEGORIA'].value_counts()
+    st.bar_chart(count_by_category)
+
+    st.subheader('Processos por Natureza de Desconto')
+    count_by_natureza = df['NATUREZA DE DESCONTO'].value_counts()
+    st.write(count_by_natureza)
+
+    st.subheader('Tempo desde a entrada')
+    
+    # Copie as colunas necessárias do DataFrame original
+    tempo_entrada = df[['SUBPROCESSO SILOMS','CNPJ','CONSIGNATÁRIA','DATA DE ENTRADA', 'SITUAÇÃO']].copy()
+
+    # Converta a coluna 'DATA DE ENTRADA' para o tipo datetime
+    tempo_entrada['DATA DE ENTRADA'] = pd.to_datetime(tempo_entrada['DATA DE ENTRADA'])
+
+    # Obtenha a data atual como um objeto datetime
+    data_atual = pd.to_datetime(date.today())
+
+    # Calcule o número de dias decorridos desde a entrada até a data atual
+    tempo_entrada['Dias Decorridos'] = (data_atual - tempo_entrada['DATA DE ENTRADA']).dt.days.abs()
+
+    # Exiba o DataFrame atualizado
+    st.write(tempo_entrada.sort_values(by='Dias Decorridos', ascending=False).drop(columns=['DATA DE ENTRADA']))
+    
+
+
+    
+
+    plt.figure(figsize=(8, 6))
+    plt.pie(count_by_natureza, labels=count_by_natureza.index, autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    st.pyplot()
+
+    
+   
+    
+    # Adicionar botão para fazer o download do arquivo CSV
+    if not df.empty:
+        st.subheader('Baixar Arquivo CSV')
+        st.download_button(label='Clique aqui para baixar os dados como CSV', data=df.to_csv(index=False), file_name='dados.csv', mime='text/csv')
+
 
 
 if __name__ == "__main__":
         main()
+
