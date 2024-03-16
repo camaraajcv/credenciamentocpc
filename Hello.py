@@ -64,15 +64,38 @@ st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para carregar o DataFrame a partir do Google Sheets
 def carregar_dataframe():
     try:
-        # Ler os dados da planilha
+        # Definir escopo e credenciais
+        scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+        credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+
+        # Autenticar e abrir a planilha
+        gc = gspread.authorize(credentials)
+        spreadsheet_key = '1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg'  # ID da planilha
+        spreadsheet = gc.open_by_key(spreadsheet_key)
+
+        # Acessar a planilha 'dados_cpc'
+        worksheet_name = 'dados_cpc'
+        sheet = None
+        for worksheet in spreadsheet.worksheets():
+            if worksheet.title == worksheet_name:
+                sheet = worksheet
+                break
+        
+        if sheet is None:
+            raise gspread.exceptions.WorksheetNotFound
+
         data = sheet.get_all_values()
-        # Transformar os dados em DataFrame
-        df = pd.DataFrame(data[1:], columns=data[0])
+        df = pd.DataFrame(data[1:], columns=data[0])  # Cria o DataFrame
+        print("Dados carregados com sucesso!")
+        print(df.head())  # Exibe as primeiras linhas do DataFrame
         return df
+    except gspread.exceptions.WorksheetNotFound:
+        print(f"A planilha '{worksheet_name}' não foi encontrada.")
     except Exception as e:
-        st.error(f"Erro ao carregar os dados: {e}")
+        print(f"Erro ao carregar os dados: {e}")
         return pd.DataFrame()  # Retorna um DataFrame vazio se houver algum erro
 
+carregar_dataframe()
 # Função para salvar o DataFrame de volta para o Google Sheets
 def salvar_dataframe(df):
     try:
