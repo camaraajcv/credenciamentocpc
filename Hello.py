@@ -3,7 +3,10 @@ import mysql.connector
 import pandas as pd
 from datetime import date
 import re
+import warnings
 
+# Suprimindo o aviso específico
+warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
 # Função para inserir dados no banco de dados
 def insert_data(data):
     try:
