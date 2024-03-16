@@ -26,7 +26,7 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para salvar o DataFrame em um arquivo CSV e no GitHub
 def salvar_dataframe(df):
-    df.to_excel("dados.xlsx", index=False)
+    df.to_excel("dados_cpc.xlsx", index=False)
 
 # Função para carregar o DataFrame a partir de um arquivo Excel
 # Função para carregar o DataFrame a partir de um arquivo Excel
