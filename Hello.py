@@ -70,7 +70,7 @@ def salvar_dataframe(df):
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
     # Check if the Excel file exists
-    if not os.path.exists("dados_cpc.xlsx"):
+    if not os.path.exists("dados.xlsx"):
         # If it doesn't exist, create a DataFrame with the required columns
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
@@ -79,7 +79,14 @@ def carregar_dataframe():
                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
         df = pd.DataFrame(columns=colunas)
         # Save the DataFrame to an Excel file
-        df.to_excel("dados_cpc.xlsx", index=False)
+        # Verificar se o arquivo dados.xlsx já existe
+        if os.path.exists("dados.xlsx"):
+            # Se existir, exclua-o
+            os.remove("dados.xlsx")
+
+        # Save DataFrame as Excel file locally using openpyxl
+        with pd.ExcelWriter("dados.xlsx", engine='openpyxl') as writer:
+            df.to_excel(writer, index=False)
         salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
     else:
         # If it exists, load the DataFrame from the Excel file
