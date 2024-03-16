@@ -21,12 +21,15 @@ def main():
         # Exclui as linhas selecionadas do DataFrame
         df = df.drop(index=rows_to_delete)
         
-        # Atualiza o arquivo Excel com as linhas excluídas (opcional)
-        df.to_excel(excel_url, index=False)  # Descomente esta linha se desejar atualizar o arquivo Excel no GitHub
+        # Salva o DataFrame modificado localmente
+        df.to_excel("dados_cpc_modificado.xlsx", index=False)
         
+        # Mostra mensagem de confirmação
+        st.success("Linhas excluídas com sucesso!")
+
         # Mostra os dados atualizados na tabela
         st.write("## Dados do Excel Atualizados")
-        st.write(pd.read_excel(excel_url))
+        st.write(df)
 
 if __name__ == "__main__":
     main()
