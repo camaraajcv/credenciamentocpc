@@ -11,7 +11,7 @@ import openpyxl
 
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
-
+excel_url="https://raw.githubusercontent.com/camaraajcv/credencaimentocpc/main/dados_cpc.xlsx"
 #Código HTML e CSS para ajustar a largura da imagem para 20% da largura da coluna e centralizar
 html_code = f'<div style="display: flex; justify-content: center;"><img src="{image_url}" alt="Imagem" style="width:8vw;"/></div>'
 # Exibir a imagem usando HTML
@@ -25,36 +25,34 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para salvar o DataFrame em um arquivo CSV e no GitHub
-def salvar_dataframe(df):
-    df.to_excel("dados_cpc.xlsx", index=False)
-
-# Função para carregar o DataFrame a partir de um arquivo Excel
-# Função para carregar o DataFrame a partir de um arquivo Excel
 def carregar_dataframe():
-    if os.path.exists("dados_cpc.xlsx"):
-        print("Arquivo 'dados_cpc.xlsx' encontrado.")
-        try:
-            df = pd.read_excel("dados_cpc.xlsx", engine='openpyxl')
-            print("Arquivo 'dados_cpc.xlsx' lido com sucesso.")
-            return df
-        except Exception as e:
-            print(f"Erro ao ler o arquivo Excel: {e}")
-            print("Criando novo DataFrame vazio.")
-            return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                                          'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                                          'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                                          'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                                          'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
-    else:
-        print("Arquivo 'dados.xlsx' não encontrado. Criando novo arquivo.")
-        colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                   'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                   'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                   'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                   'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
-        df = pd.DataFrame(columns=colunas)
-        salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
+    try:
+        # Carregar o arquivo Excel a partir da URL
+        response = requests.get(excel_url)
+        response.raise_for_status()  # Lança uma exceção se a solicitação não for bem-sucedida
+        # Ler o DataFrame a partir do arquivo Excel
+        df = pd.read_excel(response.content, engine='openpyxl')
         return df
+    except Exception as e:
+        st.error(f"Erro ao carregar os dados: {e}")
+        return pd.DataFrame()  # Retorna um DataFrame vazio se houver algum erro
+
+# Função para salvar o DataFrame em um arquivo Excel no GitHub
+def salvar_dataframe(df):
+    try:
+        # Salvar o DataFrame em um arquivo Excel temporário
+        with pd.ExcelWriter("temp.xlsx", engine='openpyxl') as writer:
+            df.to_excel(writer, index=False)
+        # Carregar o conteúdo do arquivo Excel temporário
+        with open("temp.xlsx", "rb") as file:
+            file_content = file.read()
+        # Enviar o arquivo Excel para o GitHub
+        response = requests.put(excel_url, data=file_content)
+        response.raise_for_status()  # Lança uma exceção se a solicitação não for bem-sucedida
+        st.success("Dados salvos com sucesso!")
+    except Exception as e:
+        st.error(f"Erro ao salvar os dados: {e}")
+
 
 # Função para validar o formato do CNPJ
 def validar_cnpj(cnpj):
