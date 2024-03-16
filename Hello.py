@@ -1,39 +1,41 @@
 import streamlit as st
+import mysql.connector
 import pandas as pd
-import os
 
 def main():
-    st.title('Aplicativo para Visualização e Edição de Dados Excel')
+    st.title('Aplicativo para Visualização de Dados MySQL')
 
-    # URL do arquivo Excel no GitHub
-    excel_url = "dados_cpc.xlsx"
+    # Conexão ao banco de dados MySQL
+    conn = mysql.connector.connect(
+        host="monorail.proxy.rlwy.net",
+        user="root",
+        password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+        database="railway"
+    )
 
-    # Carrega o DataFrame a partir do Excel
-    df = pd.read_excel(excel_url)
+    # Verifica se a conexão foi bem-sucedida
+    if conn.is_connected():
+        st.write("Conexão ao banco de dados MySQL bem-sucedida.")
 
-    # Mostra os dados na tabela
-    st.write("## Dados do Excel")
-    st.write(df)
+        # Executa uma consulta SQL
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM railway")
 
-    # Opção para selecionar linhas para exclusão
-    rows_to_delete = st.multiselect("Selecione as linhas para excluir", df.index)
+        # Recupera os resultados da consulta
+        results = cursor.fetchall()
 
-    if st.button("Excluir Linhas"):
-        # Exclui as linhas selecionadas do DataFrame
-        df = df.drop(index=rows_to_delete)
+        # Cria um DataFrame pandas com os resultados
+        df = pd.DataFrame(results, columns=cursor.column_names)
 
-        # Define o caminho absoluto para salvar o arquivo Excel
-        new_excel_filepath = os.path.join(os.getcwd(), "dados_cpc_modificado.xlsx")
-
-        # Salva um novo arquivo Excel com os dados atualizados
-        df.to_excel(new_excel_filepath, index=False)
-
-        # Mostra mensagem de confirmação
-        st.success(f"As linhas selecionadas foram excluídas. Um novo arquivo Excel foi salvo como {new_excel_filepath}.")
-
-        # Mostra os dados atualizados na tabela
-        st.write("## Dados do Excel Atualizados")
+        # Mostra os dados na tabela
+        st.write("## Dados do Banco de Dados")
         st.write(df)
+
+        # Fecha a conexão
+        cursor.close()
+        conn.close()
+    else:
+        st.error("Erro ao conectar ao banco de dados MySQL.")
 
 if __name__ == "__main__":
     main()
