@@ -20,7 +20,7 @@ def main():
 
         # Executa uma consulta SQL
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM railway")
+        cursor.execute("SELECT * FROM credenciamentocpc")
 
         # Recupera os resultados da consulta
         results = cursor.fetchall()
