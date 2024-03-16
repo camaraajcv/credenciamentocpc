@@ -106,15 +106,22 @@ def mostrar_opcoes():
         inserir_checked = st.checkbox('Incluir Novo Processo', key='inserir')
         if inserir_checked:
             opcao_selecionada = 'incluir'
+            # Adicionando chamada para salvar o DataFrame
+            salvar_dataframe(df)
     with col2:
         editar_checked = st.checkbox('Alterar Processo', key='alterar')
         if editar_checked:
             opcao_selecionada = 'editar'
+            # Adicionando chamada para salvar o DataFrame
+            salvar_dataframe(df)
     with col3:
         excluir_checked = st.checkbox('Excluir Processo', key='excluir')
         if excluir_checked:
             opcao_selecionada = 'excluir'
+            # Adicionando chamada para salvar o DataFrame
+            salvar_dataframe(df)
 
+    # Retornar a opção selecionada
     return opcao_selecionada
 
 # Função principal
