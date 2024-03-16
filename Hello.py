@@ -71,39 +71,33 @@ def salvar_dataframe(df):
 
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
-    if os.path.exists("dados.xlsx"):
-        print("Arquivo 'dados.xlsx' encontrado.")
-        try:
-            df = pd.read_excel("dados.xlsx", engine='openpyxl')
-            print("Arquivo 'dados.xlsx' lido com sucesso.")
-            return df
-        except Exception as e:
-            print(f"Erro ao ler o arquivo 'dados.xlsx': {e}")
-            print("Criando novo DataFrame vazio.")
-            return pd.DataFrame(columns=['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
-                                         'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
-                                         'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
-                                         'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
-                                         'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA'])
-    else:
-        print("Arquivo 'dados.xlsx' não encontrado. Criando novo arquivo.")
+    # Check if the Excel file exists
+    if not os.path.exists("dados.xlsx"):
+        # If it doesn't exist, create a DataFrame with the required columns
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
                    'BCA OU DOU', 'SITUAÇÃO', 'DATA EXPIRAÇÃO CONTRATUAL', 
                    'Dias para Fim Vigência', 'CÓDIGO', 'STATUS CREDENCIAMENTO', 
                    'CPC STATUS',  'CPC ANUAL', 'DATA DE ENTRADA']
         df = pd.DataFrame(columns=colunas)
+        # Save the DataFrame to an Excel file
         salvar_dataframe(df)  # Adicionando chamada para salvar o DataFrame
         return df
+    else:
+        # If the Excel file exists, load the DataFrame from the file
+        return pd.read_excel("dados.xlsx")
 
-# Check if the Excel file exists
-df = carregar_dataframe()
-
-# Now you can proceed with loading or working with the Excel file
-# For example, loading the DataFrame from the Excel file
+def validar_cnpj(cnpj):
+    if not re.match(r'\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}', cnpj):
+        st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
+        return False
+    return True
 
 def main():
     st.title('Controle Processos CPC 2024')
+
+    # Carregar ou criar o DataFrame
+    df = carregar_dataframe()
 
     # Checkboxes para incluir, editar e excluir processos
     col1, col2, col3 = st.columns(3)
@@ -117,7 +111,7 @@ def main():
         if inserir_checked:
             opcao_selecionada = 'incluir'
     with col2:
-        editar_checked = st.checkbox('Editar Processo', key='editar')
+        editar_checked = st.checkbox('Alterar Processo', key='alterar')
         if editar_checked:
             opcao_selecionada = 'editar'
     with col3:
@@ -125,22 +119,111 @@ def main():
         if excluir_checked:
             opcao_selecionada = 'excluir'
 
-    # Salvando a opção selecionada na sessão
-    st.session_state['opcao_selecionada'] = opcao_selecionada
-
     if opcao_selecionada == 'incluir':
-        # Código para incluir um novo processo
-        st.write("Você selecionou a opção de incluir um novo processo.")
+        # Exibir formulário para inserir dados
+        col1, col2 = st.columns(2)
+
+        with col1:
+            situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido'])
+            subprocesso_siloms = st.text_input('Subprocesso Siloms*')
+            subprocesso_siloms = subprocesso_siloms.replace(',', '')
+
+            # Adicionar o valor convertido ao DataFrame
+            df['SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
+            consignataria = st.text_input('Consignatária*')
+            bca_ou_dou = st.text_input('BCA ou DOU')
+            situacao = st.selectbox('Situação*', options=['', 'Ativo', 'Inativo'])
+            dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência*')
+
+        with col2:
+            cnpj = st.text_input('CNPJ*')
+            validar_cnpj(cnpj)
+            nro_contrato = st.text_input('Nro Contrato')
+            codigo = st.text_input('Código')
+            status_credenciamento = st.selectbox('Status Credenciamento*', options=['', 'Deferido', 'Indeferido', 'Aguardando Publicação'])
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual*', min_value=date.today())
+
+        if st.button('Incluir'):
+            # Adicionar uma nova linha ao DataFrame
+            nova_linha = {'SITUAÇÃO ECONSIG': situacao_econsig,
+                          'SUBPROCESSO SILOMS': subprocesso_siloms,
+                          'CONSIGNATÁRIA': consignataria,
+                          'CNPJ': cnpj,
+                          'NRO CONTRATO': nro_contrato,
+                          'BCA OU DOU': bca_ou_dou,
+                          'SITUAÇÃO': situacao,
+                          'Dias para Fim Vigência': dias_para_fim_vigencia,
+                          'CÓDIGO': codigo,
+                          'STATUS CREDENCIAMENTO': status_credenciamento,
+                          'DATA EXPIRAÇÃO CONTRATUAL': data_expiracao_contratual}
+            df = df.append(nova_linha, ignore_index=True)
+
+            # Salvar o DataFrame atualizado
+            salvar_dataframe(df)
+            st.success('Processo incluído com sucesso!')
+
     elif opcao_selecionada == 'editar':
-        # Código para editar um processo existente
-        st.write("Você selecionou a opção de editar um processo existente.")
+        # Exibir formulário para editar dados
+        indice_selecionado = st.selectbox('Selecione o índice da linha para editar:', options=df.index.tolist(), index=0)
+        linha_selecionada = df.loc[indice_selecionado]
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            situacao_econsig = st.selectbox('Situação Econsig*', options=['', 'Sem Cadastro','Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado','Bloqueado','Credenciamento Vencido'], index=df.index.tolist().index(indice_selecionado))
+            subprocesso_siloms = st.text_input('Subprocesso Siloms*', value=str(linha_selecionada['SUBPROCESSO SILOMS']).replace(',', ''))
+
+            # Atualizar o valor no DataFrame
+            df.at[indice_selecionado, 'SITUAÇÃO ECONSIG'] = situacao_econsig
+            df.at[indice_selecionado, 'SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
+
+            consignataria = st.text_input('Consignatária*', value=linha_selecionada['CONSIGNATÁRIA'])
+            bca_ou_dou = st.text_input('BCA ou DOU', value=linha_selecionada['BCA OU DOU'])
+            situacao = st.selectbox('Situação*', options=['', 'Ativo', 'Inativo'], index=0)
+            dias_para_fim_vigencia = st.text_input('Dias para Fim Vigência*', value=linha_selecionada['Dias para Fim Vigência'])
+
+        with col2:
+            cnpj = st.text_input('CNPJ*', value=linha_selecionada['CNPJ'])
+            validar_cnpj(cnpj)
+            nro_contrato = st.text_input('Nro Contrato', value=linha_selecionada['NRO CONTRATO'])
+            codigo = st.text_input('Código', value=linha_selecionada['CÓDIGO'])
+            status_credenciamento = st.selectbox('Status Credenciamento*', options=['', 'Deferido', 'Indeferido', 'Aguardando Publicação'], index=df.index.tolist().index(indice_selecionado))
+            data_expiracao_contratual = st.date_input('Data Expiração Contratual*', value=datetime.strptime(linha_selecionada['DATA EXPIRAÇÃO CONTRATUAL'], '%Y-%m-%d'))
+
+        if st.button('Editar'):
+            # Atualizar a linha no DataFrame
+            df.at[indice_selecionado, 'CONSIGNATÁRIA'] = consignataria
+            df.at[indice_selecionado, 'CNPJ'] = cnpj
+            df.at[indice_selecionado, 'NRO CONTRATO'] = nro_contrato
+            df.at[indice_selecionado, 'BCA OU DOU'] = bca_ou_dou
+            df.at[indice_selecionado, 'SITUAÇÃO'] = situacao
+            df.at[indice_selecionado, 'Dias para Fim Vigência'] = dias_para_fim_vigencia
+            df.at[indice_selecionado, 'CÓDIGO'] = codigo
+            df.at[indice_selecionado, 'STATUS CREDENCIAMENTO'] = status_credenciamento
+            df.at[indice_selecionado, 'DATA EXPIRAÇÃO CONTRATUAL'] = data_expiracao_contratual.strftime('%Y-%m-%d')
+
+            # Salvar o DataFrame atualizado
+            salvar_dataframe(df)
+            st.success('Processo editado com sucesso!')
+
     elif opcao_selecionada == 'excluir':
-        # Código para excluir um processo existente
-        st.write("Você selecionou a opção de excluir um processo existente.")
-    else:
-        # Nenhuma opção selecionada
-        st.write("Selecione uma opção acima para incluir, editar ou excluir um processo.")
+        # Exibir formulário para excluir linha
+        indice_selecionado = st.selectbox('Selecione o índice da linha para excluir:', options=df.index.tolist(), index=0)
+        linha_selecionada = df.loc[indice_selecionado]
 
-if __name__ == "__main__":
+        st.write('Tem certeza que deseja excluir o seguinte processo?')
+        st.write(linha_selecionada)
+
+        if st.button('Excluir'):
+            # Excluir a linha do DataFrame
+            df = df.drop(index=indice_selecionado)
+
+            # Salvar o DataFrame atualizado
+            salvar_dataframe(df)
+            st.success('Processo excluído com sucesso!')
+
+    # Exibir DataFrame
+    st.write(df)
+
+if __name__ == '__main__':
     main()
-
