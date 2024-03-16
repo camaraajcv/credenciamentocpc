@@ -27,13 +27,13 @@ st.write("CPC - Comissão Permanente de Credenciamento")
 # Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
     # Save DataFrame as Excel file locally using openpyxl
-    with pd.ExcelWriter("dados.xlsx", engine='openpyxl') as writer:
+    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
         df.to_excel(writer, index=False)
     
     # Information for GitHub repository
     usuario = "camaraajcv"
     repositorio = "credenciamentocpc"
-    caminho_arquivo = "dados.xlsx"  # Alterado o nome do arquivo
+    caminho_arquivo = "dados_cpc.xlsx"  # Alterado o nome do arquivo
     token = "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"
 
     # Read Excel file as binary
@@ -70,7 +70,7 @@ def salvar_dataframe(df):
 # Função para carregar ou criar o DataFrame
 def carregar_dataframe():
     # Check if the Excel file exists
-    if not os.path.exists("dados.xlsx"):
+    if not os.path.exists("dados_cpc.xlsx"):
         # If it doesn't exist, create a DataFrame with the required columns
         colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                    'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
