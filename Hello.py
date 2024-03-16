@@ -8,14 +8,6 @@ import seaborn as sns
 import numpy as np
 import requests 
 import openpyxl
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
-# Configurações para acessar a API do Google Sheets
-scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
-client = gspread.authorize(credentials)
-
 
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
@@ -46,38 +38,63 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 
 # Texto explicativo
 st.write("CPC - Comissão Permanente de Credenciamento")
-# Função para carregar o DataFrame a partir do Google Sheets
+# Função para salvar o DataFrame em um arquivo CSV e no GitHub
 def carregar_dataframe():
     try:
-        # Ler os dados da planilha
-        data = sheet.get_all_values()
-        # Transformar os dados em DataFrame
-        df = pd.DataFrame(data[1:], columns=data[0])
+        # Carregar o arquivo Excel a partir da URL
+        response = requests.get(excel_url)
+        response.raise_for_status()  # Lança uma exceção se a solicitação não for bem-sucedida
+        # Ler o DataFrame a partir do arquivo Excel
+        df = pd.read_excel(response.content, engine='openpyxl')
         return df
     except Exception as e:
         st.error(f"Erro ao carregar os dados: {e}")
         return pd.DataFrame()  # Retorna um DataFrame vazio se houver algum erro
 
-# Função para salvar o DataFrame de volta para o Google Sheets
+# Função para salvar o DataFrame em um arquivo Excel no GitHub
 def salvar_dataframe(df):
-    try:
-        # Limpar a planilha
-        sheet.clear()
-        # Atualizar a planilha com os novos dados
-        sheet.update([df.columns.values.tolist()] + df.values.tolist())
-        st.success("Dados atualizados com sucesso no Google Sheets!")
-    except Exception as e:
-        st.error(f"Falha ao atualizar os dados: {e}")
+    # Save DataFrame as Excel file locally using openpyxl
+    with pd.ExcelWriter("dados_cpc.xlsx", engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+    
+    # Information for GitHub repository
+    usuario = "camaraajcv"
+    repositorio = "credenciamentocpc"
+    caminho_arquivo = "dados_cpc.xlsx"
+    token = "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"
 
-# Exemplo de uso
-df = carregar_dataframe()
-st.write(df)
+    # Read Excel file as binary
+    with open(caminho_arquivo, "rb") as file:
+        conteudo_xls = file.read()
 
-if st.button('Salvar Dados'):
-    # Modifique o DataFrame conforme necessário
-    df.loc[0, 'COLUMN_NAME'] = 'NEW_VALUE'
-    # Salvar o DataFrame de volta para o Google Sheets
-    salvar_dataframe(df)
+    # Base64 encode the binary content
+    conteudo_base64 = conteudo_xls.hex()
+
+    # URL of the GitHub API to create or update a file
+    url = f"https://api.github.com/repos/{usuario}/{repositorio}/contents/{caminho_arquivo}"
+
+    # Headers for HTTP request
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Body of the request to create or update the file
+    data = {
+        "message": "Atualizando dados.xlsx",
+        "content": conteudo_base64
+    }
+
+    # Send PUT request to create or update the file
+    response = requests.put(url, headers=headers, json=data)
+
+    # Check the result
+    if response.status_code == 201:
+        st.success("Arquivo dados.xlsx atualizado com sucesso no GitHub!")
+    else:
+        st.error("Falha ao atualizar o arquivo dados.xlsx no GitHub.")
+        st.error(response.text)
+
 
 # Função para validar o formato do CNPJ
 def validar_cnpj(cnpj):
