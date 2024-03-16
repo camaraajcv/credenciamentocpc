@@ -118,7 +118,17 @@ def main():
             subprocesso_siloms = subprocesso_siloms.replace(',', '')
 
             # Adicionar o valor convertido ao DataFrame
-            df['SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
+           # Verifique se a coluna 'SUBPROCESSO SILOMS' existe no DataFrame
+            if 'SUBPROCESSO SILOMS' not in df.columns:
+                # Se não existir, crie a coluna com valores vazios
+                df['SUBPROCESSO SILOMS'] = None  # ou df['SUBPROCESSO SILOMS'] = ''
+
+            # Verifique se subprocesso_siloms não é None
+            if subprocesso_siloms is not None:
+                # Converta subprocesso_siloms para numérico e atribua à coluna 'SUBPROCESSO SILOMS'
+                df['SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
+            else:
+                print("A lista de subprocesso_siloms está vazia ou é None.")
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'])
