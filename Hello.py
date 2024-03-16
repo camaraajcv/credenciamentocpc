@@ -350,6 +350,7 @@ def main():
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
+    carregar_dataframe()
     st.write(df)
 
     # Salvar DataFrame em arquivo CSV
