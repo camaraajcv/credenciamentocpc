@@ -1,5 +1,11 @@
 import streamlit as st
 import pandas as pd
+import time
+
+# Função para ler o arquivo Excel sem cache
+@st.cache(allow_output_mutation=True)
+def load_excel_data(excel_url):
+    return pd.read_excel(excel_url)
 
 def main():
     st.title('Aplicativo para Visualização e Edição de Dados Excel')
@@ -8,7 +14,7 @@ def main():
     excel_url = "dados_cpc.xlsx"
 
     # Carrega o DataFrame a partir do Excel
-    df = pd.read_excel(excel_url)
+    df = load_excel_data(excel_url)
 
     # Mostra os dados na tabela
     st.write("## Dados do Excel")
@@ -20,10 +26,10 @@ def main():
     if st.button("Excluir Linhas"):
         # Exclui as linhas selecionadas do DataFrame
         df = df.drop(index=rows_to_delete)
-        
+
         # Salva o DataFrame modificado localmente
         df.to_excel("dados_cpc_modificado.xlsx", index=False)
-        
+
         # Mostra mensagem de confirmação
         st.success("Linhas excluídas com sucesso!")
 
