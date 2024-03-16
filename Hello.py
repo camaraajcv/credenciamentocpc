@@ -1,5 +1,6 @@
 import streamlit as st
 import mysql.connector
+import pandas as pd
 
 def main():
     st.title('Dados do Banco de Dados')
@@ -15,25 +16,17 @@ def main():
 
     # Verifica se a conexão foi bem-sucedida
     if conn.is_connected():
-        # Cria um cursor para executar comandos SQL
-        cursor = conn.cursor()
-
-        # Define a consulta SQL para recuperar os dados
+        # Define a consulta SQL para recuperar todos os dados da tabela
         query = "SELECT * FROM credenciamentocpc"
 
-        # Executa a consulta SQL
-        cursor.execute(query)
+        # Carrega os dados do banco de dados em um DataFrame pandas
+        df = pd.read_sql(query, conn)
 
-        # Recupera os resultados da consulta
-        results = cursor.fetchall()
+        # Mostra o DataFrame
+        st.write("## Dados do Banco de Dados:")
+        st.write(df)
 
-        # Mostra os dados existentes
-        st.write("## Dados Existente:")
-        for row in results:
-            st.write(f"Nome: {row[0]}, Idade: {row[1]}")
-
-        # Fecha o cursor e a conexão
-        cursor.close()
+        # Fecha a conexão
         conn.close()
     else:
         st.error("Erro ao conectar ao banco de dados MySQL.")
