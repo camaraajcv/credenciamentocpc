@@ -15,6 +15,12 @@ from oauth2client.service_account import ServiceAccountCredentials
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
 client = gspread.authorize(credentials)
+
+# Autenticar e abrir a planilha
+gc = gspread.authorize(credentials)
+spreadsheet_key = '1o8x02W65B3c17JLhvZ48E3IMQ3L08IZDxjqyRiGXwyg'  # ID da planilha
+worksheet_name = 'dados_cpc'
+worksheet = gc.open_by_key(spreadsheet_key).worksheet(worksheet_name)
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
