@@ -70,7 +70,7 @@ def salvar_dataframe(df):
 # Função para carregar ou criar o DataFrame
         
 # Check if the Excel file exists
-if not os.path.exists("dados.xlsx"):
+if not os.path.exists("dados_cpc.xlsx"):
     # If it doesn't exist, create a DataFrame with the required columns
     colunas = ['SITUAÇÃO ECONSIG', 'SUBPROCESSO SILOMS', 'CATEGORIA', 'NATUREZA DE DESCONTO', 
                'CONSIGNATÁRIA', 'CNPJ', 'NRO CONTRATO', 
@@ -87,17 +87,17 @@ df = pd.read_excel("dados_cpc.xlsx")
 
 
 def carregar_dataframe():
-    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados.csv"):
+    if os.path.exists("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.csv"):
         print("Arquivo 'dados.csv' encontrado.")
         try:
-            df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='utf-8')
+            df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.csv", encoding='utf-8')
             print("Arquivo 'dados.csv' lido com sucesso.")
             return df
         except UnicodeDecodeError as e:
             print(f"Erro ao ler o arquivo CSV: {e}")
             print("Tentando ler o arquivo CSV com encoding 'latin-1'...")
             try:
-                df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados.csv", encoding='latin-1')
+                df = pd.read_csv("https://github.com/camaraajcv/credenciamentocpc/dados_cpc.csv", encoding='latin-1')
                 print("Arquivo 'dados.csv' lido com sucesso.")
                 return df
             except Exception as e:
