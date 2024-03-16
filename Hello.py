@@ -34,7 +34,7 @@ def salvar_dataframe(df):
     usuario = "camaraajcv"
     repositorio = "credenciamentocpc"
     caminho_arquivo = "dados.xlsx"
-    token = "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"
+    token = "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"
 
     # Read Excel file as binary
     with open(caminho_arquivo, "rb") as file:
