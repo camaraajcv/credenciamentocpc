@@ -118,17 +118,7 @@ def main():
             subprocesso_siloms = subprocesso_siloms.replace(',', '')
 
             # Adicionar o valor convertido ao DataFrame
-           # Verifique se a coluna 'SUBPROCESSO SILOMS' existe no DataFrame
-            if 'SUBPROCESSO SILOMS' not in df.columns:
-                # Se não existir, crie a coluna com valores vazios
-                df['SUBPROCESSO SILOMS'] = None  # ou df['SUBPROCESSO SILOMS'] = ''
-
-            # Verifique se subprocesso_siloms não é None
-            if subprocesso_siloms is not None:
-                # Converta subprocesso_siloms para numérico e atribua à coluna 'SUBPROCESSO SILOMS'
-                df['SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
-            else:
-                print("A lista de subprocesso_siloms está vazia ou é None.")
+            df['SUBPROCESSO SILOMS'] = pd.to_numeric(subprocesso_siloms, errors='coerce')
             consignataria = st.text_input('Consignatária*')
             bca_ou_dou = st.text_input('BCA ou DOU')
             situacao = st.selectbox('Situação*', options=['', 'Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'encaminhado para a PP1 (conclusão/arquivamento)','encaminhado para a PP1 para análise'])
@@ -191,22 +181,12 @@ def main():
 
                     novo_df = pd.DataFrame([novo_dado])
                     df = pd.concat([df, novo_df], ignore_index=True)
-                    salvar_dataframe(df)
+
                     st.success('Dados inseridos com sucesso.')
 
     if opcao_selecionada == 'excluir':
-    # Exibir formulário para exclusão de linha
-        st.header('Excluir Dados')
-
-    df = carregar_dataframe()  # Carregar o DataFrame antes de verificar se está vazio
-
-    if df is not None and not df.empty:  # Verificar se o DataFrame não é None e não está vazio
-        indice_linha = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
-        indice_coluna = st.number_input('Índice da Coluna a ser Excluída', min_value=0, max_value=len(df.columns)-1, step=1, value=0)
-
-        if opcao_selecionada == 'excluir':
         # Exibir formulário para exclusão de linha
-            st.header('Excluir Dados')
+        st.header('Excluir Dados')
 
         if not df.empty:
             indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
@@ -340,9 +320,8 @@ def main():
                         df.loc[indice_edicao, 'CPC ANUAL'] = cpc_anual_edit
                         df.loc[indice_edicao, 'NRO CONTRATO'] = numero_contrato_edit
                         df.loc[indice_edicao, 'DATA DE ENTRADA'] = data_entrada_edit.strftime('%d/%m/%Y')
-                        salvar_dataframe(df)
-                        st.success('Dados alterados com sucesso.')
 
+                        st.success('Dados alterados com sucesso.')
 
     # Exibir DataFrame atualizado
     st.header('Processos Atualizados')
