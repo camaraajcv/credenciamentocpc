@@ -156,28 +156,28 @@ def main():
             data_entrada = st.date_input('Data de Entrada', None, format='DD/MM/YYYY')
 
     # Botão para enviar os dados
-    if st.button("Inserir"):
-        # Verifica se todos os campos obrigatórios foram preenchidos
-        if (
-            situacao_econsig and subprocesso_siloms and categoria and
-            natureza_de_desconto and consignataria and cnpj and nro_contrato and
-            situacao and data_entrada
-        ):
-            # Tenta inserir os dados no banco de dados
-            data = (
-                situacao_econsig, subprocesso_siloms, categoria,
-                natureza_de_desconto, consignataria, cnpj, nro_contrato,
-                dou, situacao, data_expiracao_contratual, codigo,
-                status_credenciamento, cpc_status, cpc_anual, data_entrada,
-                dias_para_fim_vigencia  # Adicionando o valor calculado aqui
-            )
-            success, error_message = insert_data(data)
-            if success:
-                st.success("Dados inseridos com sucesso!")
+        if st.button("Inserir"):
+            # Verifica se todos os campos obrigatórios foram preenchidos
+            if (
+                situacao_econsig and subprocesso_siloms and categoria and
+                natureza_de_desconto and consignataria and cnpj and nro_contrato and
+                situacao and data_entrada
+            ):
+                # Tenta inserir os dados no banco de dados
+                data = (
+                    situacao_econsig, subprocesso_siloms, categoria,
+                    natureza_de_desconto, consignataria, cnpj, nro_contrato,
+                    dou, situacao, data_expiracao_contratual, codigo,
+                    status_credenciamento, cpc_status, cpc_anual, data_entrada,
+                    dias_para_fim_vigencia  # Adicionando o valor calculado aqui
+                )
+                success, error_message = insert_data(data)
+                if success:
+                    st.success("Dados inseridos com sucesso!")
+                else:
+                    st.error(f"Erro ao inserir os dados: {error_message}")
             else:
-                st.error(f"Erro ao inserir os dados: {error_message}")
-        else:
-            st.warning("Por favor, preencha todos os campos obrigatórios.")
+                st.warning("Por favor, preencha todos os campos obrigatórios.")
 
 
 # Executa a função principal
