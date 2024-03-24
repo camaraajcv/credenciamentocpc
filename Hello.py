@@ -71,7 +71,7 @@ def update_data(id_to_edit, new_data):
             cursor = conn.cursor()
 
             # Prepara a instrução SQL para atualizar os dados
-            sql = "UPDATE credenciamentocpc SET situacao_econsig = %s, subprocesso_siloms = %s, categoria = %s, natureza_de_desconto = %s, consignataria = %s, cnpj = %s, nro_contrato = %s, dou = %s, situacao = %s, data_expiracao_contratual = %s, Dias_para_Fim_Vigencia=%s, codigo = %s, status_credenciamento = %s, cpc_status = %s, cpc_anual = %s, data_de_entrada = %s WHERE id = %s"
+            sql = "UPDATE credenciamentocpc SET situacao_econsig = %s, subprocesso_siloms = %s, categoria = %s, natureza_de_desconto = %s, consignataria = %s, cnpj = %s, nro_contrato = %s, dou = %s, situacao = %s, data_expiracao_contratual = %s, codigo = %s, status_credenciamento = %s, cpc_status = %s, cpc_anual = %s, data_de_entrada = %s WHERE id = %s"
 
             # Adiciona o ID à lista de dados a serem atualizados
             new_data.append(id_to_edit)
@@ -145,9 +145,9 @@ def insert_data(data):
             # Prepara a instrução SQL para inserir os dados
             sql = """
             INSERT INTO credenciamentocpc 
-            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_de_entrada, dias_para_fim_vigencia) 
+            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_de_entrada) 
             VALUES 
-            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
 
             # Executa a instrução SQL
@@ -181,7 +181,7 @@ def insert_data(data):
             cursor = conn.cursor()
 
             # Prepara a instrução SQL para inserir os dados
-            sql = "INSERT INTO credenciamentocpc (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada, dias_para_fim_vigencia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO credenciamentocpc (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
             # Executa a instrução SQL
             cursor.execute(sql, data)
@@ -263,19 +263,6 @@ def main():
         with col2:
             situacao = st.selectbox('Situação*', options=[''] + ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
             data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
-            # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
-            if data_expiracao_contratual is not None:
-                data_atual = date.today()
-                dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
-                if dias_para_fim_vigencia < 0:
-                    dias_para_fim_vigencia = 'Expirado'
-                else:
-                    dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
-            else:
-                dias_para_fim_vigencia = ''
-
-            # Exibe os dias para o fim da vigência
-            st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
             codigo = st.text_input('Código Caixa')
             status_credenciamento = st.text_input('Status Credenciamento - Observações')
             cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
@@ -294,8 +281,8 @@ def main():
                     situacao_econsig, subprocesso_siloms, categoria,
                     natureza_de_desconto, consignataria, cnpj, nro_contrato,
                     dou, situacao, data_expiracao_contratual, codigo,
-                    status_credenciamento, cpc_status, cpc_anual, data_entrada,
-                    dias_para_fim_vigencia  # Adicionando o valor calculado aqui
+                    status_credenciamento, cpc_status, cpc_anual, data_entrada
+                      # Adicionando o valor calculado aqui
                 )
                 success, error_message = insert_data(data)
                 if success:
@@ -349,21 +336,6 @@ def main():
                 if isinstance(data_expiracao_contratual_edit, pd.Timestamp):
                     data_expiracao_contratual_edit = data_expiracao_contratual_edit.date()
 
-                if data_expiracao_contratual_edit is not None:
-                    # Obter a data atual
-                    data_atual = date.today()
-
-                    # Calcular o número de dias restantes
-                    dias_para_fim_vigencia = (data_expiracao_contratual_edit - data_atual).days
-
-                    # Verificar se o contrato já expirou
-                    if dias_para_fim_vigencia < 0:
-                        dias_para_fim_vigencia = 'Expirado'
-                    else:
-                        dias_para_fim_vigencia= f'{dias_para_fim_vigencia} dias'
-                else:
-                    dias_para_fim_vigencia = ''
-                st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True)    
                 codigo_edit = st.text_input('Código', value=data_to_edit[12])
                 status_credenciamento_edit = st.text_input('Status de Credenciamento', value=data_to_edit[13])
                 cpc_status_edit = st.text_input('CPC Status', value=data_to_edit[14])
@@ -380,7 +352,7 @@ def main():
                     new_data = [
                         situacao_econsig_edit, subprocesso_siloms_edit, categoria_edit,
                         natureza_de_desconto_edit, consignataria_edit, cnpj_edit,
-                        nro_contrato_edit, dou_edit, situacao_edit, data_expiracao_contratual_edit,Dias_para_Fim_Vigencia,
+                        nro_contrato_edit, dou_edit, situacao_edit, data_expiracao_contratual_edit,
                         codigo_edit, status_credenciamento_edit, cpc_status_edit,
                         cpc_anual_edit, data_entrada_edit
                     ]
