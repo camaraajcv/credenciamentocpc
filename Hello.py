@@ -94,6 +94,7 @@ def update_data(id_to_edit, new_data):
         print(f"Erro ao atualizar os dados: {err}")
         return False
 
+
 # Função para buscar todos os dados do banco de dados
 def fetch_all_data():
     try:
