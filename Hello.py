@@ -176,7 +176,7 @@ def confirmar_exclusao():
 def main():
     opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos'])
 
-    if opcao_selecionada == 'incluir':
+    if opcao_selecionada == 'Incluir Processo':
         # Divide o formulário em duas colunas
         col1, col2 = st.columns(2)
 
@@ -236,7 +236,7 @@ def main():
             else:
                 st.warning("Por favor, preencha todos os campos obrigatórios.")
 
-    elif opcao_selecionada == 'excluir':
+    elif opcao_selecionada == 'Excluir Processo':
         id_to_delete = st.number_input("Insira o ID a ser excluído:", min_value=1, step=1)
         if st.button("Excluir"):
             # Tenta excluir os dados do banco de dados
@@ -245,7 +245,7 @@ def main():
                 st.success("Dados excluídos com sucesso!")
             else:
                 st.error(f"Erro ao excluir os dados: {error_message}")
-    elif opcao_selecionada == 'visualizar':
+    elif opcao_selecionada == 'Visualizar Processos':
         # Mostra os dados do banco de dados
         st.header("Visualizar Contratos")
         data = fetch_all_data()
