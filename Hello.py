@@ -244,7 +244,7 @@ def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
 # Função principal
 def main():
-    opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos', 'editar'])
+    opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos', 'Alterar Processo'])
 
     if opcao_selecionada == 'Incluir Processo':
         # Divide o formulário em duas colunas
@@ -315,8 +315,8 @@ def main():
         else:
             st.warning("Nenhum dado encontrado.")
 
-    elif opcao_selecionada == 'editar':
-        st.header('Editar Dados')
+    elif opcao_selecionada == 'Alterar Processo':
+        st.header('Alterar Processo')
 
         # Entrada para o ID do registro a ser editado
         id_to_edit = st.number_input('ID do Registro a ser Editado:', min_value=1, step=1)
@@ -367,8 +367,8 @@ def main():
                     else:
                         st.error('Erro ao atualizar o registro.')
 
-            else:
-                st.warning('Nenhum registro encontrado para o ID fornecido.')
+                else:
+                    st.warning('Nenhum registro encontrado para o ID fornecido.')
 
 
 # Executa a função principal
