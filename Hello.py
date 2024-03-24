@@ -355,17 +355,7 @@ def main():
                 cpc_anual_edit = st.text_input('CPC Anual', value=data_to_edit[14])
                 
                 # Corrigindo a entrada de data para data_entrada_edit
-                data_entrada_edit = st.date_input('Data de Entrada', value=pd.to_datetime(data_to_edit[15], errors='coerce'))
-                if isinstance(data_entrada_edit, pd.Timestamp):
-                    data_entrada_edit = data_entrada_edit.date()
-                else:
-                    data_entrada_edit = None  # Defina como None se não for uma data válida
-
-                # Agora, você pode prosseguir com a conversão para a string formatada apenas se data_entrada_edit for uma data válida
-                if pd.notnull(data_to_edit[15]):
-                    data_entrada_edit = st.date_input('Data de Entrada', value=pd.to_datetime(data_to_edit[15], errors='coerce'))
-                else:
-                    data_entrada_edit = None
+                data_entrada_edit = st.date_input('Data de Entrada', None,  value=data_to_edit[15],format='DD/MM/YYYY')
 
 
                 if st.button('Atualizar Registro'):
