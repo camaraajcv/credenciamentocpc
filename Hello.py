@@ -367,8 +367,7 @@ def main():
                     else:
                         st.error('Erro ao atualizar o registro.')
 
-        else:
-            st.warning('Nenhum registro encontrado para o ID fornecido.')
+   
 
 
 
