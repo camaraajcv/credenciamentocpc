@@ -362,8 +362,10 @@ def main():
                     data_entrada_edit = None  # Defina como None se não for uma data válida
 
                 # Agora, você pode prosseguir com a conversão para a string formatada apenas se data_entrada_edit for uma data válida
-                if data_entrada_edit is not None:
-                    data_entrada_edit = data_entrada_edit.strftime('%d/%m/%Y')
+                if pd.notnull(data_to_edit[15]):
+                    data_entrada_edit = st.date_input('Data de Entrada', value=pd.to_datetime(data_to_edit[15], errors='coerce'))
+                else:
+                    data_entrada_edit = None
 
 
                 if st.button('Atualizar Registro'):
