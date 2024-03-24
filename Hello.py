@@ -58,10 +58,7 @@ def validar_cnpj(cnpj):
 def main():
     st.title('Banco de Dados CredenciamentoCPC')
 
-    # Opções de menu
-    opcao_selecionada = st.radio('Selecione uma opção:', ['Visualizar', 'Inserir'])
-
-    # Conexão com o banco de dados MySQL
+    # Exibe a tabela diretamente
     conn = mysql.connector.connect(
         host="monorail.proxy.rlwy.net",
         user="root",
@@ -81,74 +78,72 @@ def main():
         # Fecha a conexão
         conn.close()
 
-        # Mostra o DataFrame apenas se a opção selecionada for 'Visualizar'
-        if opcao_selecionada == 'Visualizar':
-            st.write("## Dados do Banco de Dados:")
-            st.write(df)
+        # Mostra a tabela
+        st.write("## Dados do Banco de Dados:")
+        st.write(df)
 
-        # Se a opção selecionada for 'Inserir', mostra o formulário para inserir dados
-        elif opcao_selecionada == 'Inserir':
-            st.write("## Inserir Dados:")
+    # Se a opção selecionada for 'Inserir', mostra o formulário para inserir dados
+    st.write("## Inserir Dados:")
 
-            # Divide o formulário em duas colunas
-            col1, col2 = st.columns(2)
+    # Divide o formulário em duas colunas
+    col1, col2 = st.columns(2)
 
-            # Coleta os dados do usuário através de inputs
-            with col1:
-                situacao_econsig = st.selectbox('Situação Econsig*', options=[''] + ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado', 'Bloqueado', 'Credenciamento Vencido'])
-                subprocesso_siloms = st.text_input('Subprocesso Siloms*')
-                categoria = st.selectbox('Categoria*', options=[''] + ['I', 'II', 'III'])
-                natureza_de_desconto = st.selectbox('Natureza de Desconto*', options=[''] + ['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
-                consignataria = st.text_input('Consignatária*')
-                cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
-                nro_contrato = st.text_input('NRO CONTRATO*')
-                dou = st.text_input('DOU')
+    # Coleta os dados do usuário através de inputs
+    with col1:
+        situacao_econsig = st.selectbox('Situação Econsig*', options=[''] + ['Sem Cadastro', 'Recredenciado', 'Credenciado', 'Aguardando Publicação', 'Arquivado', 'Bloqueado', 'Credenciamento Vencido'])
+        subprocesso_siloms = st.text_input('Subprocesso Siloms*')
+        categoria = st.selectbox('Categoria*', options=[''] + ['I', 'II', 'III'])
+        natureza_de_desconto = st.selectbox('Natureza de Desconto*', options=[''] + ['MENSALIDADE ASSOCIATIVA', 'PREVIDÊNCIA COMPLEMENTAR', 'ASSISTÊNCIA FINANCEIRA', 'CARTÃO DE CRÉDITO', 'SEGURO DE VIDA'])
+        consignataria = st.text_input('Consignatária*')
+        cnpj = st.text_input('CNPJ*', placeholder='XX.XXX.XXX/XXXX-XX')
+        nro_contrato = st.text_input('NRO CONTRATO*')
+        dou = st.text_input('DOU')
 
-            with col2:
-                situacao = st.selectbox('Situação*', options=[''] + ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
-                data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
-                # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
-                if data_expiracao_contratual is not None:
-                    data_atual = date.today()
-                    dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
-                    if dias_para_fim_vigencia < 0:
-                        dias_para_fim_vigencia = 'Expirado'
-                    else:
-                        dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
-                else:
-                    dias_para_fim_vigencia = ''
+    with col2:
+        situacao = st.selectbox('Situação*', options=[''] + ['Encaminhado para Secretário(a) da CPC', 'Análise Equipe A', 'Análise Equipe B', 'Análise Equipe C', 'Análise Equipe D', 'Análise Equipe E' ,'Aguardando Assinaturas', 'Encaminhado para a PP1 (conclusão/arquivamento)', 'Encaminhado para a PP1 para análise'])
+        data_expiracao_contratual = st.date_input('Data Expiração Contratual', None, format='DD/MM/YYYY', key='data_expiracao_contratual')
+        # Calcula os dias para o fim da vigência apenas se data_expiracao_contratual não for None
+        if data_expiracao_contratual is not None:
+            data_atual = date.today()
+            dias_para_fim_vigencia = (data_expiracao_contratual - data_atual).days
+            if dias_para_fim_vigencia < 0:
+                dias_para_fim_vigencia = 'Expirado'
+            else:
+                dias_para_fim_vigencia = str(dias_para_fim_vigencia) + ' dias'
+        else:
+            dias_para_fim_vigencia = ''
 
-                # Exibe os dias para o fim da vigência
-                st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
-                codigo = st.text_input('Código Caixa')
-                status_credenciamento = st.text_input('Status Credenciamento - Observações')
-                cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
-                cpc_anual = st.selectbox('CPC Anual', options=[''] + ['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
-                data_entrada = st.date_input('Data de Entrada', None, format='DD/MM/YYYY')
+        # Exibe os dias para o fim da vigência
+        st.text_input('Dias para Fim Vigência', value=dias_para_fim_vigencia, disabled=True, key='dias_para_fim_vigencia')
+        codigo = st.text_input('Código Caixa')
+        status_credenciamento = st.text_input('Status Credenciamento - Observações')
+        cpc_status = st.selectbox('CPC Status', options=[''] + ['EM ANÁLISE', 'CONCLUÍDO', 'ENTREGUE', 'REJEITADO','EM ANÁLISE PP1'])
+        cpc_anual = st.selectbox('CPC Anual', options=[''] + ['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
+        data_entrada = st.date_input('Data de Entrada', None, format='DD/MM/YYYY')
 
-            # Botão para enviar os dados
-            if st.button("Enviar"):
+    # Botão para enviar os dados
+    if st.button("Enviar"):
         # Verifica se todos os campos obrigatórios foram preenchidos
-                if (
-                    situacao_econsig and subprocesso_siloms and categoria and
-                    natureza_de_desconto and consignataria and cnpj and nro_contrato and
-                    situacao and data_entrada
-                ):
-                    # Tenta inserir os dados no banco de dados
-                    data = (
-                        situacao_econsig, subprocesso_siloms, categoria,
-                        natureza_de_desconto, consignataria, cnpj, nro_contrato,
-                        dou, situacao, data_expiracao_contratual, codigo,
-                        status_credenciamento, cpc_status, cpc_anual, data_entrada,
-                        dias_para_fim_vigencia  # Adicionando o valor calculado aqui
-                    )
-                    success, error_message = insert_data(data)
-                    if success:
-                        st.success("Dados inseridos com sucesso!")
-                    else:
-                        st.error(f"Erro ao inserir os dados: {error_message}")
-                else:
-                    st.warning("Por favor, preencha todos os campos obrigatórios.")
+        if (
+            situacao_econsig and subprocesso_siloms and categoria and
+            natureza_de_desconto and consignataria and cnpj and nro_contrato and
+            situacao and data_entrada
+        ):
+            # Tenta inserir os dados no banco de dados
+            data = (
+                situacao_econsig, subprocesso_siloms, categoria,
+                natureza_de_desconto, consignataria, cnpj, nro_contrato,
+                dou, situacao, data_expiracao_contratual, codigo,
+                status_credenciamento, cpc_status, cpc_anual, data_entrada,
+                dias_para_fim_vigencia  # Adicionando o valor calculado aqui
+            )
+            success, error_message = insert_data(data)
+            if success:
+                st.success("Dados inseridos com sucesso!")
+            else:
+                st.error(f"Erro ao inserir os dados: {error_message}")
+        else:
+            st.warning("Por favor, preencha todos os campos obrigatórios.")
 
 
 # Executa a função principal
