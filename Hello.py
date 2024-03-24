@@ -310,7 +310,7 @@ def main():
         if data is not None:
             # Converter a coluna de data_de_entrada para o formato dd-mm-aaaa
             data['DATA_DE_ENTRADA'] = pd.to_datetime(data['DATA_DE_ENTRADA']).dt.strftime('%d-%m-%Y')
-            data['SUBPROCESSO_SILOMS'] = data['SUBPROCESSO_SILOMS'].astype(int).map('{:,}'.format)
+            data['SUBPROCESSO_SILOMS'] = data['SUBPROCESSO_SILOMS'].astype(int).apply(lambda x: '{:,}'.format(x))
             # Exibir os dados em um dataframe
             st.dataframe(data)
         else:
