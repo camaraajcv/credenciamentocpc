@@ -345,12 +345,12 @@ def main():
                 nro_contrato_edit = st.text_input('Nro. Contrato', value=data_to_edit[7])
                 dou_edit = st.text_input('DOU', value=data_to_edit[8])
                 situacao_edit = st.text_input('Situação', value=data_to_edit[9])
-                data_expiracao_contratual_edit = st.date_input('Data de Expiração Contratual', value=(datetime.strptime(data_to_edit[10], '%Y-%m-%d') if data_to_edit[10] else None))
+                data_expiracao_contratual_edit = st.date_input('Data de Expiração Contratual', value=pd.to_datetime(data_to_edit[10], errors='coerce'))
                 codigo_edit = st.text_input('Código', value=data_to_edit[11])
                 status_credenciamento_edit = st.text_input('Status de Credenciamento', value=data_to_edit[12])
                 cpc_status_edit = st.text_input('CPC Status', value=data_to_edit[13])
                 cpc_anual_edit = st.text_input('CPC Anual', value=data_to_edit[14])
-                data_entrada_edit = st.date_input('Data de Entrada', value=(datetime.strptime(data_to_edit[15], '%Y-%m-%d') if data_to_edit[15] else None))
+                data_entrada_edit = st.date_input('Data de Entrada', value=pd.to_datetime(data_to_edit[15], errors='coerce'))
 
                 if st.button('Atualizar Registro'):
                     # Atualiza o registro no banco de dados
