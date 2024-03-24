@@ -355,7 +355,7 @@ def main():
                 cpc_anual_edit = st.text_input('CPC Anual', value=data_to_edit[14])
                 
                 # Corrigindo a entrada de data para data_entrada_edit
-                data_entrada_edit = st.date_input('Data de Entrada', None,  value=data_to_edit[15],format='DD/MM/YYYY')
+                data_entrada_edit = st.text_input('Data de Entrada', value=data_to_edit[15])
 
 
                 if st.button('Atualizar Registro'):
