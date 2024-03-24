@@ -174,7 +174,7 @@ def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
 # Função principal
 def main():
-    opcao_selecionada = st.sidebar.radio("Opção", ['incluir', 'excluir', 'visualizar'])
+    opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos'])
 
     if opcao_selecionada == 'incluir':
         # Divide o formulário em duas colunas
