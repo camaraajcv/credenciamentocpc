@@ -73,8 +73,6 @@ def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
 # Função principal
 def main():
-    st.title('Banco de Dados CredenciamentoCPC')
-
     # Exibe a tabela diretamente
     conn = mysql.connector.connect(
         host="monorail.proxy.rlwy.net",
