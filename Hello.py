@@ -45,7 +45,7 @@ def fetch_single_data(id_to_edit):
             conn.close()
 
             df=pd.DataFrame(data)
-            df[16]= df[16].dt.strftime('%d-%m-%Y')
+            df[16]= df[16].strftime('%d-%m-%Y')
             st.view(df)
     except mysql.connector.Error as err:
         print(f"Erro ao executar a consulta SQL: {err}")
