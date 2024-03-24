@@ -53,7 +53,9 @@ def validar_cnpj(cnpj):
         st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
         return False
     return True
-
+# Função para confirmar a exclusão
+def confirmar_exclusao():
+    return st.button("Confirmar Exclusão")
 # Função principal
 def main():
     st.title('Banco de Dados CredenciamentoCPC')
@@ -84,7 +86,17 @@ def main():
 
     # Se a opção selecionada for 'Inserir', mostra o formulário para inserir dados
     st.write("## Inserir Dados:")
-
+    # Adiciona funcionalidade de edição e exclusão de dados
+    for index, row in df.iterrows():
+        if st.button(f"Editar {index}"):
+            # Exibe o formulário de edição para a linha atual
+           st.write(f"## Editar Dados - Índice: {index}")
+            # Restante do código para o formulário de edição...
+        if st.button(f"Excluir {index}"):
+            # Exclui a linha correspondente
+            if confirmar_exclusao():
+                # Lógica para exclusão da linha
+                pass
     # Divide o formulário em duas colunas
     col1, col2 = st.columns(2)
 
