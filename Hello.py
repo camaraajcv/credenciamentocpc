@@ -315,8 +315,16 @@ def main():
         data = fetch_all_data()
         if data is not None:
             # Converter a coluna de data para o formato dd/mm/aaaa
-            data_formatada = [(d.strftime('%d/%m/%Y') if d else None) for d in data]
-            data_formatada2 = [(d.strftime('%d/%m/%Y') if d else None) for d in data]
+            data_formatada = pd.DataFrame(data)
+            # Assumindo que a coluna de data é a décima primeira (índice 10)
+            data_formatada[10] = pd.to_datetime(data_formatada[10])
+            data_formatada[10] = data_formatada[10].dt.strftime('%d/%m/%Y')
+
+            data_formatada2 = pd.DataFrame(data)
+            # Assumindo que a coluna de data é a décima primeira (índice 10)
+            data_formatada2[16] = pd.to_datetime(data_formatada2[16])
+            data_formatada2[16] = data_formatada2[16].dt.strftime('%d/%m/%Y')
+            
             # Exibir os dados em um dataframe
             st.dataframe(data_formatada)
         else:
