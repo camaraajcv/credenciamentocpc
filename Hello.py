@@ -22,6 +22,77 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Suprimindo o aviso específico
 warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
+# Função para buscar um registro específico no banco de dados
+def fetch_single_data(id_to_edit):
+    try:
+        # Conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host="monorail.proxy.rlwy.net",
+            user="root",
+            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+            database="railway",
+            port=52280
+        )
+
+        # Verifica se a conexão foi bem-sucedida
+        if conn.is_connected():
+            cursor = conn.cursor()
+
+            # Prepara a instrução SQL para selecionar os dados pelo ID
+            sql = "SELECT * FROM credenciamentocpc WHERE id = %s"
+
+            # Executa a instrução SQL
+            cursor.execute(sql, (id_to_edit,))
+
+            # Obtém o registro
+            data = cursor.fetchone()
+
+            # Fecha o cursor e a conexão
+            cursor.close()
+            conn.close()
+
+            return data
+
+    except mysql.connector.Error as err:
+        st.error(f"Erro ao recuperar os dados: {err}")
+
+# Função para atualizar um registro específico no banco de dados
+def update_data(id_to_edit, new_data):
+    try:
+        # Conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host="monorail.proxy.rlwy.net",
+            user="root",
+            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+            database="railway",
+            port=52280
+        )
+
+        # Verifica se a conexão foi bem-sucedida
+        if conn.is_connected():
+            cursor = conn.cursor()
+
+            # Prepara a instrução SQL para atualizar os dados
+            sql = "UPDATE credenciamentocpc SET situacao_econsig = %s, subprocesso_siloms = %s, categoria = %s, natureza_de_desconto = %s, consignataria = %s, cnpj = %s, nro_contrato = %s, dou = %s, situacao = %s, data_expiracao_contratual = %s, codigo = %s, status_credenciamento = %s, cpc_status = %s, cpc_anual = %s, data_entrada = %s WHERE id = %s"
+
+            # Adiciona o ID à lista de dados a serem atualizados
+            new_data.append(id_to_edit)
+
+            # Executa a instrução SQL
+            cursor.execute(sql, new_data)
+
+            # Confirma a transação
+            conn.commit()
+
+            # Fecha o cursor e a conexão
+            cursor.close()
+            conn.close()
+
+            return True
+
+    except mysql.connector.Error as err:
+        st.error(f"Erro ao atualizar os dados: {err}")
+        return False
 def fetch_all_data():
     try:
         # Conexão com o banco de dados MySQL
@@ -174,7 +245,7 @@ def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
 # Função principal
 def main():
-    opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos'])
+    opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos', 'editar'])
 
     if opcao_selecionada == 'Incluir Processo':
         # Divide o formulário em duas colunas
@@ -253,6 +324,54 @@ def main():
             st.dataframe(data)
         else:
             st.warning("Nenhum dado encontrado.")
+
+    elif opcao_selecionada == 'editar':
+        st.header('Editar Dados')
+
+        # Entrada para o ID do registro a ser editado
+        id_to_edit = st.number_input('ID do Registro a ser Editado:', min_value=1, step=1)
+
+        if st.button('Buscar Registro'):
+            # Busca o registro no banco de dados
+            data_to_edit = fetch_single_data(id_to_edit)
+
+            if data_to_edit is not None:
+                # Se o registro for encontrado, exibe o formulário para edição
+                situacao_econsig_edit = st.text_input('Situação Econsig', value=data_to_edit[1])
+                subprocesso_siloms_edit = st.text_input('Subprocesso Siloms', value=data_to_edit[2])
+                categoria_edit = st.text_input('Categoria', value=data_to_edit[3])
+                natureza_de_desconto_edit = st.text_input('Natureza de Desconto', value=data_to_edit[4])
+                consignataria_edit = st.text_input('Consignatária', value=data_to_edit[5])
+                cnpj_edit = st.text_input('CNPJ', value=data_to_edit[6])
+                nro_contrato_edit = st.text_input('Nro. Contrato', value=data_to_edit[7])
+                dou_edit = st.text_input('DOU', value=data_to_edit[8])
+                situacao_edit = st.text_input('Situação', value=data_to_edit[9])
+                data_expiracao_contratual_edit = st.text_input('Data de Expiração Contratual', value=data_to_edit[10])
+                codigo_edit = st.text_input('Código', value=data_to_edit[11])
+                status_credenciamento_edit = st.text_input('Status de Credenciamento', value=data_to_edit[12])
+                cpc_status_edit = st.text_input('CPC Status', value=data_to_edit[13])
+                cpc_anual_edit = st.text_input('CPC Anual', value=data_to_edit[14])
+                data_entrada_edit = st.text_input('Data de Entrada', value=data_to_edit[15])
+
+                if st.button('Atualizar Registro'):
+                    # Atualiza o registro no banco de dados
+                    new_data = [
+                        situacao_econsig_edit, subprocesso_siloms_edit, categoria_edit,
+                        natureza_de_desconto_edit, consignataria_edit, cnpj_edit,
+                        nro_contrato_edit, dou_edit, situacao_edit, data_expiracao_contratual_edit,
+                        codigo_edit, status_credenciamento_edit, cpc_status_edit,
+                        cpc_anual_edit, data_entrada_edit
+                    ]
+
+                    if update_data(id_to_edit, new_data):
+                        st.success('Registro atualizado com sucesso!')
+                    else:
+                        st.error('Erro ao atualizar o registro.')
+
+            else:
+                st.warning('Nenhum registro encontrado para o ID fornecido.')
+
+
 # Executa a função principal
 if __name__ == "__main__":
     main()
