@@ -61,6 +61,72 @@ def insert_data(data):
     except mysql.connector.Error as err:
         error_message = str(err)
         return False, error_message  # Indica que a inserção falhou e retorna a mensagem de erro
+def insert_data(data):
+    try:
+        # Conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host="monorail.proxy.rlwy.net",
+            user="root",
+            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+            database="railway",
+            port=52280
+        )
+
+        # Verifica se a conexão foi bem-sucedida
+        if conn.is_connected():
+            cursor = conn.cursor()
+
+            # Prepara a instrução SQL para inserir os dados
+            sql = "INSERT INTO credenciamentocpc (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada, dias_para_fim_vigencia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+            # Executa a instrução SQL
+            cursor.execute(sql, data)
+
+            # Confirma a transação
+            conn.commit()
+
+            # Fecha o cursor e a conexão
+            cursor.close()
+            conn.close()
+
+            return True, None  # Indica que a inserção foi bem-sucedida, sem erros
+
+    except mysql.connector.Error as err:
+        error_message = str(err)
+        return False, error_message  # Indica que a inserção falhou e retorna a mensagem de erro
+def excluir_dados(id_to_delete):
+    try:
+        # Conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host="monorail.proxy.rlwy.net",
+            user="root",
+            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+            database="railway",
+            port=52280
+        )
+
+        # Verifica se a conexão foi bem-sucedida
+        if conn.is_connected():
+            cursor = conn.cursor()
+
+            # Prepara a instrução SQL para excluir os dados por ID
+            sql = "DELETE FROM credenciamentocpc WHERE id = %s"
+
+            # Executa a instrução SQL
+            cursor.execute(sql, (id_to_delete,))
+
+            # Confirma a transação
+            conn.commit()
+
+            # Fecha o cursor e a conexão
+            cursor.close()
+            conn.close()
+
+            return True, None  # Indica que a exclusão foi bem-sucedida, sem erros
+
+    except mysql.connector.Error as err:
+        error_message = str(err)
+        return False, error_message  # Indica que a exclusão falhou e retorna a mensagem de erro
 
 # Função para validar o CNPJ
 def validar_cnpj(cnpj):
@@ -73,35 +139,7 @@ def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
 # Função principal
 def main():
-    # Exibe a tabela diretamente
-    conn = mysql.connector.connect(
-        host="monorail.proxy.rlwy.net",
-        user="root",
-        password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
-        database="railway",
-        port=52280
-    )
-
-    # Verifica se a conexão foi bem-sucedida
-    if conn.is_connected():
-        # Consulta SQL para recuperar todos os dados da tabela
-        query = "SELECT * FROM credenciamentocpc"
-
-        # Carrega os dados do banco de dados em um DataFrame pandas
-        df = pd.read_sql(query, conn)
-
-        # Fecha a conexão
-        conn.close()
-
-        # Mostra a tabela
-        st.write("## Dados do Banco de Dados:")
-        st.write(df)
-
-    # Se a opção selecionada for 'Inserir', mostra o formulário para inserir dados
-    st.write("## Inserir Dados:")
-    # Checkboxes para incluir, editar e excluir processos
-    col1, col2, col3 = st.columns(3)
-    # Variável para armazenar o valor do checkbox selecionado
+    
     opcao_selecionada = st.session_state.get('opcao_selecionada', None)
 
     # Lógica para garantir apenas um checkbox selecionado
@@ -180,15 +218,17 @@ def main():
                 st.warning("Por favor, preencha todos os campos obrigatórios.")
 
         if opcao_selecionada == 'excluir':
-            # Exibir formulário para exclusão de linha
-            st.header('Excluir Dados')
+            id_to_delete = st.number_input("Insira o ID a ser excluído:", min_value=1, step=1)
+            if st.button("excluir"):
+                id_to_delete = st.number_input("Insira o ID a ser excluído:", min_value=1, step=1)
+        if st.button("Excluir"):
+            # Tenta excluir os dados do banco de dados
+            success, error_message = excluir_dados(id_to_delete)
+            if success:
+                st.success("Dados excluídos com sucesso!")
+            else:
+                st.error(f"Erro ao excluir os dados: {error_message}")
 
-            if not df.empty:
-                indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
-
-                if st.button('Excluir'):
-                    df = df.drop(index=indice_exclusao)
-                    st.success('Linha excluída com sucesso.')
 # Executa a função principal
 if __name__ == "__main__":
     main()
