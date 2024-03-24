@@ -22,6 +22,8 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Suprimindo o aviso específico
 warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
+def formatar_numero(numero):
+    return '{:,.0f}'.format(numero)
 # Função para buscar um registro específico no banco de dados
 def fetch_single_data(id_to_edit):
     try:
@@ -310,7 +312,7 @@ def main():
         if data is not None:
             # Converter a coluna de data_de_entrada para o formato dd-mm-aaaa
             data['DATA_DE_ENTRADA'] = pd.to_datetime(data['DATA_DE_ENTRADA']).dt.strftime('%d-%m-%Y')
-            data['SUBPROCESSO_SILOMS'] = data['SUBPROCESSO_SILOMS'].astype(int).apply(lambda x: '{:,}'.format(x))
+            data['SUBPROCESSO_SILOMS'] = data['SUBPROCESSO_SILOMS'].apply(formatar_numero)
             # Exibir os dados em um dataframe
             st.dataframe(data)
         else:
