@@ -44,7 +44,8 @@ def fetch_single_data(id_to_edit):
             cursor.close()
             conn.close()
 
-            return data
+            df=pd.DataFrame(data)
+            st.view(df)
     except mysql.connector.Error as err:
         print(f"Erro ao executar a consulta SQL: {err}")
     except Exception as e:
