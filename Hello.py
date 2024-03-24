@@ -73,7 +73,7 @@ def update_data(id_to_edit, new_data):
             cursor = conn.cursor()
 
             # Prepara a instrução SQL para atualizar os dados
-            sql = "UPDATE credenciamentocpc SET situacao_econsig = %s, subprocesso_siloms = %s, categoria = %s, natureza_de_desconto = %s, consignataria = %s, cnpj = %s, nro_contrato = %s, dou = %s, situacao = %s, data_expiracao_contratual = %s, codigo = %s, status_credenciamento = %s, cpc_status = %s, cpc_anual = %s, data_entrada = %s WHERE id = %s"
+            sql = "UPDATE credenciamentocpc SET situacao_econsig = %s, subprocesso_siloms = %s, categoria = %s, natureza_de_desconto = %s, consignataria = %s, cnpj = %s, nro_contrato = %s, dou = %s, situacao = %s, data_expiracao_contratual = %s, codigo = %s, status_credenciamento = %s, cpc_status = %s, cpc_anual = %s, data_de_entrada = %s WHERE id = %s"
 
             # Adiciona o ID à lista de dados a serem atualizados
             new_data.append(id_to_edit)
