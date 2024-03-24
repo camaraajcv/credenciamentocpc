@@ -314,7 +314,11 @@ def main():
         st.header("Visualizar Contratos")
         data = fetch_all_data()
         if data is not None:
-            st.dataframe(data)
+            # Converter a coluna de data para o formato dd/mm/aaaa
+            data_formatada = [(d.strftime('%d/%m/%Y') if d else None) for d in data]
+            data_formatada2 = [(d.strftime('%d/%m/%Y') if d else None) for d in data]
+            # Exibir os dados em um dataframe
+            st.dataframe(data_formatada)
         else:
             st.warning("Nenhum dado encontrado.")
 
