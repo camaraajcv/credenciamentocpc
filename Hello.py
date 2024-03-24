@@ -130,7 +130,7 @@ def main():
 
             # Botão para enviar os dados
             if st.button("Enviar"):
-                # Verifica se todos os campos obrigatórios foram preenchidos
+        # Verifica se todos os campos obrigatórios foram preenchidos
                 if (
                     situacao_econsig and subprocesso_siloms and categoria and
                     natureza_de_desconto and consignataria and cnpj and nro_contrato and
@@ -143,12 +143,14 @@ def main():
                         dou, situacao, data_expiracao_contratual, codigo,
                         status_credenciamento, cpc_status, cpc_anual, data_entrada
                     )
-                    if insert_data(data):
+                    success, error_message = insert_data(data)
+                    if success:
                         st.success("Dados inseridos com sucesso!")
                     else:
-                        st.error("Erro ao inserir os dados. Verifique a conexão com o banco de dados.")
+                        st.error(f"Erro ao inserir os dados: {error_message}")
                 else:
                     st.warning("Por favor, preencha todos os campos obrigatórios.")
+
 
 # Executa a função principal
 if __name__ == "__main__":
