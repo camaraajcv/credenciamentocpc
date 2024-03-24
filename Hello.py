@@ -179,7 +179,16 @@ def main():
             else:
                 st.warning("Por favor, preencha todos os campos obrigatórios.")
 
+        if opcao_selecionada == 'excluir':
+            # Exibir formulário para exclusão de linha
+            st.header('Excluir Dados')
 
+            if not df.empty:
+                indice_exclusao = st.number_input('Índice da Linha a ser Excluída', min_value=0, max_value=len(df)-1, step=1, value=0)
+
+                if st.button('Excluir'):
+                    df = df.drop(index=indice_exclusao)
+                    st.success('Linha excluída com sucesso.')
 # Executa a função principal
 if __name__ == "__main__":
     main()
