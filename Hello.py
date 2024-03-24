@@ -38,8 +38,16 @@ def fetch_single_data(id_to_edit):
 
             sql = "SELECT * FROM credenciamentocpc WHERE id = %s"
 
-            cursor.execute(sql, (id_to_edit,))
-            data = cursor.fetchone()
+           # Converter a data para o formato dd/mm/aaaa
+            data_formatada = data[10].strftime('%d/%m/%Y') if data[10] else None
+            data = list(data)
+            data[10] = data_formatada
+            data = tuple(data)
+
+            data_formatada2 = data[16].strftime('%d/%m/%Y') if data[16] else None
+            data = list(data)
+            data[10] = data_formatada2
+            data = tuple(data)
 
             cursor.close()
             conn.close()
