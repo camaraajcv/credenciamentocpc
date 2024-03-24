@@ -25,7 +25,6 @@ warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy conne
 # Função para buscar um registro específico no banco de dados
 def fetch_single_data(id_to_edit):
     try:
-        # Conexão com o banco de dados MySQL
         conn = mysql.connector.connect(
             host="monorail.proxy.rlwy.net",
             user="root",
@@ -34,27 +33,26 @@ def fetch_single_data(id_to_edit):
             port=52280
         )
 
-        # Verifica se a conexão foi bem-sucedida
         if conn.is_connected():
             cursor = conn.cursor()
 
-            # Prepara a instrução SQL para selecionar os dados pelo ID
             sql = "SELECT * FROM credenciamentocpc WHERE id = %s"
 
-            # Executa a instrução SQL
             cursor.execute(sql, (id_to_edit,))
-
-            # Obtém o registro
             data = cursor.fetchone()
 
-            # Fecha o cursor e a conexão
             cursor.close()
             conn.close()
 
             return data
-
     except mysql.connector.Error as err:
-        st.error(f"Erro ao recuperar os dados: {err}")
+        print(f"Erro ao executar a consulta SQL: {err}")
+    except Exception as e:
+        print(f"Erro desconhecido: {e}")
+    finally:
+        if 'conn' in locals() and conn.is_connected():
+            conn.close()
+   
 
 # Função para atualizar um registro específico no banco de dados
 def update_data(id_to_edit, new_data):
