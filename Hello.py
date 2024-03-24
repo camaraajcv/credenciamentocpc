@@ -22,6 +22,41 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Suprimindo o aviso específico
 warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
+def fetch_all_data():
+    try:
+        # Conexão com o banco de dados MySQL
+        conn = mysql.connector.connect(
+            host="monorail.proxy.rlwy.net",
+            user="root",
+            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
+            database="railway",
+            port=52280
+        )
+
+        # Verifica se a conexão foi bem-sucedida
+        if conn.is_connected():
+            cursor = conn.cursor()
+
+            # Prepara a instrução SQL para selecionar todos os dados
+            sql = "SELECT * FROM credenciamentocpc"
+
+            # Executa a instrução SQL
+            cursor.execute(sql)
+
+            # Obtém todos os dados
+            data = cursor.fetchall()
+
+            # Obtém os nomes das colunas
+            columns = [i[0] for i in cursor.description]
+
+            # Fecha o cursor e a conexão
+            cursor.close()
+            conn.close()
+
+            return pd.DataFrame(data, columns=columns)
+
+    except mysql.connector.Error as err:
+        st.error(f"Erro ao recuperar os dados: {err}")
 # Função para inserir dados no banco de dados
 def insert_data(data):
     try:
@@ -210,7 +245,14 @@ def main():
                 st.success("Dados excluídos com sucesso!")
             else:
                 st.error(f"Erro ao excluir os dados: {error_message}")
-                
+    elif opcao_selecionada == 'visualizar':
+        # Mostra os dados do banco de dados
+        st.header("Visualizar Contratos")
+        data = fetch_all_data()
+        if data is not None:
+            st.dataframe(data)
+        else:
+            st.warning("Nenhum dado encontrado.")
 # Executa a função principal
 if __name__ == "__main__":
     main()
