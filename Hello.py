@@ -139,25 +139,10 @@ def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
 # Função principal
 def main():
-    
-    opcao_selecionada = st.session_state.get('opcao_selecionada', None)
-
-    # Lógica para garantir apenas um checkbox selecionado
-    with col1:
-        inserir_checked = st.checkbox('Incluir Novo Processo', key='inserir')
-        if inserir_checked:
-            opcao_selecionada = 'incluir'
-    with col2:
-        editar_checked = st.checkbox('Alterar Processo', key='alterar')
-        if editar_checked:
-            opcao_selecionada = 'editar'
-    with col3:
-        excluir_checked = st.checkbox('Excluir Processo', key='excluir')
-        if excluir_checked:
-            opcao_selecionada = 'excluir'
+    opcao_selecionada = st.sidebar.radio("Opção", ['incluir', 'excluir'])
 
     if opcao_selecionada == 'incluir':
-    # Divide o formulário em duas colunas
+        # Divide o formulário em duas colunas
         col1, col2 = st.columns(2)
 
         # Coleta os dados do usuário através de inputs
@@ -193,14 +178,13 @@ def main():
             cpc_anual = st.selectbox('CPC Anual', options=[''] + ['CPC 2021', 'CPC 2022', 'CPC 2023', 'CPC 2024', 'CPC 2025', 'CPC 2026'])
             data_entrada = st.date_input('Data de Entrada', None, format='DD/MM/YYYY')
 
-    # Botão para enviar os dados
+        # Botão para enviar os dados
         if st.button("Inserir"):
             # Verifica se todos os campos obrigatórios foram preenchidos
             if (
-                situacao_econsig and subprocesso_siloms and categoria and
-                natureza_de_desconto and consignataria and cnpj and nro_contrato and
-                situacao and data_entrada
-            ):
+                situacao_econsig and subprocesso_siloms and categoria and natureza_de_desconto and consignataria and cnpj and nro_contrato and
+                situacao and data_entrada):
+
                 # Tenta inserir os dados no banco de dados
                 data = (
                     situacao_econsig, subprocesso_siloms, categoria,
@@ -217,10 +201,8 @@ def main():
             else:
                 st.warning("Por favor, preencha todos os campos obrigatórios.")
 
-        if opcao_selecionada == 'excluir':
-            id_to_delete = st.number_input("Insira o ID a ser excluído:", min_value=1, step=1)
-            if st.button("excluir"):
-                id_to_delete = st.number_input("Insira o ID a ser excluído:", min_value=1, step=1)
+    elif opcao_selecionada == 'excluir':
+        id_to_delete = st.number_input("Insira o ID a ser excluído:", min_value=1, step=1)
         if st.button("Excluir"):
             # Tenta excluir os dados do banco de dados
             success, error_message = excluir_dados(id_to_delete)
@@ -228,7 +210,7 @@ def main():
                 st.success("Dados excluídos com sucesso!")
             else:
                 st.error(f"Erro ao excluir os dados: {error_message}")
-
+                
 # Executa a função principal
 if __name__ == "__main__":
     main()
