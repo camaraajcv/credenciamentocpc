@@ -38,16 +38,8 @@ def fetch_single_data(id_to_edit):
 
             sql = "SELECT * FROM credenciamentocpc WHERE id = %s"
 
-           # Converter a data para o formato dd/mm/aaaa
-            data_formatada = data[10].strftime('%d/%m/%Y') if data[10] else None
-            data = list(data)
-            data[10] = data_formatada
-            data = tuple(data)
-
-            data_formatada2 = data[16].strftime('%d/%m/%Y') if data[16] else None
-            data = list(data)
-            data[10] = data_formatada2
-            data = tuple(data)
+            cursor.execute(sql, (id_to_edit,))
+            data = cursor.fetchone()
 
             cursor.close()
             conn.close()
@@ -310,7 +302,7 @@ def main():
             else:
                 st.error(f"Erro ao excluir os dados: {error_message}")
     elif opcao_selecionada == 'Visualizar Processos':
-        # Mostra os dados do banco de dados
+    # Mostra os dados do banco de dados
         st.header("Visualizar Contratos")
         data = fetch_all_data()
         if data is not None:
@@ -319,11 +311,6 @@ def main():
             # Assumindo que a coluna de data é a décima primeira (índice 10)
             data_formatada[10] = pd.to_datetime(data_formatada[10])
             data_formatada[10] = data_formatada[10].dt.strftime('%d/%m/%Y')
-
-            data_formatada2 = pd.DataFrame(data)
-            # Assumindo que a coluna de data é a décima primeira (índice 10)
-            data_formatada2[16] = pd.to_datetime(data_formatada2[16])
-            data_formatada2[16] = data_formatada2[16].dt.strftime('%d/%m/%Y')
             
             # Exibir os dados em um dataframe
             st.dataframe(data_formatada)
