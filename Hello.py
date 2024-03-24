@@ -26,7 +26,7 @@ def insert_data(data):
             # Prepara a instrução SQL para inserir os dados
             sql = """
             INSERT INTO credenciamentocpc 
-            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_de_entrada) 
+            (SITUACAO_ECONSIG, SUBPROCESSO_SILOMS, CATEGORIA, NATUREZA_DE_DESCONTO, CONSIGNATARIA, CNPJ, NRO_CONTRATO, DOU, SITUACAO, DATA_EXPIRACAO_CONTRATUAL, CODIGO, STATUS_CREDENCIAMENTO, CPC_STATUS, CPC_ANUAL, DATA_DE_ENTRADA) 
             VALUES 
             (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
             """
