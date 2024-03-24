@@ -308,6 +308,10 @@ def main():
         st.header("Visualizar Contratos")
         data = fetch_all_data()
         if data is not None:
+            # Converter a coluna de data_de_entrada para o formato dd-mm-aaaa
+            data['DATA_DE_ENTRADA'] = pd.to_datetime(data['DATA_DE_ENTRADA']).dt.strftime('%d-%m-%Y')
+            
+            # Exibir os dados em um dataframe
             st.dataframe(data)
         else:
             st.warning("Nenhum dado encontrado.")
