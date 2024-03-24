@@ -90,8 +90,9 @@ def update_data(id_to_edit, new_data):
             return True
 
     except mysql.connector.Error as err:
-        st.error(f"Erro ao atualizar os dados: {err}")
+        print(f"Erro ao atualizar os dados: {err}")
         return False
+
 def fetch_all_data():
     try:
         # Conexão com o banco de dados MySQL
