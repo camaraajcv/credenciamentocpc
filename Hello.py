@@ -26,9 +26,9 @@ def insert_data(data):
             # Prepara a instrução SQL para inserir os dados
             sql = """
             INSERT INTO credenciamentocpc 
-            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_de_entrada) 
+            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada, dias_para_fim_vigencia) 
             VALUES 
-            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
 
             # Executa a instrução SQL
@@ -139,7 +139,8 @@ def main():
                         situacao_econsig, subprocesso_siloms, categoria,
                         natureza_de_desconto, consignataria, cnpj, nro_contrato,
                         dou, situacao, data_expiracao_contratual, codigo,
-                        status_credenciamento, cpc_status, cpc_anual, data_entrada
+                        status_credenciamento, cpc_status, cpc_anual, data_entrada,
+                        dias_para_fim_vigencia  # Adicionando o valor calculado aqui
                     )
                     success, error_message = insert_data(data)
                     if success:
