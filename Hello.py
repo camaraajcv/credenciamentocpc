@@ -8,7 +8,7 @@ import warnings
 # URL da imagem
 image_url = "https://www.fab.mil.br/om/logo/mini/dirad2.jpg"
 
-#Código HTML e CSS para ajustar a largura da imagem para 20% da largura da coluna e centralizar
+# Código HTML e CSS para ajustar a largura da imagem para 20% da largura da coluna e centralizar
 html_code = f'<div style="display: flex; justify-content: center;"><img src="{image_url}" alt="Imagem" style="width:8vw;"/></div>'
 # Exibir a imagem usando HTML
 st.markdown(html_code, unsafe_allow_html=True)
@@ -22,8 +22,10 @@ st.markdown("<h3 style='text-align: center; font-size: 1em; text-decoration: und
 st.write("CPC - Comissão Permanente de Credenciamento")
 # Suprimindo o aviso específico
 warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
+
 def formatar_numero(numero):
     return '{:,.0f}'.format(numero)
+
 # Função para buscar um registro específico no banco de dados
 def fetch_single_data(id_to_edit):
     try:
@@ -45,7 +47,7 @@ def fetch_single_data(id_to_edit):
 
             cursor.close()
             conn.close()
-            return(data)
+            return data
     except mysql.connector.Error as err:
         print(f"Erro ao executar a consulta SQL: {err}")
     except Exception as e:
@@ -53,7 +55,6 @@ def fetch_single_data(id_to_edit):
     finally:
         if 'conn' in locals() and conn.is_connected():
             conn.close()
-   
 
 # Função para atualizar um registro específico no banco de dados
 def update_data(id_to_edit, new_data):
@@ -93,6 +94,7 @@ def update_data(id_to_edit, new_data):
         print(f"Erro ao atualizar os dados: {err}")
         return False
 
+# Função para buscar todos os dados do banco de dados
 def fetch_all_data():
     try:
         # Conexão com o banco de dados MySQL
@@ -128,6 +130,7 @@ def fetch_all_data():
 
     except mysql.connector.Error as err:
         st.error(f"Erro ao recuperar os dados: {err}")
+
 # Função para inserir dados no banco de dados
 def insert_data(data):
     try:
@@ -167,39 +170,8 @@ def insert_data(data):
     except mysql.connector.Error as err:
         error_message = str(err)
         return False, error_message  # Indica que a inserção falhou e retorna a mensagem de erro
-def insert_data(data):
-    try:
-        # Conexão com o banco de dados MySQL
-        conn = mysql.connector.connect(
-            host="monorail.proxy.rlwy.net",
-            user="root",
-            password="IavrTTLyCOohONgVOMWTdepOQrWuJHQO",
-            database="railway",
-            port=52280
-        )
 
-        # Verifica se a conexão foi bem-sucedida
-        if conn.is_connected():
-            cursor = conn.cursor()
-
-            # Prepara a instrução SQL para inserir os dados
-            sql = "INSERT INTO credenciamentocpc (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-
-            # Executa a instrução SQL
-            cursor.execute(sql, data)
-
-            # Confirma a transação
-            conn.commit()
-
-            # Fecha o cursor e a conexão
-            cursor.close()
-            conn.close()
-
-            return True, None  # Indica que a inserção foi bem-sucedida, sem erros
-
-    except mysql.connector.Error as err:
-        error_message = str(err)
-        return False, error_message  # Indica que a inserção falhou e retorna a mensagem de erro
+# Função para excluir dados do banco de dados
 def excluir_dados(id_to_delete):
     try:
         # Conexão com o banco de dados MySQL
@@ -240,9 +212,11 @@ def validar_cnpj(cnpj):
         st.error('O CNPJ deve ter o formato XX.XXX.XXX/XXXX-XX')
         return False
     return True
+
 # Função para confirmar a exclusão
 def confirmar_exclusao():
     return st.button("Confirmar Exclusão")
+
 # Função principal
 def main():
     opcao_selecionada = st.sidebar.radio("Opção", ['Incluir Processo', 'Excluir Processo', 'Visualizar Processos', 'Alterar Processo'])
@@ -284,7 +258,6 @@ def main():
                     natureza_de_desconto, consignataria, cnpj, nro_contrato,
                     dou, situacao, data_expiracao_contratual, codigo,
                     status_credenciamento, cpc_status, cpc_anual, data_entrada
-                      # Adicionando o valor calculado aqui
                 )
                 success, error_message = insert_data(data)
                 if success:
@@ -303,6 +276,7 @@ def main():
                 st.success("Dados excluídos com sucesso!")
             else:
                 st.error(f"Erro ao excluir os dados: {error_message}")
+
     elif opcao_selecionada == 'Visualizar Processos':
         # Mostra os dados do banco de dados
         st.header("Visualizar Contratos")
@@ -367,11 +341,8 @@ def main():
                     else:
                         st.error('Erro ao atualizar o registro.')
 
-   
-
-
-
 # Executa a função principal
 if __name__ == "__main__":
     main()
+
 
