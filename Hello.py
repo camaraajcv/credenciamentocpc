@@ -26,9 +26,9 @@ def insert_data(data):
             # Prepara a instrução SQL para inserir os dados
             sql = """
             INSERT INTO credenciamentocpc 
-            (SITUACAO_ECONSIG, SUBPROCESSO_SILOMS, CATEGORIA, NATUREZA_DE_DESCONTO, CONSIGNATARIA, CNPJ, NRO_CONTRATO, DOU, SITUACAO, DATA_EXPIRACAO_CONTRATUAL, CODIGO, STATUS_CREDENCIAMENTO, CPC_STATUS, CPC_ANUAL, DATA_DE_ENTRADA) 
+            (situacao_econsig, subprocesso_siloms, categoria, natureza_de_desconto, consignataria, cnpj, nro_contrato, dou, situacao, data_expiracao_contratual, codigo, status_credenciamento, cpc_status, cpc_anual, data_entrada) 
             VALUES 
-            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
+            (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
 
             # Executa a instrução SQL
@@ -41,14 +41,12 @@ def insert_data(data):
             cursor.close()
             conn.close()
 
-            return True
-        else:
-            print("Erro ao conectar ao banco de dados MySQL.")
-            return False
+            return True, None  # Indica que a inserção foi bem-sucedida, sem erros
 
-    except Exception as e:
-        print("Erro durante a inserção de dados:", e)
-        return False
+    except mysql.connector.Error as err:
+        error_message = str(err)
+        return False, error_message  # Indica que a inserção falhou e retorna a mensagem de erro
+
 # Função para validar o CNPJ
 def validar_cnpj(cnpj):
     if not re.match(r'\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}', cnpj):
