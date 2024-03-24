@@ -349,10 +349,10 @@ def main():
                 if isinstance(data_expiracao_contratual_edit, pd.Timestamp):
                     data_expiracao_contratual_edit = data_expiracao_contratual_edit.date()
                 
-                codigo_edit = st.text_input('Código', value=data_to_edit[11])
-                status_credenciamento_edit = st.text_input('Status de Credenciamento', value=data_to_edit[12])
-                cpc_status_edit = st.text_input('CPC Status', value=data_to_edit[13])
-                cpc_anual_edit = st.text_input('CPC Anual', value=data_to_edit[14])
+                codigo_edit = st.text_input('Código', value=data_to_edit[12])
+                status_credenciamento_edit = st.text_input('Status de Credenciamento', value=data_to_edit[13])
+                cpc_status_edit = st.text_input('CPC Status', value=data_to_edit[14])
+                cpc_anual_edit = st.text_input('CPC Anual', value=data_to_edit[15])
                 
                 # Corrigindo a entrada de data para data_entrada_edit
                 data_entrada_edit = st.text_input('Data de Entrada', value=data_to_edit[15])
